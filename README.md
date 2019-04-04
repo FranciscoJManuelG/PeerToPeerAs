@@ -1,6 +1,6 @@
-# Practicaarquitectura
+# Server
 
-**TODO: Add description**
+Taxonomia, paisanaje y acopiaje
 
 ## Installation
 
@@ -10,12 +10,12 @@ by adding `practicaarquitectura` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:practicaarquitectura, "~> 0.1.0"}
+    {:server, "~> 0.1.0"}
   ]
 end
 ```
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/practicaarquitectura](https://hexdocs.pm/practicaarquitectura).
+be found at [https://hexdocs.pm/practicaarquitectura](https://hexdocs.pm/server).
 

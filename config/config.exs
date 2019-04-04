@@ -10,11 +10,11 @@ use Mix.Config
 
 # You can configure your application as:
 #
-#     config :practicaarquitectura, key: :value
+#     config :server, key: :value
 #
 # and access this configuration in your application as:
 #
-#     Application.get_env(:practicaarquitectura, :key)
+#     Application.get_env(:server, :key)
 #
 # You can also configure a third-party app:
 #
