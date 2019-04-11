@@ -1,5 +1,17 @@
 # Server
 
+Participantes:
+	Borja Álvarez Piñeiro
+	Iván Barrientos Lema 
+	Anxo Cristobo Fabeiro
+	David García Gondell
+	Francisco Javier Manuel García 
+	Nuria Méndez Casás
+	Iván González Dopico
+
+Descripción de la app
+
+Explicación de la arquitectura
 
 
 ## Installation
