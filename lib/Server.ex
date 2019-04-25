@@ -5,11 +5,10 @@ defmodule Server do
 		IO.puts("Aceptando conexiones en el puerto #{port}")
 		loop(socket)
   	end
-	
-	defp loop({:error, :closed}),do: :okboii
+
 	defp loop(socket) do
-		{:ok, socket} = :gen_tcp.accept(socket)
-		serve(socket)
+		{:ok, client} = :gen_tcp.accept(socket)
+		serve(client)
 		loop(socket)
 	end
 
@@ -30,3 +29,17 @@ defmodule Server do
 		:gen_tcp.send(socket, line)
 	end
 end
+
+
+#SERVER
+#{:ok, socket}=:gen_tcp.listen(5000,[:binary,
+#	 packet: :line, active: false, reuseaddr: true])
+#{:ok, client} = :gen_tcp.accept(socket)
+#{:ok, data} = :gen_tcp.recv(client, 0)
+#:gen_tcp.send(client, line)
+
+#CLIENT
+#{:ok,socket} = :gen_tcp.connect('127.0.0.1',5000,[:binary,
+#	packet: :line, active: false, reuseaddr: true])
+#:gen_tcp.send(socket,"holahola")
+#{:ok, data} = :gen_tcp.recv(socket, 0)
