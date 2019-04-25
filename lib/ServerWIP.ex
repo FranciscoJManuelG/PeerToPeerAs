@@ -30,33 +30,32 @@ defmodule ServerWIP do
 		GenServer.call(pid, :viewNodesM)
 	end
 
-	def viewNodesFiles(pid) do
-		GenServer.call(pid, :viewNodesFiles)
-	end
-
 	def removeNode(pid, node) do
 		GenServer.cast(pid, {:removeNode, node})
 	end
 
-#
-	def nodeMUp(pid, node) do
-  		GenServer.cast(pid, {:nodeMUp, node})
+	def removeNodeM(pid, nodeM) do
+		GenServer.cast(pid, {:removeNodeM, nodeM})
+	end
+
+	def nodeUp(pid, node) do
+  		GenServer.cast(pid, {:nodeUp, node})
   	end
 
-	def nodeMDown(pid, node) do
-		GenServer.cast(pid, {:nodeMDown, node})
-	end
+  	def nodeDown(pid, node) do
+  		GenServer.cast(pid, {:nodeDown, node})
+  	end
 
-	def add(pid, item) do
-		GenServer.cast(pid, {:addItem, item})
-	end
+  	def nodeMSync(pid, nodeM) do
+  		GenServer.cast(pid, {:nodeMSync, node})
+  	end
 
-	def view(pid) do
-		GenServer.call(pid, :view)
-	end
+  	def nodeMUnsync(pid, nodeM) do
+  		GenServer.cast(pid, {:nodeMUnsync, node})
+  	end
 
-	def remove(pid, item) do
-		GenServer.cast(pid, {:remove, item})
+	def viewNodesFiles(pid) do
+		GenServer.call(pid, :viewNodesFiles)
 	end
 
 	def stop(pid) do
@@ -91,7 +90,7 @@ defmodule ServerWIP do
 	end
 
 	def handle_cast({:addNodeM, nodeM}, [listNodesM,other,other2]) do 
-		updated_list = listNodesM ++ [{nodeM,:UNSYNC}]
+		updated_list = listNodesM ++ [{nodeM,:SYNC}]
 		{:noreply, [updated_list,other,other2]}
 	end
 
@@ -100,51 +99,47 @@ defmodule ServerWIP do
 		{:noreply, [other,other2,updated_list]}
 	end
 
-	def aux_remove(node, [{nodeID, state}|others], list_aux)
-		when (node == nodeID) do [list_aux ++ others]		
+	def nodeStateFunction(node, state, {nodeID, status})
+		when node == nodeID do {node, state}
 	end
 
-	def aux_remove(node, [{nodeID, info}|others], list_aux)
-		when (node != nodeID) do aux_remove(node, others, list_aux ++ [{nodeID, info}])		
+	def nodeStateFunction(node, state, {nodeID, status})
+		when node != nodeID do {nodeID, status}
 	end
 
-	def handle_cast({:remove, node}, [list1, list2, list3]) do
-		updated_listNodes = aux_remove(node, list2, [])
+	def handle_cast({:removeNodeM, nodeM}, [list1, list2, list3]) do
+		updated_listNodesM = Enum.map(list1, fn x -> nodeStateFunction(nodeM, :UNSYNC, x) end)
+		updated_listNodesM = List.delete(updated_listNodesM, {nodeM, :UNSYNC})
+		{:noreply, [updated_listNodesM, list2, list3]}
+	end
+
+	def handle_cast({:removeNode, node}, [list1, list2, list3]) do
+		updated_listNodes = Enum.map(list2, fn x -> nodeStateFunction(node, :DOWN, x) end)
+		updated_listNodes = List.delete(updated_listNodes, {node, :DOWN})
 		{:noreply, [list1, updated_listNodes, list3]}
 	end
 
-	#No funciona
-	#def handle_cast({:remove, node}, [other, [{nodeID, state}|others1], [{nodeID2, files}|others2]]) do
-	#	updated_listNodes = Enum.reject([{nodeID, state}|others1], fn({node_aux, _}) -> node_aux == nodeID end)
-	#	updated_listNodesFiles = Enum.reject([{nodeID2, files}|others2], fn({node_aux, _}) -> node_aux == nodeID2 end)
-	#	{:noreply, [other, updated_listNodes, updated_listNodesFiles]}
-	#end
+	def handle_cast({:nodeMSync, nodeM}, [list, list2, list3]) do
+		updated_listNodesM = Enum.map(list, fn x -> nodeStateFunction(nodeM, :SYNC, x) end)
+		{:noreply, [updated_listNodesM,list2,list3]}
+	end
 
-#	def handle_cast({:nodeUp, node}, [other,{}]) do 
-#		updated_list = listNodesM ++ [nodeM]
-#		{:noreply, [other,updated_list]}
-#	end
+	def handle_cast({:nodeMUnsync, nodeM}, [list, list2, list3]) do
+		updated_listNodesM = Enum.map(list, fn x -> nodeStateFunction(nodeM, :UNSYNC, x) end)
+		{:noreply, [updated_listNodesM,list2,list3]}
+	end
 
-	#def handle_cast({:removeNode, node}, [other,nodeList]) do
-	#	updated_list = Enum.reject(nodeList, fn(i) -> i == nodeId end)
-	#	{:noreply, [other,updated_list]}
-	#end
+	def handle_cast({:nodeUp, node}, [other, list, other2]) do
+		updated_listNodes = Enum.map(list, fn x -> nodeStateFunction(node, :UP, x) end)
+		{:noreply, [other,updated_listNodes,other2]}
+	end
+
+	def handle_cast({:nodeDown, node}, [other, list, other2]) do
+		updated_listNodes = Enum.map(list, fn x -> nodeStateFunction(node, :DOWN, x) end)
+		{:noreply, [other,updated_listNodes,other2]}
+	end
 
 	def init([nodesMaster, nodesList, nodesFiles]) do
 		{:ok, [nodesMaster, nodesList, nodesFiles]}
 	end
 end
-
-#{_,pid}=ServerWIP.start_link()
-#ServerWIP.addNode(pid,Node1)
-#ServerWIP.addNode(pid,Node2)
-#ServerWIP.addNode(pid,Node3)
-#ServerWIP.addNode(pid,Node4)
-#ServerWIP.addNode(pid,Node5)
-#ServerWIP.addNode(pid,Node6)
-#ServerWIP.addNodeM(pid,NodeM1)
-#ServerWIP.addNodeM(pid,NodeM2)
-#ServerWIP.viewNodes(pid)
-#ServerWIP.viewNodesM(pid)
-#ServerWIP.viewNodesFiles(pid)
-#ServerWIP.viewAll(pid)
