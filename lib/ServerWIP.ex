@@ -2,7 +2,11 @@ defmodule ServerWIP do
 	use GenServer
 
 	#Client
-  	def start_link() do
+	def start do
+		start_link()
+	end
+
+  	defp start_link() do
     	GenServer.start_link(__MODULE__, [[],[],[]])
   	end
 
@@ -47,15 +51,19 @@ defmodule ServerWIP do
   	end
 
   	def nodeMSync(pid, nodeM) do
-  		GenServer.cast(pid, {:nodeMSync, node})
+  		GenServer.cast(pid, {:nodeMSync, nodeM})
   	end
 
   	def nodeMUnsync(pid, nodeM) do
-  		GenServer.cast(pid, {:nodeMUnsync, node})
+  		GenServer.cast(pid, {:nodeMUnsync, nodeM})
   	end
 
 	def viewNodesFiles(pid) do
 		GenServer.call(pid, :viewNodesFiles)
+	end
+
+	def addNodesToFiles(pid, file, nodes) do
+		GenServer.cast(pid, {:addNodesToFiles, file, nodes})
 	end
 
 	def stop(pid) do
@@ -63,11 +71,6 @@ defmodule ServerWIP do
 	end
 
 	#Server	
-	def terminate() do
-		IO.puts("** STOPING SERVER **")
-		:ok
-	end
-
 	def handle_call(:viewAll, _from, list) do
 		{:reply, list, list}
 	end
@@ -90,20 +93,20 @@ defmodule ServerWIP do
 	end
 
 	def handle_cast({:addNodeM, nodeM}, [listNodesM,other,other2]) do 
-		updated_list = listNodesM ++ [{nodeM,:SYNC}]
+		updated_list = listNodesM ++ [{nodeM,:UNSYNC}]
 		{:noreply, [updated_list,other,other2]}
 	end
 
 	def handle_cast({:addFile, file}, [other,other2,listFilesNodes]) do
-		updated_list = listFilesNodes ++ [file,[]]
+		updated_list = listFilesNodes ++ [{file,[]}]
 		{:noreply, [other,other2,updated_list]}
 	end
 
-	def nodeStateFunction(node, state, {nodeID, status})
+	def nodeStateFunction(node, state, {nodeID, _})
 		when node == nodeID do {node, state}
 	end
 
-	def nodeStateFunction(node, state, {nodeID, status})
+	def nodeStateFunction(node, _, {nodeID, status})
 		when node != nodeID do {nodeID, status}
 	end
 
@@ -137,6 +140,27 @@ defmodule ServerWIP do
 	def handle_cast({:nodeDown, node}, [other, list, other2]) do
 		updated_listNodes = Enum.map(list, fn x -> nodeStateFunction(node, :DOWN, x) end)
 		{:noreply, [other,updated_listNodes,other2]}
+	end
+
+	def addNodesToFilesFunction(file, nodes, fileID)
+		when file == fileID do {fileID, nodes}
+	end
+
+	def addNodesToFilesFunction(file, nodes, {fileID, nodesList})
+		when file == fileID do {fileID, nodesList++nodes}
+	end
+
+	def addNodesToFilesFunction(file, _, {fileID, nodesList})
+		when file != fileID do {fileID, nodesList}
+	end
+
+	def addNodesToFilesFunction(file, _, fileID)
+		when file != fileID do {fileID, []}
+	end
+
+	def handle_cast({:addNodesToFiles, file, nodes}, [list1, list2, list]) do
+		updated_listFiles = Enum.map(list, fn x -> addNodesToFilesFunction(file, nodes, x) end)
+		{:noreply, [list1,list2,updated_listFiles]}
 	end
 
 	def init([nodesMaster, nodesList, nodesFiles]) do
