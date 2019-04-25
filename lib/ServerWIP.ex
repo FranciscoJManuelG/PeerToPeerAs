@@ -14,6 +14,10 @@ defmodule ServerWIP do
   		GenServer.cast(pid, {:addNodeM, nodeM})
   	end
 
+  	def addFile(pid, file) do
+  		GenServer.cast(pid, {:addFile, file})
+  	end
+
   	def viewAll(pid) do
 		GenServer.call(pid, :viewAll)
 	end
@@ -81,15 +85,19 @@ defmodule ServerWIP do
 		{:reply, nodesFiles, [other,other2,nodesFiles]}
 	end
 
-	def handle_cast({:addNode, node}, [other,listNodes,nodesFiles]) do 
+	def handle_cast({:addNode, node}, [other,listNodes,other2]) do 
 		updated_listNodes = listNodes ++ [{node,:DOWN}]
-		updated_listNodesFiles = nodesFiles ++ [{node,[]}]
-		{:noreply, [other,updated_listNodes,updated_listNodesFiles]}
+		{:noreply, [other,updated_listNodes,other2]}
 	end
 
 	def handle_cast({:addNodeM, nodeM}, [listNodesM,other,other2]) do 
 		updated_list = listNodesM ++ [{nodeM,:UNSYNC}]
 		{:noreply, [updated_list,other,other2]}
+	end
+
+	def handle_cast({:addFile, file}, [other,other2,listFilesNodes]) do
+		updated_list = listFilesNodes ++ [file,[]]
+		{:noreply, [other,other2,updated_list]}
 	end
 
 	def aux_remove(node, [{nodeID, state}|others], list_aux)
