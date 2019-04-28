@@ -1,6 +1,5 @@
 defmodule ServerWIP do
 	use GenServer
-	require Logger
 
 	#Client
   	def addNode(node, ip) do
@@ -19,7 +18,7 @@ defmodule ServerWIP do
   	end
 
   	def viewAll() do
-  		IO.puts("Mostrando la estructura completa del nodo")
+  		#IO.puts("Mostrando la estructura completa del nodo")
 		GenServer.call(:server, :viewAll)
 	end
 
@@ -73,9 +72,9 @@ defmodule ServerWIP do
   		GenServer.cast(:server, {:nodeDown, node})
   	end
 
-  	def nodeMSync(nodeM) do
-  		IO.puts("Estableciendo nodo master como sincronizado '#{nodeM}'")
-  		GenServer.cast(:server, {:nodeMSync, nodeM})
+  	def nodeMSync(nodeM, listSync) do
+  		IO.puts("Sincronizando nodo master '#{nodeM}'")
+  		GenServer.cast(:server, {:nodeMSync, nodeM, listSync})
   	end
 
   	def nodeMUnsync(nodeM) do
@@ -139,86 +138,88 @@ defmodule ServerWIP do
 
 	#Añade un nodo base
 	def handle_cast({:addNode, node, ip}, [list1,list2,list3,list4, list5]) do
-		case canAdd(node,list2) do
-			true -> 	updated_listNodes = list2 ++ [{node,:DOWN}]
-						updated_listNodesIps = list4 ++ [{node, ip}]
-						IO.puts("Añadido")
-						{:noreply, [list1,updated_listNodes,list3,updated_listNodesIps,list5]}
-
-			false ->	IO.puts("No se ha podido añadir, '#{node}' ya existe")
-						{:noreply, [list1,list2,list3,list4,list5]}
+		if canAdd(node,list2) do
+			updated_listNodes = list2 ++ [{node,:DOWN}]
+			updated_listNodesIps = list4 ++ [{node, ip}]
+			IO.puts("Añadido")
+			{:noreply, [list1,updated_listNodes,list3,updated_listNodesIps,list5]}
+		else
+			IO.puts("No se ha podido añadir, '#{node}' ya existe")
+			{:noreply, [list1,list2,list3,list4,list5]}
 		end
 	end
 
 	#Añade un nodo maestro
 	def handle_cast({:addNodeM, nodeM, ip}, [list1,list2,list3,list4, list5]) do 
-		case canAdd(nodeM,list1) do
-			true -> 	updated_list = list1 ++ [{nodeM,:UNSYNC}]
-						updated_listNodesMIps = list5 ++ [{nodeM, ip}]
-						IO.puts("Añadido")
-						{:noreply, [updated_list,list2,list3, list4, updated_listNodesMIps]}
-
-			false -> 	IO.puts("No se ha podido añadir, '#{nodeM}' ya existe")
-						{:noreply, [list1,list2,list3, list4, list5]}
+		if canAdd(nodeM,list1) do
+			updated_list = list1 ++ [{nodeM,:UNSYNC}]
+			updated_listNodesMIps = list5 ++ [{nodeM, ip}]
+			IO.puts("Añadido")
+			{:noreply, [updated_list,list2,list3, list4, updated_listNodesMIps]}
+		else
+			IO.puts("No se ha podido añadir, '#{nodeM}' ya existe")
+			{:noreply, [list1,list2,list3, list4, list5]}
 		end
 	end
 
 	#Añade un fichero
 	def handle_cast({:addFile, file}, [list1,list2,list3,list4,list5]) do
-		case canAdd(file,list3) do
-			true ->		updated_list = list3 ++ [{file,[]}]
-						IO.puts("Añadido")
-						{:noreply, [list1,list2,updated_list,list4,list5]}
-
-			false -> 	IO.puts("No se ha podido añadir, '#{file}' ya existe")
-						{:noreply, [list1,list2,list3,list4,list5]}
+		if canAdd(file,list3) do
+			updated_list = list3 ++ [{file,[]}]
+			IO.puts("Añadido")
+			{:noreply, [list1,list2,updated_list,list4,list5]}
+		else
+			IO.puts("No se ha podido añadir, '#{file}' ya existe")
+			{:noreply, [list1,list2,list3,list4,list5]}
 		end
 	end
 
 	#Elimina un nodo maestro 
 	def handle_cast({:removeNodeM, nodeM}, [list1, list2, list3, list4, list5]) do
 		updated_listNodesM = deleteX(nodeM,list1)
-		case updated_listNodesM == list1 do
-			true -> 	IO.puts("No se ha podido eliminar, '#{nodeM}' no existe")
-						{:noreply, [list1, list2, list3,list4, list5]}
-
-			false ->	IO.puts("Eliminado nodo maestro '#{nodeM}'")
-						updated_listNodesMIps = deleteX(nodeM,list5)
-						{:noreply, [updated_listNodesM, list2, list3,list4, updated_listNodesMIps]}
+		if updated_listNodesM == list1 do
+			IO.puts("No se ha podido eliminar, '#{nodeM}' no existe")
+			{:noreply, [list1, list2, list3,list4, list5]}
+		else
+			IO.puts("Eliminado nodo maestro '#{nodeM}'")
+			updated_listNodesMIps = deleteX(nodeM,list5)
+			{:noreply, [updated_listNodesM, list2, list3,list4, updated_listNodesMIps]}
 		end		
 	end
 
 	#Elimina un nodo base
 	def handle_cast({:removeNode, node}, [list1, list2, list3, list4, list5]) do
 		updated_listNodes = deleteX(node,list2)
-		case updated_listNodes == list2 do
-			true -> 	IO.puts("No se ha podido eliminar, '#{node}' no existe")
-						{:noreply, [list1, list2, list3,list4, list5]}
-
-			false ->	IO.puts("Eliminado nodo base '#{node}'")
-						updated_listNodesIps = deleteX(node,list4)
-						{:noreply, [list1, updated_listNodes, list3,updated_listNodesIps, list5]}
+		if updated_listNodes == list2 do
+			IO.puts("No se ha podido eliminar, '#{node}' no existe")
+			{:noreply, [list1, list2, list3,list4, list5]}
+		else
+			IO.puts("Eliminado nodo base '#{node}'")
+			updated_listNodesIps = deleteX(node,list4)
+			{:noreply, [list1, updated_listNodes, list3,updated_listNodesIps, list5]}
 		end		
 	end
 
 	#Elimina un fichero
 	def handle_cast({:removeFile, file}, [list1, list2, list3, list4, list5]) do
 		updated_listFiles = deleteX(file,list3)
-		case updated_listFiles == list3 do
-			true -> 	IO.puts("No se ha podido eliminar, '#{file}' no existe")
-						{:noreply, [list1, list2, list3,list4, list5]}
-
-			false ->	IO.puts("Eliminado fichero '#{file}'")
-						{:noreply, [list1, list2, updated_listFiles,list4, list5]}
+		if updated_listFiles == list3 do
+			IO.puts("No se ha podido eliminar, '#{file}' no existe")
+			{:noreply, [list1, list2, list3,list4, list5]}
+		else
+			IO.puts("Eliminado fichero '#{file}'")
+			{:noreply, [list1, list2, updated_listFiles,list4, list5]}
 		end
 	end
 
 	#Sincroniza un nodo principal con este
-	def handle_cast({:nodeMSync, nodeM}, [list1, list2, list3, list4, list5]) do
+	def handle_cast({:nodeMSync, nodeM, listSync}, [list1, list2, list3, list4, list5]) do
 		updated_listNodesM = Enum.map(list1, fn x -> nodeStateFunction(nodeM, :SYNC, x) end)
-		case updated_listNodesM == list1 do
-			true -> IO.puts("El nodo '#{nodeM}' no existe o ya está sincronizado")
-			false -> IO.puts("El nodo '#{nodeM}' se ha sincronizado")
+		if updated_listNodesM == list1 do
+			IO.puts("El nodo '#{nodeM}' no existe o ya está sincronizado")
+		else
+			syncNodes(listSync)
+			IO.puts("El nodo '#{nodeM}' se ha sincronizado")
 		end
 		{:noreply, [updated_listNodesM,list2,list3, list4, list5]}
 	end
@@ -226,9 +227,10 @@ defmodule ServerWIP do
 	#Establece el estado de UNSYNC a un nodo principal
 	def handle_cast({:nodeMUnsync, nodeM}, [list1, list2, list3, list4, list5]) do
 		updated_listNodesM = Enum.map(list1, fn x -> nodeStateFunction(nodeM, :UNSYNC, x) end)
-		case updated_listNodesM == list1 do
-			true -> IO.puts("El nodo '#{nodeM}' no existe o ya está desincronizado")
-			false -> IO.puts("El nodo '#{nodeM}' se ha desincronizado")
+		if updated_listNodesM == list1 do
+			IO.puts("El nodo '#{nodeM}' no existe o ya está desincronizado")
+		else
+			IO.puts("El nodo '#{nodeM}' se ha desincronizado")
 		end
 		{:noreply, [updated_listNodesM,list2,list3, list4, list5]}
 	end
@@ -236,9 +238,10 @@ defmodule ServerWIP do
 	#Establece el estado de UP a un nodo base
 	def handle_cast({:nodeUp, node}, [list1, list2, list3, list4, list5]) do
 		updated_listNodes = Enum.map(list2, fn x -> nodeStateFunction(node, :UP, x) end)
-		case updated_listNodes == list2 do
-			true -> IO.puts("El nodo '#{node}' no existe o ya está levantado")
-			false -> IO.puts("El nodo '#{node}' se ha levantado")
+		if updated_listNodes == list2 do
+			IO.puts("El nodo '#{node}' no existe o ya está levantado")
+		else
+			IO.puts("El nodo '#{node}' se ha levantado")
 		end
 		{:noreply, [list1,updated_listNodes,list3, list4, list5]}
 	end
@@ -246,9 +249,10 @@ defmodule ServerWIP do
 	#Establece el estado de DOWN a un nodo base
 	def handle_cast({:nodeDown, node}, [list1, list2, list3, list4, list5]) do
 		updated_listNodes = Enum.map(list2, fn x -> nodeStateFunction(node, :DOWN, x) end)
-		case updated_listNodes == list2 do
-			true -> IO.puts("El nodo '#{node}' no existe o ya está tirado")
-			false -> IO.puts("El nodo '#{node}' se ha tirado")
+		if updated_listNodes == list2 do
+			IO.puts("El nodo '#{node}' no existe o ya está tirado")
+		else
+			IO.puts("El nodo '#{node}' se ha tirado")
 		end
 		{:noreply, [list1,updated_listNodes,list3, list4, list5]}
 	end
@@ -267,10 +271,44 @@ defmodule ServerWIP do
 		{:noreply, [list1, list2, updated_listFiles, list4, list5]}
 	end
 
-	#Sincroniza dos nodos maestros
-	#FALTA
-
 	############################## FUNCIONES AUXILIARES ###########################
+
+	def ipOfNode(node, [{nodeID,ip}|_])
+		when node == nodeID do ip
+	end
+
+	def ipOfNode(node, [{nodeID,_}|listIpsNodes])
+		when node != nodeID do ipOfNode(node, listIpsNodes)
+	end
+
+	def ipOfNode(_) do
+		"ERROR"
+	end
+
+	####################################################
+
+	def syncNodes([[{nodeM, _}|list1Node2], list2Node2, list3Node2, list4Node2, list5Node2]) do
+		addNodeM(nodeM,ipOfNode(nodeM,list5Node2))
+		syncNodes([list1Node2, list2Node2, list3Node2, list4Node2, list5Node2])
+	end
+
+	def syncNodes([[], [{node, state}|list2Node2], list3Node2, list4Node2, list5Node2]) do
+		addNode(node,ipOfNode(node,list4Node2))
+		if state == :UP do
+			nodeUp(node)
+		end	
+		syncNodes([[], list2Node2, list3Node2, list4Node2, list5Node2])
+	end
+
+	def syncNodes([[], [], [{file,nodes}|list3Node2], list4Node2, list5Node2]) do
+		addFile(file)
+		addNodesToFiles(file,nodes)
+		syncNodes([[], [], list3Node2, list4Node2, list5Node2])
+	end
+
+	def syncNodes([[], [], [], _, _]), do: :ok
+
+	####################################################
 
 	def canAdd(x, [{xID, _}|_])
 		when x == xID do false
@@ -280,19 +318,13 @@ defmodule ServerWIP do
 		when x != xID do canAdd(x,tail)
 	end
 
-	def canAdd(_, []) do
-		true
-	end
+	def canAdd(_, []), do: true
 
 	####################################################
 
-	def deleteX(x,list) do
-		deleteX(x,list,[])
-	end
+	def deleteX(x,list), do: deleteX(x,list,[])
 
-	def deleteX(_,[],aux) do
-		aux
-	end
+	def deleteX(_,[],aux), do: aux
 
 	def deleteX(x,[{xID,_}|tail],aux)
 		when x == xID do aux ++ tail
@@ -311,7 +343,7 @@ defmodule ServerWIP do
 	def nodeStateFunction(node, _, {nodeID, status})
 		when node != nodeID do {nodeID, status}
 	end
-#################################################################
+################################################################
 
 	def isNotNodeInFileFunction(node, [head|_])
 		when node == head do false		
@@ -321,9 +353,7 @@ defmodule ServerWIP do
 		when node != head do isNotNodeInFileFunction(node,tail)
 	end
 
-	def isNotNodeInFileFunction(_, _) do
-		true
-	end
+	def isNotNodeInFileFunction(_, _), do: true
 
 	##################################################################
 
@@ -331,21 +361,23 @@ defmodule ServerWIP do
 		addNodesToFilesFunction(file, listNodes, listFiles, list2, [])
 	end
 
+
 	def addNodesToFilesFunction(file, [node|nodesTail], [{fileID,nodeList}|tail],list2, listAux) do
-		case file == fileID do
-			true ->		case isNotNodeInFileFunction(node, nodeList) do
-							true ->		case canAdd(node,list2) do
-											false -> 	IO.puts("Insertado el nodo '#{node}' al fichero '#{file}'")
-														addNodesToFilesFunction(file,nodesTail,[{fileID,nodeList ++ [node]}|tail], listAux)
-
-											true ->		IO.puts("El nodo '#{node}' no está registrado")
-														addNodesToFilesFunction(file,nodesTail,[{fileID,nodeList}|tail], listAux)
-										end
-
-							false ->	IO.puts("El nodo '#{node}' ya está asociado al fichero '#{file}'")
-										addNodesToFilesFunction(file,nodesTail,[{fileID,nodeList}|tail], listAux)
-						end
-			false ->	addNodesToFilesFunction(file,[node|nodesTail],tail,listAux ++ [{fileID,nodeList}])
+		if file == fileID do
+			if isNotNodeInFileFunction(node, nodeList) do
+				if canAdd(node,list2) do
+					IO.puts("El nodo '#{node}' no está registrado")
+					addNodesToFilesFunction(file,nodesTail,[{fileID,nodeList}|tail], listAux)
+				else 
+					IO.puts("Insertado el nodo '#{node}' al fichero '#{file}'")
+					addNodesToFilesFunction(file,nodesTail,[{fileID,nodeList ++ [node]}|tail], listAux)
+				end
+			else
+				IO.puts("El nodo '#{node}' ya está asociado al fichero '#{file}'")
+				addNodesToFilesFunction(file,nodesTail,[{fileID,nodeList}|tail], listAux)
+			end
+		else
+			addNodesToFilesFunction(file,[node|nodesTail],tail,listAux ++ [{fileID,nodeList}])
 		end
 	end
 
@@ -383,10 +415,11 @@ defmodule ServerWIP do
 	end
 
 	def removeNodesToFilesFunction(file, listNodes, [{fileID,listNodesFiles}|tail], listAux) do
-		case file == fileID do
-			true ->		update_nodeList = removeNodesToFileFunction(listNodes, listNodesFiles, [])
-						listAux ++ [{fileID,update_nodeList}]
-			false ->	removeNodesToFilesFunction(file,listNodes,tail,listAux ++ [{fileID,listNodesFiles}])
+		if file == fileID do
+			update_nodeList = removeNodesToFileFunction(listNodes, listNodesFiles, [])
+			listAux ++ [{fileID,update_nodeList}]
+		else
+			removeNodesToFilesFunction(file,listNodes,tail,listAux ++ [{fileID,listNodesFiles}])
 		end
 	end
 
@@ -449,3 +482,28 @@ end
 # ServerWIP.removeFile("File2")
 # ServerWIP.viewAll()
 # ServerWIP.stop()
+
+# Example Sync 
+# ServerWIP.nodeMSync("NodeM1",
+# [
+#   [{"NodeM1", :UNSYNC}, {"NodeM2", :UNSYNC}],
+#   [
+#     {"Node1", :DOWN},
+#     {"Node2", :DOWN},
+#     {"Node3", :DOWN},
+#     {"Node4", :DOWN},
+#     {"Node5", :DOWN},
+#     {"Node6", :DOWN}
+#   ],
+#   [{"File1", ["Node1"]}, {"File2", ["Node2"]}, {"File3", ["Node1", "Node2"]}],
+#   [
+#     {"Node1", "10.10.10.10"},
+#     {"Node2", "20.10.10.10"},
+#     {"Node3", "30.10.10.10"},
+#     {"Node4", "40.10.10.10"},
+#     {"Node5", "50.10.10.10"},
+#     {"Node6", "60.10.10.10"}
+#   ],
+#   [{"NodeM1", "11.10.10.10"}, {"NodeM2", "12.10.10.10"}]
+# ]
+# ) 
