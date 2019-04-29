@@ -1,6 +1,5 @@
 defmodule ServerWIP do
 	use GenServer
-
 	#Client
   	def addNode(node, ip) do
   		IO.puts("Añadiendo nodo base con id '#{node}' e ip '#{ip}'.")
@@ -258,14 +257,12 @@ defmodule ServerWIP do
 	end
 
 	#Añade nodos a los ficheros
-	#Comprobar que los nodos existen (Si el primer nodo no existe los otros fallan)
-	#Si se pasa un file que no existe se borra la lista de files
 	def handle_cast({:addNodesToFiles, file, nodes}, [list1, list2, list3, list4, list5]) do
 		updated_listFiles = addNodesToFilesFunction(file, nodes, list3, list2)
 		{:noreply, [list1,list2,updated_listFiles, list4, list5]}
 	end
 
-	#Elimina un nodo de un fichero ** NO FUNCIONA ** 
+	#Elimina un nodo de un fichero
 	def handle_cast({:removeNodesOfFile, file, nodes}, [list1, list2, list3, list4, list5]) do
 		updated_listFiles = removeNodesToFilesFunction(file, nodes, list3)
 		{:noreply, [list1, list2, updated_listFiles, list4, list5]}
@@ -367,22 +364,22 @@ defmodule ServerWIP do
 			if isNotNodeInFileFunction(node, nodeList) do
 				if canAdd(node,list2) do
 					IO.puts("El nodo '#{node}' no está registrado")
-					addNodesToFilesFunction(file,nodesTail,[{fileID,nodeList}|tail], listAux)
+					addNodesToFilesFunction(file,nodesTail,[{fileID,nodeList}|tail], list2, listAux)
 				else 
 					IO.puts("Insertado el nodo '#{node}' al fichero '#{file}'")
-					addNodesToFilesFunction(file,nodesTail,[{fileID,nodeList ++ [node]}|tail], listAux)
+					addNodesToFilesFunction(file,nodesTail,[{fileID,nodeList ++ [node]}|tail], list2, listAux)
 				end
 			else
 				IO.puts("El nodo '#{node}' ya está asociado al fichero '#{file}'")
-				addNodesToFilesFunction(file,nodesTail,[{fileID,nodeList}|tail], listAux)
+				addNodesToFilesFunction(file,nodesTail,[{fileID,nodeList}|tail], list2, listAux)
 			end
 		else
-			addNodesToFilesFunction(file,[node|nodesTail],tail,listAux ++ [{fileID,nodeList}])
+			addNodesToFilesFunction(file,[node|nodesTail],tail, list2,listAux ++ [{fileID,nodeList}])
 		end
 	end
 
-	def addNodesToFilesFunction(file, _, [],_, _) do
-		IO.puts("El fichero '#{file}' no está registrado")
+	def addNodesToFilesFunction(_, _, [],_, listAux) do
+		listAux
 	end
 
 	def addNodesToFilesFunction(_, _, listFiles,_ ,listAux) do
@@ -390,23 +387,23 @@ defmodule ServerWIP do
 	end
 
 	##############################################################################
-	def removeNodesToFileFunction([], listNodesFiles, _) do
-		listNodesFiles
+	def removeNodesToFileFunction([], listNodesFiles, listAux) do
+		listAux ++ listNodesFiles
 	end
 
 	def removeNodesToFileFunction([node|nodesTail], [nodeFile|nodesFileTail], listAux)
 		when node == nodeFile do
 			IO.puts("Se ha eliminado el nodo '#{node}' del fichero '#{nodeFile}'")
-			removeNodesToFileFunction([nodesTail], [nodesFileTail], listAux)
+			removeNodesToFileFunction(nodesTail, nodesFileTail, listAux)
 	end
 
 	def removeNodesToFileFunction([node|nodesTail], [nodeFile|nodesFileTail], listAux)
 		when node != nodeFile do
-			removeNodesToFileFunction([node|nodesTail], [nodesFileTail], listAux++[nodeFile])
+			removeNodesToFileFunction([node|nodesTail], nodesFileTail, listAux++[nodeFile])
 	end
 
 	def removeNodesToFileFunction([_|nodesTail], [], listAux) do 
-		removeNodesToFileFunction([nodesTail], listAux, [])
+		removeNodesToFileFunction(nodesTail, listAux, [])
 	end
 
 	##############################################################################
@@ -419,12 +416,12 @@ defmodule ServerWIP do
 			update_nodeList = removeNodesToFileFunction(listNodes, listNodesFiles, [])
 			listAux ++ [{fileID,update_nodeList}]
 		else
-			removeNodesToFilesFunction(file,listNodes,tail,listAux ++ [{fileID,listNodesFiles}])
+			removeNodesToFilesFunction(file, listNodes, tail,listAux ++ [{fileID,listNodesFiles}])
 		end
 	end
 
-	def removeNodesToFilesFunction(file, _, [], _) do
-		IO.puts("El fichero '#{file}' no está registrado")
+	def removeNodesToFilesFunction(file, _, [], listAux) do
+		listAux
 	end
 
 	def removeNodesToFilesFunction(_, _, listFiles, listAux) do
@@ -469,8 +466,6 @@ end
 # ServerWIP.removeNode("Node4")
 # ServerWIP.nodeUp("Node4")
 # ServerWIP.nodeUp("Node5")
-# ServerWIP.nodeMSync("NodeM1")
-# ServerWIP.nodeMSync("NodeM2")
 # ServerWIP.removeNodeM("NodeM1")
 # ServerWIP.viewAll()
 # ServerWIP.addNodesToFiles("File1",["Node3","Node4"])
