@@ -1,15 +1,26 @@
 defmodule Interface do
-	import alias ServerWIP, as: Server
+	alias ServerWIP, as: Server
 
 	# Ejecuta ordenes provenientes de nodos base
-	def execute_client(orden) do
+	def execute_client(orden, name, ip) do
 		case String.split(orden) do
-			["VIEW","NODES"] -> Server.viewNodes()
-			["VIEW","NODES","IPS"] -> ServerWIP.viewNodesIp()
-			["VIEW","FILES"] -> Server.viewFiles()
-			["ADD", "FILE", fileId] -> Server.addFile(fileId)
-			#["WANT", data]->"Wantthefile"<>Kernel.inspect(data)<>"\n"
-			#["OFFER",data]->"Offerthefile"<>Kernel.inspect(data)<>"\n"
+			["CONNECT"] -> 			if not Server.isNodeUp(name) do
+										Server.addNode(name, ip)
+										Server.nodeUp(name)
+									else IO.puts("YA ESTAS CONECTADO")
+									end
+			["DISCONNECT"] -> 		if Server.isNodeUp(name) do
+										Server.nodeDown(name)
+									else IO.puts("NO ESTAS CONECTADO")
+									end
+			["WANT", fileId] -> 	if Server.isNodeUp(name) do
+										Server.want(fileId)
+									else IO.puts("NO ESTAS CONECTADO")
+									end
+			["OFFER", fileId] -> 	if Server.isNodeUp(name) do
+										Server.offer(fileId, name)
+									else IO.puts("NO ESTAS CONECTADO")
+									end
 			_-> IO.puts("FORMAT INCORRECT")
 		end
 	end
@@ -29,16 +40,14 @@ defmodule Interface do
 			["REMOVE", "NODES_TO_FILE", fileId, nodes] -> Server.removeNodesOfFile(fileId,String.split(nodes,"-"))	
 			["VIEW","NODES"] -> Server.viewNodes()
 			["VIEW","NODESM"] -> Server.viewNodesM()
-			["VIEW","NODESM","IPS"] -> ServerWIP.viewNodesMIp()
-			["VIEW","NODES","IPS"] -> ServerWIP.viewNodesIp()
+			["VIEW","NODESM","IPS"] -> Server.viewNodesMIp()
+			["VIEW","NODES","IPS"] -> Server.viewNodesIp()
 			["VIEW","FILES"] -> Server.viewFiles()
 			["VIEW"] -> Server.viewAll()
 			["NODE","UP",nodeId] -> Server.nodeUp(nodeId)
 			["NODE","DOWN",nodeId] -> Server.nodeDown(nodeId)
-			["NODE","SYNC",nodeMId, nodeMIdList] -> Server.nodeMSync(nodeMId, nodeMIdList) #No funciona
+			["NODE","SYNC",nodeMId, listSync] -> Server.nodeMSync(nodeMId, listSync) #No funciona
 			["NODE","UNSYNC",nodeMId] -> Server.nodeMUnsync(nodeMId)
-			#["WANT", data]->"Wantthefile"<>Kernel.inspect(data)<>"\n"
-			#["OFFER",data]->"Offerthefile"<>Kernel.inspect(data)<>"\n"
 			_-> IO.puts("FORMAT INCORRECT")
 		end
 	end

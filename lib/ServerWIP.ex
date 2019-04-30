@@ -17,7 +17,6 @@ defmodule ServerWIP do
   	end
 
   	def viewAll() do
-  		#IO.puts("Mostrando la estructura completa del nodo")
 		GenServer.call(:server, :viewAll)
 	end
 
@@ -91,6 +90,19 @@ defmodule ServerWIP do
 		GenServer.cast(:server, {:removeNodesOfFile, file, nodes})
 	end
 
+	def offer(file, name) do
+		addFile(file)
+		addNodesToFiles(file,[name])
+	end
+
+	def want(file) do
+		IO.puts("Mostrando los nodos que tiene el fichero '#{file}'")
+		GenServer.call(:server, {:viewFile, file})
+	end
+
+	def isNodeUp(name) do
+		GenServer.call(:server, {:nodeIsUp, name})
+	end
 	#Server
 
 	#Arranca el servidor
@@ -125,6 +137,13 @@ defmodule ServerWIP do
 		{:reply, list3, [list1,list2,list3,list4, list5]}
 	end
 
+	#Muestra los nodos que tienen disponible el fichero 
+	def handle_call({:viewFile, fileId}, _from, [list1,list2,list3,list4, list5]) do
+		nodesList = nodesByFile(fileId, list3)
+		ipsList = ipsByNodes(nodesList, list4)
+		{:reply, ipsList, [list1,list2,list3,list4, list5]}
+	end
+
 	#Muestra las ips asociadas a los nodos base
 	def handle_call(:viewNodesIp, _from, [list1,list2,list3,list4, list5]) do
 		{:reply, list4, [list1,list2,list3,list4, list5]}
@@ -133,6 +152,11 @@ defmodule ServerWIP do
 	#Muestra las ips asociadas a los nodos master
 	def handle_call(:viewNodesMIp, _from, [list1,list2,list3,list4, list5]) do
 		{:reply, list5, [list1,list2,list3,list4, list5]}
+	end
+
+	#Duvuelve verdadero si el nodo está conectado
+	def handle_call({:nodeIsUp, name}, _from, [list1,list2,list3,list4, list5]) do
+		{:reply, nodeIsUpFunction(name, list2), [list1,list2,list3,list4, list5]}
 	end
 
 	#Añade un nodo base
@@ -269,6 +293,53 @@ defmodule ServerWIP do
 	end
 
 	############################## FUNCIONES AUXILIARES ###########################
+	def nodeIsUpFunction(node, [{nodeId,state}|_])
+		when node == nodeId and state == :UP do true
+	end
+
+	def nodeIsUpFunction(node, [{nodeId,_}|tail])
+		when node != nodeId do nodeIsUpFunction(node, tail)
+	end
+
+	def nodeIsUpFunction(node, [{nodeId,state}|_])
+		when node == nodeId and state != :UP do false
+	end
+
+	def nodeIsUpFunction(_, _), do: false
+	####################################################
+	def ipsByNodes(nodeList, nodeIpsList) do
+		ipsByNodes(nodeList, nodeIpsList, [], [])
+	end
+
+	def ipsByNodes([node|tail], [{nodeId,ip}|tail2], listAuxNodes, listAux)
+		when node == nodeId do ipsByNodes(tail, tail2,listAuxNodes ++ [{nodeId,ip}], listAux ++ [ip])
+	end
+
+	def ipsByNodes([node|tail], [{nodeId,ip}|tail2], listAuxNodes, listAux)
+		when node != nodeId do ipsByNodes([node|tail], tail2,listAuxNodes ++ [{nodeId,ip}], listAux)
+	end
+
+	def ipsByNodes(nodeList, [], listAuxNodes, listAux) do
+		ipsByNodes(nodeList, listAuxNodes,[], listAux)
+	end
+
+	def ipsByNodes([], _, _, listAux) do
+		listAux
+	end
+
+	####################################################
+
+	def nodesByFile(file, [{fileId,listNodes}|_])
+		when file == fileId do listNodes
+	end
+
+	def nodesByFile(file, [{fileId,_}|tail])
+		when file != fileId do nodesByFile(file, tail)
+	end
+
+	def nodesByFile(_, _), do: []
+
+	####################################################
 
 	def ipOfNode(node, [{nodeID,ip}|_])
 		when node == nodeID do ip
@@ -278,7 +349,7 @@ defmodule ServerWIP do
 		when node != nodeID do ipOfNode(node, listIpsNodes)
 	end
 
-	def ipOfNode(_) do
+	def ipOfNode(_,_) do
 		"ERROR"
 	end
 
@@ -420,7 +491,7 @@ defmodule ServerWIP do
 		end
 	end
 
-	def removeNodesToFilesFunction(file, _, [], listAux) do
+	def removeNodesToFilesFunction(_, _, [], listAux) do
 		listAux
 	end
 
