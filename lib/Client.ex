@@ -9,13 +9,12 @@ defmodule Client do
     end
 
     def send(message) do
-        GenServer.cast(:client,{:send,message})
+        GenServer.cast(:client,{:send,Kernel.instpect(message)})
     end
 
     def close() do
         GenServer.cast(:client,:close)
         GenServer.stop(:client)
-        Process.unregister(:client)
         :ok
     end
 
