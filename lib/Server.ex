@@ -1,4 +1,5 @@
 defmodule Server do
+	import Interface
 
 	def accept(port) do
 		{:ok, socket} = :gen_tcp.listen(port,[:binary, packet: :line, active: false, reuseaddr: true])
@@ -23,6 +24,7 @@ defmodule Server do
 	defp read_line(socket) do
 		resp = :gen_tcp.recv(socket, 0)
 		data = see_resp(resp)
+		#Interface.execute_admin(data)
 		data
 	end
 
