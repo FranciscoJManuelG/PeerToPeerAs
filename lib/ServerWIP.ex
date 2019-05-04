@@ -176,7 +176,7 @@ defmodule ServerWIP do
 		unless exists(nodeM,listaNodosMaestros) do
 			updated_listNodes = listaNodosMaestros ++ [{nodeM, :UNSYNC, ip}]
 			#Se sincroniza el nodo que se acaba de añadir
-			nodeMSync(nodeM,[])
+			#nodeMSync(nodeM,[])
 			IO.puts("Añadido nodo maestro con id '#{nodeM}' e ip '#{ip}'.")
 			{:noreply, [updated_listNodes,listaNodosBase,listaFicheros]}
 		else
