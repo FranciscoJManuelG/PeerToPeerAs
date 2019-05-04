@@ -61,7 +61,7 @@ defmodule ServerWIP do
   	end
   	#list?
   	def nodeMSync(nodeM, listSync) do
-  		IO.puts("Sincronizando nodo master '#{nodeM}'")
+  		IO.puts("Sincronizando nodo maestro '#{nodeM}'")
   		GenServer.cast(:server, {:nodeMSync, nodeM, listSync})
   	end
 
@@ -77,7 +77,7 @@ defmodule ServerWIP do
 
 	def offer(fileId, file, node) do
 		addFile(fileId, file)
-		addNodeToFile(file,node)
+		addNodeToFile(fileId,node)
 	end
 
 	def want(fileId) do
@@ -87,6 +87,15 @@ defmodule ServerWIP do
 
 	def isNodeUp(name) do
 		GenServer.call(:server, {:nodeIsUp, name})
+	end
+
+	def idOfIp(ip) do
+		GenServer.call(:server, {:idOfIp, ip})
+	end
+
+	def isAdmin(ip) do
+		#De momento siempre devuelve true solo si es localhost
+		ip == "127.0.0.1"
 	end
 	#Server
 
@@ -137,9 +146,10 @@ defmodule ServerWIP do
 			ipOfNode = ipByNode(node, listaNodosBase)
 			#Devolvemos la ip del nodo
 			{:reply, ipOfNode, [listaNodosMaestros,listaNodosBase,listaFicheros]}
-		end
+		else
 		#Si no se tiene ningún nodo asociado al fichero o no existe el fichero se devuelve :not_found
 		{:reply, :not_found, [listaNodosMaestros,listaNodosBase,listaFicheros]}
+		end
 	end
 
  	#Devuelve verdadero si el nodo está conectado
@@ -254,17 +264,12 @@ defmodule ServerWIP do
 		end
 	end
 
-# 	#Sincroniza un nodo principal con este
-# 	def handle_cast({:nodeMSync, nodeM, listSync}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
-# 		updated_listNodesM = Enum.map(list1, fn x -> nodeStateFunction(nodeM, :SYNC, x) end)
-# 		if updated_listNodesM == list1 do
-# 			IO.puts("El nodo '#{nodeM}' no existe o ya está sincronizado")
-# 		else
-# 			syncNodes(listSync)
-# 			IO.puts("El nodo '#{nodeM}' se ha sincronizado")
-# 		end
-# 		{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}
-# 	end
+	#Sincroniza un nodo maestro con este
+ 	def handle_cast({:nodeMSync, _, syncList}, _) do
+ 		#No tenemos manera de comunicar nodos intermedios por tcp
+ 		#Se actualizaria en campo de sincronización con la fecha y hora en que se haga
+ 		{:noreply, syncList}
+ 	end
 
 	#Establece el estado de UP a un nodo base
 	def handle_cast({:nodeUp, node}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
@@ -281,15 +286,27 @@ defmodule ServerWIP do
 	def handle_cast({:nodeDown, node}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
 		updated_listNodes = nodeStateFunction(node, :DOWN, listaNodosBase)
 		if updated_listNodes == listaNodosBase do
-			IO.puts("El nodo '#{node}' no existe o ya está levantado")
+			IO.puts("El nodo '#{node}' no existe o ya no está levantado")
 		else
-			IO.puts("El nodo '#{node}' se ha levantado")
+			IO.puts("El nodo '#{node}' se ha tirado")
 		end
 		{:noreply, [listaNodosMaestros,updated_listNodes,listaFicheros]}
 	end
 
+	def handle_call({:idOfIp, ip}, _from, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
+		nodeId = idOfIp(ip,listaNodosBase)
+		{:reply, nodeId, [listaNodosMaestros,listaNodosBase,listaFicheros]}
+	end
+
 	############################## FUNCIONES AUXILIARES ###########################
 
+	def idOfIp(ip,[{id,_,ip}|_]), do: id
+
+	def idOfIp(ip,[{_,_,_}|tail]), do: idOfIp(ip,tail)
+
+	def idOfIp(_,[]), do: ""
+
+	######################################################
 	def nodeIsUpFunction(node, [{nodeId,state,_}|_])
 		when node == nodeId and state == :UP do true
 	end
@@ -344,28 +361,6 @@ defmodule ServerWIP do
 
 	####################################################
 
-# 	def syncNodes([[{nodeM, _}|list1Node2], list2Node2, list3Node2, list4Node2, list5Node2]) do
-# 		addNodeM(nodeM,ipOfNode(nodeM,list5Node2))
-# 		syncNodes([list1Node2, list2Node2, list3Node2, list4Node2, list5Node2])
-# 	end
-
-# 	def syncNodes([[], [{node, state}|list2Node2], list3Node2, list4Node2, list5Node2]) do
-# 		addNode(node,ipOfNode(node,list4Node2))
-# 		if state == :UP do
-# 			nodeUp(node)
-# 		end	
-# 		syncNodes([[], list2Node2, list3Node2, list4Node2, list5Node2])
-# 	end
-
-# 	def syncNodes([[], [], [{file,nodes}|list3Node2], list4Node2, list5Node2]) do
-# 		addFile(file)
-# 		addNodesToFiles(file,nodes)
-# 		syncNodes([[], [], list3Node2, list4Node2, list5Node2])
-# 	end
-
-# 	def syncNodes([[], [], [], _, _]), do: :ok
-##########################################################
-
 	def delete(id_want,list), do: delete(id_want,list,[])
 
 	def delete(_,[],aux), do: aux
@@ -388,12 +383,12 @@ defmodule ServerWIP do
 		nodeStateFunction(nodeId, state, list, [])
 	end
 
-	def nodeStateFunction(nodeId, state, [{nodeId, state, ip}|tail], aux) do
+	def nodeStateFunction(nodeId, state, [{nodeId, _, ip}|tail], aux) do
 		aux ++ [{nodeId, state, ip}|tail]
 	end
 
-	def nodeStateFunction(node, status, [{nodeID, status, id}|tail], aux) do
-		nodeStateFunction(node, status, tail, aux ++ [{nodeID, status, id}])
+	def nodeStateFunction(node, status, [{nodeID, state, id}|tail], aux) do
+		nodeStateFunction(node, status, tail, aux ++ [{nodeID, state, id}])
 	end
 
 	def nodeStateFunction(_, _, _, aux) do

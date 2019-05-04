@@ -1,27 +1,46 @@
 defmodule Interface do
 	alias ServerWIP, as: Server
 
+	def execute(orden, ip) do
+		if Process.whereis(:server) != nil do
+			#Si es una ip admin ejecuta execute_admin, si no, ejecuta execute_client
+			if Interface.execute_admin("IS ADMIN " <>  ip) do
+				Interface.execute_admin(orden)
+			else 
+				node = Interface.execute_admin("ID OF IP " <> ip)
+				if (String.length(node)==0) do
+					Interface.execute_client(orden,gen_reference(),ip)
+				else
+					Interface.execute_client(orden,node,ip)
+				end
+			end		
+		else
+			Interface.execute_admin("START")
+			execute(orden,ip)
+		end
+	end
+
 	# Ejecuta ordenes provenientes de nodos base
 	def execute_client(orden, name, ip) do
 		case String.split(orden) do
 			["CONNECT"] -> 			if not Server.isNodeUp(name) do
 										Server.addNode(name, ip)
 										Server.nodeUp(name)
-									else IO.puts("YA ESTAS CONECTADO")
+									else "YA ESTÁS CONECTADO\n"
 									end
 			["DISCONNECT"] -> 		if Server.isNodeUp(name) do
 										Server.nodeDown(name)
-									else IO.puts("NO ESTAS CONECTADO")
+									else "NO ESTÁS CONECTADO\n"
 									end
 			["WANT", fileId] -> 	if Server.isNodeUp(name) do
 										Server.want(fileId)
-									else IO.puts("NO ESTAS CONECTADO")
+									else "NO ESTÁS CONECTADO\n"
 									end
-			["OFFER", fileId] -> 	if Server.isNodeUp(name) do
-										Server.offer(fileId, name)
-									else IO.puts("NO ESTAS CONECTADO")
+			["OFFER", fileId, file] -> 	if Server.isNodeUp(name) do
+										Server.offer(fileId, file, name)
+									else "NO ESTÁS CONECTADO\n"
 									end
-			_-> IO.puts("FORMAT INCORRECT")
+			_-> "FORMAT INCORRECT\n"
 		end
 	end
 
@@ -32,24 +51,36 @@ defmodule Interface do
 			["STOP"] -> Server.stop()
 			["ADD", "NODE", nodeId, nodeIp] -> Server.addNode(nodeId,nodeIp)
 			["ADD", "NODEM", nodeMId, nodeMIp] -> Server.addNodeM(nodeMId,nodeMIp)
-			["ADD", "FILE", fileId] -> Server.addFile(fileId)
-			["ADD", "NODES_TO_FILE", fileId, nodes] -> Server.addNodesToFiles(fileId,String.split(nodes,"-"))			
+			["ADD", "FILE", fileId, file] -> Server.addFile(fileId, file)
+			["ADD", "NODES_TO_FILE", fileId, node] -> Server.addNodeToFile(fileId,node)
 			["REMOVE", "NODEM", nodeMId] -> Server.removeNodeM(nodeMId)
 			["REMOVE", "NODE", nodeId] -> Server.removeNode(nodeId)
 			["REMOVE", "FILE", fileId] -> Server.removeFile(fileId)
-			["REMOVE", "NODES_TO_FILE", fileId, nodes] -> Server.removeNodesOfFile(fileId,String.split(nodes,"-"))	
+			["REMOVE", "NODES_TO_FILE", fileId, node] -> Server.removeNodeOfFile(fileId,node)	
 			["VIEW","NODES"] -> Server.viewNodes()
 			["VIEW","NODESM"] -> Server.viewNodesM()
-			["VIEW","NODESM","IPS"] -> Server.viewNodesMIp()
-			["VIEW","NODES","IPS"] -> Server.viewNodesIp()
 			["VIEW","FILES"] -> Server.viewFiles()
 			["VIEW"] -> Server.viewAll()
 			["NODE","UP",nodeId] -> Server.nodeUp(nodeId)
 			["NODE","DOWN",nodeId] -> Server.nodeDown(nodeId)
-			["NODE","SYNC",nodeMId, listSync] -> Server.nodeMSync(nodeMId, listSync) #No funciona
-			["NODE","UNSYNC",nodeMId] -> Server.nodeMUnsync(nodeMId)
-			_-> IO.puts("FORMAT INCORRECT")
+			["IS","ADMIN", ip] -> Server.isAdmin(ip)
+			["ID","OF","IP", ip] -> Server.idOfIp(ip)
+			#["NODE","SYNC",nodeMId, listSync] -> Server.nodeMSync(nodeMId, listSync)
+			_-> "FORMAT INCORRECT\n"
 		end
+	end
+
+	def execute_admin(_, _), do: IO.puts("Contraseña incorrecta")
+
+	#Genera un string aleatorio
+	def gen_reference() do
+ 		min = String.to_integer("100000", 36)
+ 		max = String.to_integer("ZZZZZZ", 36)
+  		max
+  		|> Kernel.-(min)
+  		|> :rand.uniform()
+  		|> Kernel.+(min)
+  		|> Integer.to_string(36)
 	end
 
 end

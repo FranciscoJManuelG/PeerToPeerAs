@@ -24,8 +24,13 @@ defmodule Server do
 	defp read_line(socket) do
 		resp = :gen_tcp.recv(socket, 0)
 		data = see_resp(resp)
-		#Interface.execute_admin(data)
-		data
+		#Para sacar el \n del final
+		data = String.slice(data,0,String.length(data)-1)
+		#Aquí va la ip 
+		ip = Kernel.inspect("10.10.10.10")
+
+		IO.puts(Interface.execute(data, ip))
+		Interface.execute(data, ip)		
 	end
 
 	defp see_resp({:ok, data}),do: data
@@ -36,6 +41,7 @@ defmodule Server do
 		:gen_tcp.send(socket, line)
 		serve(socket)
 	end
+
 end
 
 
