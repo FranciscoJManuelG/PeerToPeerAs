@@ -26,12 +26,13 @@ defmodule Client do
     def send_stringlist([""|tl], socket),do: send_stringlist(tl,socket)
     def send_stringlist([message|tl], socket) do
         :gen_tcp.send(socket,message<>"\n")
-        {:ok, data} = :gen_tcp.recv(socket, 0)
-        IO.puts(data)
-        send_stringlist(tl,socket)
+        case :gen_tcp.recv(socket, 0) do
+            {:ok, data} ->  IO.puts(data)
+                            send_stringlist(tl,socket)
+            _ -> IO.puts("Error con el servidor")
+        end
+        
     end
-
-    def send_stringlist(_,_),do: :error
 
     def init(socket),do: {:ok,socket}
 

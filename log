@@ -1,0 +1,274 @@
+~T[15:23:28.636745][127.0.0.1:43549]:
+P: VIEW
+R: [[], [], []]
+~T[15:23:42.302575][127.0.0.1:43549]:
+P: ADD NODE node 1 10.10.10.10
+R: FORMAT INCORRECT
+
+~T[15:23:45.357204][127.0.0.1:43549]:
+P: ADD NODE node1 10.10.10.10
+R: Añadiendo nodo base con id 'node1' e ip '10.10.10.10'.
+~T[15:28:40.652609][192.168.1.34:58885]:
+P: CONNECTA
+R: FORMAT INCORRECT
+~T[15:28:48.088133][192.168.1.34:58885]:
+P: WANT
+R: FORMAT INCORRECT
+~T[15:28:54.078619][192.168.1.34:58885]:
+P: WANT FILE
+R: File not found
+~T[15:29:05.471018][192.168.1.34:58885]:
+P: OFFER FILE FILEEEE
+R: Ahora el nodo 'OAY68T' tiene disponible el fichero 'FILE' 
+~T[15:29:17.955746][192.168.1.34:58885]:
+P: WANT FILE
+R: File not found
+~T[15:30:03.824424][127.0.0.1:34215]:
+P: ADD NODE node 1 10.10.10.10
+R: FORMAT INCORRECT
+~T[15:30:07.519010][127.0.0.1:34215]:
+P: ADD NODE node1 10.10.10.10
+R: Añadiendo nodo base con id 'node1' e ip '10.10.10.10'.
+~T[15:30:19.969138][127.0.0.1:34215]:
+P: VIEW
+R: [[], [{"node1", :DOWN, "10.10.10.10"}], [{"FILE", "", "FILEEEE", []}]]
+~T[15:30:37.203022][192.168.1.34:58885]:
+P: WANT FILE
+R: File not found
+~T[15:30:39.179584][192.168.1.34:58885]:
+P: WANT FILE
+R: File not found
+~T[15:32:00.673645][127.0.0.1:33699]:
+P: ADD FILE practica.pdf dfasdfdasfsadf&/$
+R: Añadiendo fichero con id 'practica.pdf'
+~T[15:32:07.579466][127.0.0.1:33699]:
+P: VIEW
+R: [[], [], [{"practica.pdf", "", "dfasdfdasfsadf&/$", []}]]
+~T[15:32:55.215588][127.0.0.1:33699]:
+P: ADD_NODES_TO_FILE practica.pdf node1
+R: FORMAT INCORRECT
+~T[15:33:11.967392][127.0.0.1:33699]:
+P: ADD NODES_TO_FILE practica.pdf node1
+R: Añadiendo 'node1' al fichero 'practica.pdf'
+~T[15:33:14.311727][127.0.0.1:33699]:
+P: VIEW
+R: [[], [], [{"practica.pdf", "", "dfasdfdasfsadf&/$", []}]]
+~T[15:33:16.154293][127.0.0.1:33699]:
+P: VIEW
+R: [[], [], [{"practica.pdf", "", "dfasdfdasfsadf&/$", []}]]
+~T[15:33:16.877275][127.0.0.1:33699]:
+P: VIEW
+R: [[], [], [{"practica.pdf", "", "dfasdfdasfsadf&/$", []}]]
+~T[15:33:17.342840][127.0.0.1:33699]:
+P: VIEW
+R: [[], [], [{"practica.pdf", "", "dfasdfdasfsadf&/$", []}]]
+~T[15:33:17.804675][127.0.0.1:33699]:
+P: VIEW
+R: [[], [], [{"practica.pdf", "", "dfasdfdasfsadf&/$", []}]]
+~T[15:33:18.157249][127.0.0.1:33699]:
+P: VIEW
+R: [[], [], [{"practica.pdf", "", "dfasdfdasfsadf&/$", []}]]
+~T[15:33:18.501264][127.0.0.1:33699]:
+P: VIEW
+R: [[], [], [{"practica.pdf", "", "dfasdfdasfsadf&/$", []}]]
+~T[15:33:33.028693][127.0.0.1:33699]:
+P: ADD NODE node1 10.10.10.10
+R: Añadiendo nodo base con id 'node1' e ip '10.10.10.10'.
+~T[15:33:34.759006][127.0.0.1:33699]:
+P: ADD NODES_TO_FILE practica.pdf node1
+R: Añadiendo 'node1' al fichero 'practica.pdf'
+~T[15:33:36.484723][127.0.0.1:33699]:
+P: VIEW
+R: [[], [{"node1", :DOWN, "10.10.10.10"}], [{"practica.pdf", "", "dfasdfdasfsadf&/$", ["node1"]}]]
+~T[15:34:26.156654][127.0.0.1:33699]:
+P: VIEW
+R: [[], [{"node1", :DOWN, "10.10.10.10"}], [{"practica.pdf", "", "dfasdfdasfsadf&/$", ["node1"]}]]
+~T[15:34:27.070145][127.0.0.1:33699]:
+P: VIEW
+R: [[], [{"node1", :DOWN, "10.10.10.10"}], [{"practica.pdf", "", "dfasdfdasfsadf&/$", ["node1"]}]]
+~T[15:34:27.582264][127.0.0.1:33699]:
+P: VIEW
+R: [[], [{"node1", :DOWN, "10.10.10.10"}], [{"practica.pdf", "", "dfasdfdasfsadf&/$", ["node1"]}]]
+~T[15:34:49.181852][192.168.1.34:58910]:
+P: WANT practica.pdf
+R: 10.10.10.10
+~T[15:35:41.394179][127.0.0.1:33699]:
+P: VIEW
+R: [[], [{"node1", :DOWN, "10.10.10.10"}], [{"practica.pdf", "", "dfasdfdasfsadf&/$", ["node1"]}]]
+~T[15:35:42.358739][127.0.0.1:33699]:
+P: VIEW
+R: [[], [{"node1", :DOWN, "10.10.10.10"}], [{"practica.pdf", "", "dfasdfdasfsadf&/$", ["node1"]}]]
+~T[15:35:42.881502][127.0.0.1:33699]:
+P: VIEW
+R: [[], [{"node1", :DOWN, "10.10.10.10"}], [{"practica.pdf", "", "dfasdfdasfsadf&/$", ["node1"]}]]
+~T[15:35:43.744583][127.0.0.1:33699]:
+P: VIEW
+R: [[], [{"node1", :DOWN, "10.10.10.10"}], [{"practica.pdf", "", "dfasdfdasfsadf&/$", ["node1"]}]]
+~T[15:37:53.200337][127.0.0.1:39893]:
+P: ADD NODES_TO_FILE practica.pdf node1
+R: Añadiendo 'node1' al fichero 'practica.pdf'
+~T[15:38:01.413516][127.0.0.1:39893]:
+P: ADD FILE practica.pdf dfasdfdasfsadf&/$
+R: Añadiendo fichero con id 'practica.pdf'
+~T[15:38:05.041258][127.0.0.1:39893]:
+P: ADD NODES_TO_FILE practica.pdf node1
+R: Añadiendo 'node1' al fichero 'practica.pdf'
+~T[15:38:07.398662][127.0.0.1:39893]:
+P: VIEW
+R: [[], [], [{"practica.pdf", "", "dfasdfdasfsadf&/$", []}]]
+~T[15:38:14.440735][127.0.0.1:39893]:
+P: ADD NODE node1 10.10.10.10
+R: Añadiendo nodo base con id 'node1' e ip '10.10.10.10'.
+~T[15:38:17.057459][127.0.0.1:39893]:
+P: ADD NODES_TO_FILE practica.pdf node1
+R: Añadiendo 'node1' al fichero 'practica.pdf'
+~T[15:38:18.532273][127.0.0.1:39893]:
+P: VIEW
+R: [[], [{"node1", :DOWN, "10.10.10.10"}], [{"practica.pdf", "", "dfasdfdasfsadf&/$", ["node1"]}]]
+~T[15:38:43.064456][192.168.1.34:58959]:
+P: WANT practica.pdf
+R: Añadiendo '436Y6P' al fichero 'practica.pdf'
+~T[15:40:05.600205][127.0.0.1:33023]:
+P: ADD FILE practica.pdf dfasdfdasfsadf&/$
+R: Añadiendo fichero con id 'practica.pdf'
+~T[15:40:08.420335][127.0.0.1:33023]:
+P: ADD NODE node1 10.10.10.10
+R: Añadiendo nodo base con id 'node1' e ip '10.10.10.10'.
+~T[15:40:18.126847][127.0.0.1:33023]:
+P: ADD NODE_TO_FILE practica.pdf node1
+R: FORMAT INCORRECT
+~T[15:40:21.082410][127.0.0.1:33023]:
+P: ADD NODES_TO_FILE practica.pdf node1
+R: Añadiendo 'node1' al fichero 'practica.pdf'
+~T[15:40:35.323306][127.0.0.1:33023]:
+P: VIEW
+R: [[], [{"node1", :DOWN, "10.10.10.10"}], [{"practica.pdf", "", "dfasdfdasfsadf&/$", ["node1"]}]]
+~T[15:40:39.788256][192.168.1.34:58960]:
+P: WANT practica.pdf
+R: Añadiendo 'B99AY2' al fichero 'practica.pdf'
+~T[15:40:57.784133][192.168.1.34:58960]:
+P: OFFER practica2.pdf 4721684962716441
+R: Ahora el nodo 'QPTVG9' tiene disponible el fichero 'practica2.pdf' 
+~T[15:41:08.205767][127.0.0.1:33023]:
+P: VIEW
+R: [[], [{"node1", :DOWN, "10.10.10.10"}], [{"practica.pdf", "", "dfasdfdasfsadf&/$", ["node1"]}, {"practica2.pdf", "", "4721684962716441", []}]]
+~T[15:54:49.223388][127.0.0.1:38237]:
+P: ADD FILE practica.pdf dfasdfdasfsadf&/$
+R: FORMAT INCORRECT
+~T[16:36:51.838515][127.0.0.1:34711]:
+P: CONNECT
+R: Estableciendo nodo base como activo 'GY8BKK'
+~T[16:37:23.559028][127.0.0.1:34711]:
+P: OFFER practica1.pdf dfjasdf7e7w8ehfuiwsd
+R: Ahora el nodo 'GY8BKK' tiene disponible el fichero 'practica1.pdf' 
+~T[16:37:59.622395][192.168.1.34:59192]:
+P: WANT practica1.pdf
+R: NO ESTÁS CONECTADO
+~T[16:37:59.628363][192.168.1.34:59192]:
+P: )
+R: FORMAT INCORRECT
+~T[16:38:02.541794][192.168.1.34:59192]:
+P: WANT practica1.pdf
+R: NO ESTÁS CONECTADO
+~T[16:38:07.638506][192.168.1.34:59192]:
+P: CONNECT
+R: Estableciendo nodo base como activo 'OE9CTE'
+~T[16:38:12.574648][192.168.1.34:59192]:
+P: CONNECT
+R: YA ESTÁS CONECTADO
+~T[16:38:14.645581][192.168.1.34:59192]:
+P: WANT practica1.pdf
+R: Añadiendo 'OE9CTE' al fichero 'practica1.pdf'
+~T[16:38:23.388384][192.168.1.34:59192]:
+P: WANT practica1.pdf
+R: Añadiendo 'OE9CTE' al fichero 'practica1.pdf'
+~T[16:38:24.698084][192.168.1.34:59192]:
+P: WANT practica1.pdf
+R: Añadiendo 'OE9CTE' al fichero 'practica1.pdf'
+~T[16:38:25.436951][192.168.1.34:59192]:
+P: WANT practica1.pdf
+R: Añadiendo 'OE9CTE' al fichero 'practica1.pdf'
+~T[16:38:26.026789][192.168.1.34:59192]:
+P: WANT practica1.pdf
+R: Añadiendo 'OE9CTE' al fichero 'practica1.pdf'
+~T[16:38:26.661489][192.168.1.34:59192]:
+P: WANT practica1.pdf
+R: Añadiendo 'OE9CTE' al fichero 'practica1.pdf'
+~T[16:38:27.453712][192.168.1.34:59192]:
+P: WANT practica1.pdf
+R: Añadiendo 'OE9CTE' al fichero 'practica1.pdf'
+~T[16:38:31.486586][127.0.0.1:34711]:
+P: OFFER practica1.pdf dfjasdf7e7w8ehfuiwsd
+R: Ahora el nodo 'GY8BKK' tiene disponible el fichero 'practica1.pdf' 
+~T[16:38:33.181052][127.0.0.1:34711]:
+P: OFFER practica1.pdf dfjasdf7e7w8ehfuiwsd
+R: Ahora el nodo 'GY8BKK' tiene disponible el fichero 'practica1.pdf' 
+~T[16:38:33.720971][127.0.0.1:34711]:
+P: OFFER practica1.pdf dfjasdf7e7w8ehfuiwsd
+R: Ahora el nodo 'GY8BKK' tiene disponible el fichero 'practica1.pdf' 
+~T[16:38:34.243035][127.0.0.1:34711]:
+P: OFFER practica1.pdf dfjasdf7e7w8ehfuiwsd
+R: Ahora el nodo 'GY8BKK' tiene disponible el fichero 'practica1.pdf' 
+~T[16:38:34.695203][127.0.0.1:34711]:
+P: OFFER practica1.pdf dfjasdf7e7w8ehfuiwsd
+R: Ahora el nodo 'GY8BKK' tiene disponible el fichero 'practica1.pdf' 
+~T[16:38:35.352482][127.0.0.1:34711]:
+P: CONNECT
+R: YA ESTÁS CONECTADO
+~T[16:38:40.483052][127.0.0.1:34711]:
+P: DISCONNECT
+R: Estableciendo nodo base como apagado 'GY8BKK'
+~T[16:39:55.377647][192.168.1.34:59194]:
+P: CONNECT
+R: Estableciendo nodo base como activo '3X3ZZC'
+~T[16:39:59.654840][192.168.1.34:59194]:
+P: CONNECT
+R: YA ESTÁS CONECTADO
+~T[16:40:07.559781][192.168.1.34:59194]:
+P: WANT practica1.pdf
+R: Añadiendo '3X3ZZC' al fichero 'practica1.pdf'
+~T[16:40:29.309675][127.0.0.1:43705]:
+P: ADD FILE practica1.pdf dfjasdf7e7w8ehfuiwsd
+R: Añadiendo fichero con id 'practica1.pdf'
+~T[16:40:46.830543][127.0.0.1:43705]:
+P: ADD NODE node1 funciona:D
+R: Añadiendo nodo base con id 'node1' e ip 'funciona:D'.
+~T[16:41:13.090399][127.0.0.1:43705]:
+P: ADD NODE_TO_FILE practica1.pdf node1
+R: Añadiendo 'node1' al fichero 'practica1.pdf'
+~T[16:41:18.714608][127.0.0.1:43705]:
+P: VIEW
+R: [[], [{"3X3ZZC", :UP, "192.168.1.34"}, {"node1", :DOWN, "funciona:D"}], [{"practica1.pdf", "", "dfjasdf7e7w8ehfuiwsd", ["node1"]}]]
+~T[16:41:31.921451][192.168.1.34:59194]:
+P: WANT practica1.pdf
+R: Añadiendo '3X3ZZC' al fichero 'practica1.pdf'
+~T[16:41:33.115308][192.168.1.34:59194]:
+P: WANT practica1.pdf
+R: Añadiendo '3X3ZZC' al fichero 'practica1.pdf'
+~T[16:41:33.864897][192.168.1.34:59194]:
+P: WANT practica1.pdf
+R: Añadiendo '3X3ZZC' al fichero 'practica1.pdf'
+~T[16:42:41.349670][127.0.0.1:41167]:
+P: ADD NODE node1 funciona:D
+R: Añadiendo nodo base con id 'node1' e ip 'funciona:D'.
+~T[16:42:44.549833][127.0.0.1:41167]:
+P: ADD FILE practica1.pdf dfjasdf7e7w8ehfuiwsd
+R: Añadiendo fichero con id 'practica1.pdf'
+~T[16:42:47.067265][127.0.0.1:41167]:
+P: ADD NODE_TO_FILE practica1.pdf node1
+R: Añadiendo 'node1' al fichero 'practica1.pdf'
+~T[16:42:51.958634][127.0.0.1:41167]:
+P: VIEW
+R: [[], [{"node1", :DOWN, "funciona:D"}], [{"practica1.pdf", "", "dfjasdf7e7w8ehfuiwsd", ["node1"]}]]
+~T[16:43:05.903954][192.168.1.34:59196]:
+P: CONNECT
+R: Estableciendo nodo base como activo '9N2LOL'
+~T[16:43:08.907590][127.0.0.1:41167]:
+P: VIEW
+R: [[], [{"node1", :DOWN, "funciona:D"}, {"9N2LOL", :UP, "192.168.1.34"}], [{"practica1.pdf", "", "dfjasdf7e7w8ehfuiwsd", ["node1"]}]]
+~T[16:43:18.335021][192.168.1.34:59196]:
+P: WANT practica1.pdf
+R: funciona:D
+~T[16:43:23.085002][127.0.0.1:41167]:
+P: VIEW
+R: [[], [{"node1", :DOWN, "funciona:D"}, {"9N2LOL", :UP, "192.168.1.34"}], [{"practica1.pdf", "", "dfjasdf7e7w8ehfuiwsd", ["node1"]}]]

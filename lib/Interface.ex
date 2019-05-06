@@ -26,21 +26,21 @@ defmodule Interface do
 			["CONNECT"] -> 			if not Server.isNodeUp(name) do
 										Server.addNode(name, ip)
 										Server.nodeUp(name)
-									else "YA ESTÁS CONECTADO\n"
+									else "YA ESTÁS CONECTADO"
 									end
 			["DISCONNECT"] -> 		if Server.isNodeUp(name) do
 										Server.nodeDown(name)
-									else "NO ESTÁS CONECTADO\n"
+									else "NO ESTÁS CONECTADO"
 									end
 			["WANT", fileId] -> 	if Server.isNodeUp(name) do
 										Server.want(fileId)
-									else "NO ESTÁS CONECTADO\n"
+									else "NO ESTÁS CONECTADO"
 									end
 			["OFFER", fileId, file] -> 	if Server.isNodeUp(name) do
 										Server.offer(fileId, file, name)
-									else "NO ESTÁS CONECTADO\n"
+									else "NO ESTÁS CONECTADO"
 									end
-			_-> "FORMAT INCORRECT\n"
+			_-> "FORMAT INCORRECT"
 		end
 	end
 
@@ -51,11 +51,11 @@ defmodule Interface do
 			["ADD", "NODE", nodeId, nodeIp] -> Server.addNode(nodeId,nodeIp)
 			["ADD", "NODEM", nodeMId, nodeMIp] -> Server.addNodeM(nodeMId,nodeMIp)
 			["ADD", "FILE", fileId, file] -> Server.addFile(fileId, file)
-			["ADD", "NODES_TO_FILE", fileId, node] -> Server.addNodeToFile(fileId,node)
+			["ADD", "NODE_TO_FILE", fileId, node] -> Server.addNodeToFile(fileId,node)
 			["REMOVE", "NODEM", nodeMId] -> Server.removeNodeM(nodeMId)
 			["REMOVE", "NODE", nodeId] -> Server.removeNode(nodeId)
 			["REMOVE", "FILE", fileId] -> Server.removeFile(fileId)
-			["REMOVE", "NODES_TO_FILE", fileId, node] -> Server.removeNodeOfFile(fileId,node)	
+			["REMOVE", "NODE_TO_FILE", fileId, node] -> Server.removeNodeOfFile(fileId,node)	
 			["VIEW","NODES"] -> Server.viewNodes()
 			["VIEW","NODESM"] -> Server.viewNodesM()
 			["VIEW","FILES"] -> Server.viewFiles()
@@ -65,7 +65,7 @@ defmodule Interface do
 			["IS","ADMIN", ip] -> Server.isAdmin(ip)
 			["ID","OF","IP", ip] -> Server.idOfIp(ip)
 			#["NODE","SYNC",nodeMId, listSync] -> #Server.nodeMSync(nodeMId, listSync)
-			_-> "FORMAT INCORRECT\n"
+			_-> "FORMAT INCORRECT"
 		end
 	end
 
