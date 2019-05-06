@@ -1,6 +1,7 @@
 defmodule Client do
     use GenServer
 
+    def connect(),do: connect('127.0.0.1',5000)
     def connect(ip,port) do
         {:ok,socket} = :gen_tcp.connect(ip,port,[:binary, packet: :line, active: false, reuseaddr: true])
         {:ok,pid} = GenServer.start_link(__MODULE__, [socket])
