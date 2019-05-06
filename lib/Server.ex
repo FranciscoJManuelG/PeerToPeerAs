@@ -1,5 +1,4 @@
 defmodule Server do
-	import Interface
 
 	def accept(),do: accept(5000)
 	def accept(port) do
@@ -41,7 +40,7 @@ defmodule Server do
 		ip = Kernel.inspect(ip1)<>"."<>Kernel.inspect(ip2)<>"."<>Kernel.inspect(ip3)<>"."<>Kernel.inspect(ip4)
 
 		peticion = Kernel.inspect(Time.utc_now)<>"[#{ip}:#{port}]:\nP: #{data}\n"
-		respuesta = "R: "<>Interface.execute_client(line,"pipas", ip)
+		respuesta = "R: "<>Interface.execute(line, ip)
 		#Almacena el log
 		#File.write(Path.rootname("./log.txt"), peticion<>respuesta<>"\n",[:append])
 

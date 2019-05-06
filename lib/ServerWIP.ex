@@ -151,7 +151,7 @@ defmodule ServerWIP do
 
  	#Devuelve verdadero si el nodo está conectado
  	def handle_call({:nodeIsUp, node}, _from, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
- 		{:reply, Kernel.inspect(nodeIsUpFunction(node, listaNodosBase)), [listaNodosMaestros,listaNodosBase,listaFicheros]}
+ 		{:reply, nodeIsUpFunction(node, listaNodosBase), [listaNodosMaestros,listaNodosBase,listaFicheros]}
  	end
 
 	#Añade un nodo base
