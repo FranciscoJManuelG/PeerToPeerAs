@@ -22,8 +22,23 @@ defmodule Server do
 
 	defp read_line(socket) do
 		resp = :gen_tcp.recv(socket, 0)
-		see_resp(resp)
-		#Interface.execute_admin(data)
+
+		data = see_resp(resp)
+		#Para sacar el \n del final
+		data = String.slice(String.trim(data),0,String.length(data)-1)
+		#Aquí va la ip 
+		{:ok, {ip, port}} = :inet.peername(socket)
+		{ip1,ip2,ip3,ip4} = ip
+		#Paso la ip a un string
+		ip = Kernel.inspect(ip1)<>"."<>Kernel.inspect(ip2)<>"."<>Kernel.inspect(ip3)<>"."<>Kernel.inspect(ip4)
+
+		peticion = Kernel.inspect(Time.utc_now)<>"[#{ip}:#{port}]:\nP: #{data}\n"
+		respuesta = "R: "<>Interface.execute(data, ip)
+		#Almacena el log
+		File.write(Path.rootname("./log.txt"), peticion<>respuesta<>"\n",[:append])
+
+		IO.puts(peticion<>respuesta)
+		respuesta<>"\n"
 	end
 
 	defp see_resp({:ok, data}),do: data
@@ -34,6 +49,7 @@ defmodule Server do
 		:gen_tcp.send(socket, line)
 		serve(socket)
 	end
+
 end
 
 

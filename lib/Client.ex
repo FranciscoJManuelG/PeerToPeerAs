@@ -18,14 +18,16 @@ defmodule Client do
         :ok
     end
 
-    defp send_stringlist([],_),do: :ok
-    defp send_stringlist([""|tl], socket),do: send_stringlist(tl,socket)
-    defp send_stringlist([message|tl], socket) do
+    def send_stringlist([],_),do: :ok
+    def send_stringlist([""|tl], socket),do: send_stringlist(tl,socket)
+    def send_stringlist([message|tl], socket) do
         :gen_tcp.send(socket,message<>"\n")
         {:ok, data} = :gen_tcp.recv(socket, 0)
         IO.puts(data)
         send_stringlist(tl,socket)
     end
+
+    def send_stringlist(_,_),do: :error
 
     def init(socket),do: {:ok,socket}
 
