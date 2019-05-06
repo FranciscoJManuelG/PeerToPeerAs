@@ -9,6 +9,7 @@ defmodule Server do
 	defp loop(socket) do
 		{:ok,client} = :gen_tcp.accept(socket)
 		pid = spawn_link(__MODULE__,:serve,[client])
+		:gen_tcp.controlling_process(client,pid)
 		#serve(client)
 		loop(socket)
 	end
@@ -21,7 +22,6 @@ defmodule Server do
 
 	defp read_line(socket) do
 		resp = :gen_tcp.recv(socket, 0)
-
 		data = see_resp(resp)
 		#Para sacar el \n del final
 		data = String.slice(String.trim(data),0,String.length(data)-1)
