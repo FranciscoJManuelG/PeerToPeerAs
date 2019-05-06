@@ -10,7 +10,6 @@ defmodule Server do
 	defp loop(socket) do
 		{:ok,client} = :gen_tcp.accept(socket)
 		pid = spawn_link(__MODULE__,:serve,[client])
-		# :gen_tcp.controlling_process(client,pid)
 		#serve(client)
 		loop(socket)
 	end
