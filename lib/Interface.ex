@@ -2,9 +2,12 @@ defmodule Interface do
 	alias ServerWIP, as: Server
 
 	def execute(orden, ip) do
+		IO.puts(orden)
 		if Process.whereis(:server) != nil do
+			IO.puts("APAGADO")
 			#Si es una ip admin ejecuta execute_admin, si no, ejecuta execute_client
 			if Interface.execute_admin("IS ADMIN " <>  ip) do
+				IO.puts("ADMIN")
 				Interface.execute_admin(orden)
 			else 
 				node = Interface.execute_admin("ID OF IP " <> ip)
@@ -47,7 +50,6 @@ defmodule Interface do
 	# Ejecuta ordenes provenientes de administradores
 	def execute_admin(orden) do
 		case String.split(orden) do
-			["START"] -> Server.start()
 			["STOP"] -> Server.stop()
 			["ADD", "NODE", nodeId, nodeIp] -> Server.addNode(nodeId,nodeIp)
 			["ADD", "NODEM", nodeMId, nodeMIp] -> Server.addNodeM(nodeMId,nodeMIp)

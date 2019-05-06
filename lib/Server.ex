@@ -25,10 +25,13 @@ defmodule Server do
 		resp = :gen_tcp.recv(socket, 0)
 		data = see_resp(resp)
 		#Para sacar el \n del final
-		data = String.slice(data,0,String.length(data)-1)
+		data = String.slice(String.trim(data),0,String.length(data)-1)
 		#Aquí va la ip 
-		ip = Kernel.inspect("10.10.10.10")
-
+		{:ok, {ip, port}} = :inet.peername(socket)
+		{ip1,ip2,ip3,ip4} = ip
+		#Paso la ip a un string
+		ip = Kernel.inspect(ip1)<>"."<>Kernel.inspect(ip2)<>"."<>Kernel.inspect(ip3)<>"."<>Kernel.inspect(ip4)
+		IO.puts(ip)
 		IO.puts(Interface.execute(data, ip))
 		Interface.execute(data, ip)		
 	end
