@@ -9,11 +9,7 @@ defmodule Client do
     end
 
     def send(message) do
-    	if is_binary(message) do 
-    		GenServer.cast(:client,{:send,message})
-    	else
-    		IO.puts("El mensaje debe ser un String")
-    	end
+        GenServer.cast(:client,{:send,Kernel.inspect(message)})
     end
 
     def close() do
