@@ -9,7 +9,7 @@ defmodule Client do
     end
 
     def send(message) do
-        GenServer.cast(:client,{:send,Kernel.instpect(message)})
+        GenServer.cast(:client,{:send,Kernel.inspect(message)})
     end
 
     def close() do
