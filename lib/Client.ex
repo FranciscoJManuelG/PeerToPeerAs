@@ -31,6 +31,8 @@ defmodule Client do
         send_stringlist(tl,socket)
     end
 
+    def send_stringlist(_,_),do: :error
+
     def init(socket),do: {:ok,socket}
 
     def handle_cast({:send,message},[socket]) do

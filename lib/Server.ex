@@ -31,9 +31,14 @@ defmodule Server do
 		{ip1,ip2,ip3,ip4} = ip
 		#Paso la ip a un string
 		ip = Kernel.inspect(ip1)<>"."<>Kernel.inspect(ip2)<>"."<>Kernel.inspect(ip3)<>"."<>Kernel.inspect(ip4)
-		IO.puts(ip)
-		IO.puts(Interface.execute(data, ip))
-		Interface.execute(data, ip)		
+
+		peticion = Kernel.inspect(Time.utc_now)<>"[#{ip}:#{port}]:\nP: #{data}\n"
+		respuesta = "R: "<>Interface.execute(data, ip)
+		#Almacena el log
+		File.write(Path.rootname("./log.txt"), peticion<>respuesta<>"\n",[:append])
+
+		IO.puts(peticion<>respuesta)
+		respuesta<>"\n"
 	end
 
 	defp see_resp({:ok, data}),do: data

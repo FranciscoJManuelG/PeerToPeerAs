@@ -2,12 +2,9 @@ defmodule Interface do
 	alias ServerWIP, as: Server
 
 	def execute(orden, ip) do
-		IO.puts(orden)
 		if Process.whereis(:server) != nil do
-			IO.puts("APAGADO")
 			#Si es una ip admin ejecuta execute_admin, si no, ejecuta execute_client
 			if Interface.execute_admin("IS ADMIN " <>  ip) do
-				IO.puts("ADMIN")
 				Interface.execute_admin(orden)
 			else 
 				node = Interface.execute_admin("ID OF IP " <> ip)
@@ -18,7 +15,7 @@ defmodule Interface do
 				end
 			end		
 		else
-			Interface.execute_admin("START")
+			Server.start()
 			execute(orden,ip)
 		end
 	end
@@ -71,8 +68,6 @@ defmodule Interface do
 			_-> "FORMAT INCORRECT\n"
 		end
 	end
-
-	def execute_admin(_, _), do: IO.puts("Contraseña incorrecta")
 
 	#Genera un string aleatorio
 	def gen_reference() do

@@ -2,18 +2,18 @@ defmodule ServerWIP do
 	use GenServer
 	#Client
   	def addNode(node, ip) do
-  		IO.puts("Añadiendo nodo base con id '#{node}' e ip '#{ip}'.")
   		GenServer.cast(:server, {:addNode, node, ip})
+  		"Añadiendo nodo base con id '#{node}' e ip '#{ip}'."
   	end
 
   	def addNodeM(nodeM, ip) do
-  		IO.puts("Añadiendo nodo maestro con id '#{nodeM}' e ip '#{ip}'.")
   		GenServer.cast(:server, {:addNodeM, nodeM, ip})
+  		"Añadiendo nodo maestro con id '#{nodeM}' e ip '#{ip}'."
   	end
 
   	def addFile(fileId, file) do
-  		IO.puts("Añadiendo fichero con id '#{fileId}'")
   		GenServer.cast(:server, {:addFile, fileId, file})
+  		"Añadiendo fichero con id '#{fileId}'"
   	end
 
   	def viewAll() do
@@ -21,67 +21,64 @@ defmodule ServerWIP do
 	end
 
   	def viewNodes() do
-  		IO.puts("Mostrando la estructura de los nodos base")
 		GenServer.call(:server, :viewNodes)
 	end
 
 	def viewNodesM() do
-		IO.puts("Mostrando la estructura de los nodo maestros")
 		GenServer.call(:server, :viewNodesM)
 	end
 
 	def viewFiles() do
-		IO.puts("Mostrando la estructura de los ficheros con los nodos asociados")
 		GenServer.call(:server, :viewFiles)
 	end
 
 	def removeNode(node) do
-		IO.puts("Eliminando nodo base '#{node}'")
 		GenServer.cast(:server, {:removeNode, node})
+		"Eliminando nodo base '#{node}'"
 	end
 
 	def removeNodeM(nodeM) do
-		IO.puts("Eliminando nodo maestro '#{nodeM}'")
 		GenServer.cast(:server, {:removeNodeM, nodeM})
+		"Eliminando nodo maestro '#{nodeM}'"
 	end
 
 	def removeFile(file) do
-		IO.puts("Eliminando fichero '#{file}'")
 		GenServer.cast(:server, {:removeFile, file})
+		"Eliminando fichero '#{file}'"
 	end
 
 	def nodeUp(node) do
-		IO.puts("Estableciendo nodo base como activo '#{node}'")
   		GenServer.cast(:server, {:nodeUp, node})
+  		"Estableciendo nodo base como activo '#{node}'"
   	end
 
   	def nodeDown(node) do
-  		IO.puts("Estableciendo nodo base como apagado '#{node}'")
   		GenServer.cast(:server, {:nodeDown, node})
+  		"Estableciendo nodo base como apagado '#{node}'"
   	end
-  	#list?
+
   	def nodeMSync(nodeM, listSync) do
-  		IO.puts("Sincronizando nodo maestro '#{nodeM}'")
   		GenServer.cast(:server, {:nodeMSync, nodeM, listSync})
+  		"Sincronizando nodo maestro '#{nodeM}'"
   	end
 
 	def addNodeToFile(file, node) do
-		IO.puts("Añadiendo '#{node}' al fichero '#{file}'")
 		GenServer.cast(:server, {:addNodeToFile, file, node})
+		"Añadiendo '#{node}' al fichero '#{file}'"
 	end
 
 	def removeNodeOfFile(file, node) do
-		IO.puts("Eliminando '#{node}' del fichero '#{file}'")
 		GenServer.cast(:server, {:removeNodeOfFile, file, node})
+		"Eliminando '#{node}' del fichero '#{file}'"
 	end
 
 	def offer(fileId, file, node) do
 		addFile(fileId, file)
 		addNodeToFile(fileId,node)
+		"Ahora el nodo '#{node}' tiene disponible el fichero '#{fileId}' "
 	end
 
 	def want(fileId) do
-		IO.puts("Mostrando ip de donde se debe descargar el fichero '#{fileId}'")
 		GenServer.call(:server, {:viewFile, fileId})
 	end
 
@@ -114,25 +111,25 @@ defmodule ServerWIP do
   	#Muestra la estructura completa
 	def handle_call(:viewAll, _from, list) do
 		#Se devuelve la estructura almacenada en el nodo
-		{:reply, list, list}
+		{:reply, Kernel.inspect(list), list}
 	end
 
 	#Muestra los nodos básicos y su estado
 	def handle_call(:viewNodes, _from, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
 		#Se devuelve la lista que contiene los nodos base
-		{:reply, listaNodosBase, [listaNodosMaestros,listaNodosBase,listaFicheros]}
+		{:reply, Kernel.inspect(listaNodosBase), [listaNodosMaestros,listaNodosBase,listaFicheros]}
 	end
 
 	#Muestra los nodos principales y si están sincronizados o no
 	def handle_call(:viewNodesM, _from, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
 		#Se devuelve la lista que contiene los nodos maestros
-		{:reply, listaNodosMaestros, [listaNodosMaestros,listaNodosBase,listaFicheros]}
+		{:reply, Kernel.inspect(listaNodosMaestros), [listaNodosMaestros,listaNodosBase,listaFicheros]}
 	end
 
 	#Muestra los ficheros con los nodos que lo tienen disponible
 	def handle_call(:viewFiles, _from, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
 		#Se devuelve la lista que contiene los ficheros
-		{:reply, listaFicheros, [listaNodosMaestros,listaNodosBase,listaFicheros]}
+		{:reply, Kernel.inspect(listaFicheros), [listaNodosMaestros,listaNodosBase,listaFicheros]}
 	end
 
 	#Muestra los nodos que tienen disponible el fichero 
@@ -148,13 +145,13 @@ defmodule ServerWIP do
 			{:reply, ipOfNode, [listaNodosMaestros,listaNodosBase,listaFicheros]}
 		else
 		#Si no se tiene ningún nodo asociado al fichero o no existe el fichero se devuelve :not_found
-		{:reply, :not_found, [listaNodosMaestros,listaNodosBase,listaFicheros]}
+		{:reply, "File not found", [listaNodosMaestros,listaNodosBase,listaFicheros]}
 		end
 	end
 
  	#Devuelve verdadero si el nodo está conectado
  	def handle_call({:nodeIsUp, node}, _from, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
- 		{:reply, nodeIsUpFunction(node, listaNodosBase), [listaNodosMaestros,listaNodosBase,listaFicheros]}
+ 		{:reply, Kernel.inspect(nodeIsUpFunction(node, listaNodosBase)), [listaNodosMaestros,listaNodosBase,listaFicheros]}
  	end
 
 	#Añade un nodo base
@@ -162,10 +159,8 @@ defmodule ServerWIP do
 		#Si no existe el nodo se añade
 		unless exists(node,listaNodosBase) do
 			updated_listNodes = listaNodosBase ++ [{node,:DOWN, ip}]
-			IO.puts("Añadido nodo base con id '#{node}' e ip '#{ip}'.")
 			{:noreply, [listaNodosMaestros,updated_listNodes,listaFicheros]}
 		else
-			IO.puts("No se ha podido añadir, '#{node}' ya existe")
 			{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}
 		end
 	end
@@ -177,10 +172,8 @@ defmodule ServerWIP do
 			updated_listNodes = listaNodosMaestros ++ [{nodeM, :UNSYNC, ip}]
 			#Se sincroniza el nodo que se acaba de añadir
 			#nodeMSync(nodeM,[])
-			IO.puts("Añadido nodo maestro con id '#{nodeM}' e ip '#{ip}'.")
 			{:noreply, [updated_listNodes,listaNodosBase,listaFicheros]}
 		else
-			IO.puts("No se ha podido añadir, '#{nodeM}' ya existe")
 			{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}
 		end
 	end
@@ -193,10 +186,8 @@ defmodule ServerWIP do
 			hash = ""
 			#Se añade
 			updated_list = listaFicheros ++ [{fileId,hash,file,[]}]
-			IO.puts("Añadido fichero '#{file}'")
 			{:noreply, [listaNodosMaestros,listaNodosBase,updated_list]}
 		else
-			IO.puts("No se ha podido añadir, '#{file}' ya existe")
 			{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}
 		end
 	end
@@ -220,10 +211,8 @@ defmodule ServerWIP do
 	def handle_cast({:removeNodeM, nodeM}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
 		updated_listNodesM = delete(nodeM,listaNodosMaestros)
 		if updated_listNodesM == listaNodosMaestros do
-			IO.puts("No se ha podido eliminar, '#{nodeM}' no existe")
 			{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}
 		else
-			IO.puts("Eliminado nodo maestro '#{nodeM}'")
 			{:noreply, [updated_listNodesM,listaNodosBase,listaFicheros]}
 		end		
 	end
@@ -232,10 +221,8 @@ defmodule ServerWIP do
 	def handle_cast({:removeNode, node}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
 		updated_listNodes = delete(node,listaNodosBase)
 		if updated_listNodes == listaNodosBase do
-			IO.puts("No se ha podido eliminar, '#{node}' no existe")
 			{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}
 		else
-			IO.puts("Eliminado nodo base '#{node}'")
 			{:noreply, [listaNodosMaestros,updated_listNodes,listaFicheros]}
 		end		
 	end
@@ -244,10 +231,8 @@ defmodule ServerWIP do
 	def handle_cast({:removeFile, file}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
 		updated_listFiles = delete(file,listaFicheros)
 		if updated_listFiles == listaFicheros do
-			IO.puts("No se ha podido eliminar, '#{file}' no existe")
 			{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}
 		else
-			IO.puts("Eliminado fichero '#{file}'")
 			{:noreply, [listaNodosMaestros,listaNodosBase,updated_listFiles]}
 		end		
 	end
@@ -256,10 +241,8 @@ defmodule ServerWIP do
 	def handle_cast({:removeNodeOfFile, file, node}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
 		updated_listFiles = removeNodeToFilesFunction(file, node, listaFicheros)
 		if updated_listFiles == listaFicheros do
-			IO.puts("No se ha podido eliminar, '#{node}' no existe")
 			{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}
 		else
-			IO.puts("Eliminado nodo base '#{node}'")
 			{:noreply, [listaNodosMaestros,listaNodosBase,updated_listFiles]}
 		end
 	end
@@ -274,22 +257,12 @@ defmodule ServerWIP do
 	#Establece el estado de UP a un nodo base
 	def handle_cast({:nodeUp, node}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
 		updated_listNodes = nodeStateFunction(node, :UP, listaNodosBase)
-		if updated_listNodes == listaNodosBase do
-			IO.puts("El nodo '#{node}' no existe o ya está levantado")
-		else
-			IO.puts("El nodo '#{node}' se ha levantado")
-		end
 		{:noreply, [listaNodosMaestros,updated_listNodes,listaFicheros]}
 	end
 
  	#Establece el estado de DOWN a un nodo base
 	def handle_cast({:nodeDown, node}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
 		updated_listNodes = nodeStateFunction(node, :DOWN, listaNodosBase)
-		if updated_listNodes == listaNodosBase do
-			IO.puts("El nodo '#{node}' no existe o ya no está levantado")
-		else
-			IO.puts("El nodo '#{node}' se ha tirado")
-		end
 		{:noreply, [listaNodosMaestros,updated_listNodes,listaFicheros]}
 	end
 
