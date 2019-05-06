@@ -20,18 +20,6 @@ defmodule ServerWIP do
 		GenServer.call(:server, :viewAll)
 	end
 
-  	def viewNodes() do
-		GenServer.call(:server, :viewNodes)
-	end
-
-	def viewNodesM() do
-		GenServer.call(:server, :viewNodesM)
-	end
-
-	def viewFiles() do
-		GenServer.call(:server, :viewFiles)
-	end
-
 	def removeNode(node) do
 		GenServer.cast(:server, {:removeNode, node})
 		"Eliminando nodo base '#{node}'"
@@ -55,11 +43,6 @@ defmodule ServerWIP do
   	def nodeDown(node) do
   		GenServer.cast(:server, {:nodeDown, node})
   		"Estableciendo nodo base como apagado '#{node}'"
-  	end
-
-  	def nodeMSync(nodeM, listSync) do
-  		GenServer.cast(:server, {:nodeMSync, nodeM, listSync})
-  		"Sincronizando nodo maestro '#{nodeM}'"
   	end
 
 	def addNodeToFile(file, node) do
@@ -114,24 +97,6 @@ defmodule ServerWIP do
 		{:reply, Kernel.inspect(list), list}
 	end
 
-	#Muestra los nodos básicos y su estado
-	def handle_call(:viewNodes, _from, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
-		#Se devuelve la lista que contiene los nodos base
-		{:reply, Kernel.inspect(listaNodosBase), [listaNodosMaestros,listaNodosBase,listaFicheros]}
-	end
-
-	#Muestra los nodos principales y si están sincronizados o no
-	def handle_call(:viewNodesM, _from, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
-		#Se devuelve la lista que contiene los nodos maestros
-		{:reply, Kernel.inspect(listaNodosMaestros), [listaNodosMaestros,listaNodosBase,listaFicheros]}
-	end
-
-	#Muestra los ficheros con los nodos que lo tienen disponible
-	def handle_call(:viewFiles, _from, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
-		#Se devuelve la lista que contiene los ficheros
-		{:reply, Kernel.inspect(listaFicheros), [listaNodosMaestros,listaNodosBase,listaFicheros]}
-	end
-
 	#Muestra los nodos que tienen disponible el fichero 
 	def handle_call({:viewFile, fileId}, _from, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
 		#Se seleccionan los nodos que tienen ese fichero
@@ -183,7 +148,7 @@ defmodule ServerWIP do
 		#Si no existe el fichero lo añade
 		unless exists(file,listaFicheros) do
 			#Se aplica el hash al fichero
-			hash = ""
+			hash = :crypto.hash(:sha256, file)
 			#Se añade
 			updated_list = listaFicheros ++ [{fileId,hash,file,[]}]
 			{:noreply, [listaNodosMaestros,listaNodosBase,updated_list]}
@@ -246,13 +211,6 @@ defmodule ServerWIP do
 			{:noreply, [listaNodosMaestros,listaNodosBase,updated_listFiles]}
 		end
 	end
-
-	#Sincroniza un nodo maestro con este
- 	def handle_cast({:nodeMSync, _, syncList}, _) do
- 		#No tenemos manera de comunicar nodos intermedios por tcp
- 		#Se actualizaria en campo de sincronización con la fecha y hora en que se haga
- 		{:noreply, syncList}
- 	end
 
 	#Establece el estado de UP a un nodo base
 	def handle_cast({:nodeUp, node}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do

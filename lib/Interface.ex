@@ -56,15 +56,11 @@ defmodule Interface do
 			["REMOVE", "NODE", nodeId] -> Server.removeNode(nodeId)
 			["REMOVE", "FILE", fileId] -> Server.removeFile(fileId)
 			["REMOVE", "NODE_TO_FILE", fileId, node] -> Server.removeNodeOfFile(fileId,node)	
-			["VIEW","NODES"] -> Server.viewNodes()
-			["VIEW","NODESM"] -> Server.viewNodesM()
-			["VIEW","FILES"] -> Server.viewFiles()
 			["VIEW"] -> Server.viewAll()
 			["NODE","UP",nodeId] -> Server.nodeUp(nodeId)
 			["NODE","DOWN",nodeId] -> Server.nodeDown(nodeId)
-			["IS","ADMIN", ip] -> Server.isAdmin(ip)
-			["ID","OF","IP", ip] -> Server.idOfIp(ip)
-			#["NODE","SYNC",nodeMId, listSync] -> #Server.nodeMSync(nodeMId, listSync)
+			["IS","ADMIN", ip] -> Server.isAdmin(ip) # No deben de ser llamadas desde el cliente
+			["ID","OF","IP", ip] -> Server.idOfIp(ip) # No deben de ser llamadas desde el cliente
 			_-> "FORMAT INCORRECT"
 		end
 	end

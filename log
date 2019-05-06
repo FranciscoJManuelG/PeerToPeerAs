@@ -327,3 +327,51 @@ R: funciona:D
 P: VIEW
 R: [[], [{"node1", :DOWN, "funciona:D"}, {"9N2LOL", :UP, "192.168.1.34"}], [{"practica1.pdf", "", "dfjasdf7e7w8ehfuiwsd", ["node1"]}]]
 >>>>>>> c4343579478a6abfbc991e5cecf14181c8ae1c0d
+~T[17:42:47.377238][127.0.0.1:35537]:
+P: ADD NODE node 1010101
+
+R: Añadiendo nodo base con id 'node' e ip '1010101'.
+~T[17:42:53.432778][127.0.0.1:35537]:
+P: ADD NODEM nodeM 1010101
+
+R: Añadiendo nodo maestro con id 'nodeM' e ip '1010101'.
+~T[17:43:05.403109][127.0.0.1:35537]:
+P: ADD FILE file filetext
+
+R: Añadiendo fichero con id 'file'
+~T[17:43:20.837883][127.0.0.1:35537]:
+P: ADD NODE_TO_FILE file node
+
+R: Añadiendo 'node' al fichero 'file'
+~T[17:43:42.857869][127.0.0.1:35537]:
+P: REMOVE NODEM nodeM
+
+R: Eliminando nodo maestro 'nodeM'
+~T[17:43:48.619778][127.0.0.1:35537]:
+P: REMOVE NODE node
+
+R: Eliminando nodo base 'node'
+~T[17:43:59.775264][127.0.0.1:35537]:
+P: REMOVE FILE file
+
+R: Eliminando fichero 'file'
+~T[17:44:10.205358][127.0.0.1:35537]:
+P: VIEW
+
+R: [[], [], []]
+~T[17:44:15.926466][127.0.0.1:35537]:
+P: ADD NODE node 1010101
+
+R: Añadiendo nodo base con id 'node' e ip '1010101'.
+~T[17:44:24.276461][127.0.0.1:35537]:
+P: NODE UP node
+
+R: Estableciendo nodo base como activo 'node'
+~T[17:44:29.610651][127.0.0.1:35537]:
+P: NODE DOWN node
+
+R: Estableciendo nodo base como apagado 'node'
+~T[17:47:00.279222][127.0.0.1:40961]:
+P: NODE DOWN node
+
+R: Estableciendo nodo base como apagado 'node'

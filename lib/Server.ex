@@ -9,7 +9,7 @@ defmodule Server do
 
 	defp loop(socket) do
 		{:ok,client} = :gen_tcp.accept(socket)
-		pid = spawn_link(__MODULE__,:serve,[client])
+		_pid = spawn_link(__MODULE__,:serve,[client])
 		#serve(client)
 		loop(socket)
 	end
@@ -30,8 +30,7 @@ defmodule Server do
 		:gen_tcp.send(socket, line)
 		serve(socket)
 	end
-
-	defp see_resp({:ok, data},socket) do
+defp see_resp({:ok, data},socket) do
 		#Para sacar el \n del final
 		line = String.slice(String.trim(data),0,String.length(data)-1)
 		#Aquí va la ip 
@@ -41,13 +40,19 @@ defmodule Server do
 
 		peticion = Kernel.inspect(Time.utc_now)<>"[#{ip}:#{port}]:\nP: #{data}\n"
 		respuesta = "R: "<>Interface.execute(line, ip)
+
 		#Almacena el log
-		#File.write(Path.rootname("./log.txt"), peticion<>respuesta<>"\n",[:append])
+		almacenar_log(peticion, respuesta)
 
 		IO.puts(peticion<>respuesta)
-		respuesta
+		respuesta<>"\n"
 	end
-	defp see_resp(_,_),do: :ok
+	defp see_resp({:ok, data}),do: data
+	defp see_resp(_),do: :ok
+
+	defp almacenar_log(peticion, respuesta) do
+		File.write(Path.rootname("./log.txt"), peticion<>respuesta<>"\n",[:append])
+	end
 end
 
 
