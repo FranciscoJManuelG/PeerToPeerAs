@@ -88,7 +88,7 @@ defmodule Utils do
 	############################################################
 	def get_own_ip() do
 		{:ok,list} = :inet.getif()
-		get_own_ip(first(list))
+		get_own_ip(List.first(list))
 	end
 	def get_own_ip({{ip1,ip2,ip3,ip4},_,_}) do
 		Kernel.inspect(ip1)<>"."<>Kernel.inspect(ip2)<>"."<>Kernel.inspect(ip3)<>"."<>Kernel.inspect(ip4)
