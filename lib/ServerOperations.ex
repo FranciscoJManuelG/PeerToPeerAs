@@ -78,11 +78,11 @@ defmodule ServerOperations do
 	end
 
 	 #Añade nodos a los ficheros
- 	def handle_cast({:addNodeToFile, file, node}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
+ 	def handle_cast({:addNodeToFile, file, hash, node}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
  		if Utils.exists(node, listaNodosBase) do
  			nodes = Utils.nodesByFile(file, listaFicheros)
  			unless Utils.inList?(node, nodes) do
-				updated_listFiles = Utils.addNodeToFileFunction(file, node, listaFicheros)
+				updated_listFiles = Utils.addNodeToFileFunction(file, hash, node, listaFicheros)
 				{:noreply, [listaNodosMaestros,listaNodosBase,updated_listFiles]}
 			else
 				{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}

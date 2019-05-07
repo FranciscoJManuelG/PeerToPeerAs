@@ -30,7 +30,10 @@ defmodule Interface do
 	end
 
 	# Ejecuta ordenes provenientes de nodos base
-	def execute_client(["CONNECT"], name, ip, false), do: Client.addNode(name, ip)
+	def execute_client(["CONNECT"], name, ip, false) do
+		Client.addNode(name, ip)
+		Client.nodeUp(name)
+	end
 	def execute_client(["DISCONNECT"], name, _, true), do: Client.nodeDown(name)
 	def execute_client(["WANT", fileId], _, _, true), do: Client.want(fileId)
 	def execute_client(["OFFER", fileId, file], name, _, true), do: Client.offer(fileId, file, name)

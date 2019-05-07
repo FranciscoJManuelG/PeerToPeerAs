@@ -21,14 +21,14 @@ defmodule ClientOperations do
   		"Estableciendo nodo base como apagado '#{node}'"
   	end
 
-	def addNodeToFile(file, node) do
-		GenServer.cast(:server, {:addNodeToFile, file, node})
+	def addNodeToFile(file, hash, node) do
+		GenServer.cast(:server, {:addNodeToFile, file, hash, node})
 		"Añadiendo '#{node}' al fichero '#{file}'"
 	end
 
 	def offer(fileId, hash, node) do
 		addFile(fileId, hash)
-		addNodeToFile(fileId,node)
+		addNodeToFile(fileId,hash,node)
 		"Ahora el nodo '#{node}' tiene disponible el fichero '#{fileId}' "
 	end
 
