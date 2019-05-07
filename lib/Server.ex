@@ -2,16 +2,16 @@ defmodule Server do
 
 	def accept(),do: accept(5000)
 	def accept(port) do
-		{:ok, socket} = :gen_tcp.listen(port,[:binary, packet: :line, active: false, reuseaddr: true])
+		{:ok, serverSocket} = :gen_tcp.listen(port,[:binary, packet: :line, active: false, reuseaddr: true])
 		IO.puts("Aceptando conexiones en el puerto #{port}")
-		loop(socket)
+		loop(serverSocket)
   	end
 
-	defp loop(socket) do
-		{:ok,client} = :gen_tcp.accept(socket)
-		_pid = spawn_link(__MODULE__,:serve,[client])
+	defp loop(serverSocket) do
+		{:ok,clientSocket} = :gen_tcp.accept(serverSocket)
+		_pid = spawn_link(__MODULE__,:serve,[clientSocket])
 		#serve(client)
-		loop(socket)
+		loop(serverSocket)
 	end
 
 	def serve(socket) do

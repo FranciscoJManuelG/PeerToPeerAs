@@ -431,3 +431,19 @@ R: Ahora el nodo 'W0UOAY' tiene disponible el fichero 'asd2'
 P: WANT asd
 
 R: 127.0.0.1
+~T[15:48:00.577605][192.168.43.29:38101]:
+P: CONNECT
+
+R: Añadiendo nodo base con id 'MTPSQF' e ip '192.168.43.29'.
+~T[15:48:31.119544][192.168.43.29:38101]:
+P: OFFER asd asd
+
+R: Ahora el nodo 'MTPSQF' tiene disponible el fichero 'asd' 
+~T[15:48:43.303722][192.168.43.29:38101]:
+P: OFFER asd2 asd2
+
+R: Ahora el nodo 'MTPSQF' tiene disponible el fichero 'asd2' 
+~T[15:48:55.547842][192.168.43.29:38101]:
+P: WANT asd
+
+R: 192.168.43.29
