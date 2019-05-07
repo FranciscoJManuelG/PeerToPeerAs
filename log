@@ -399,3 +399,35 @@ R: FORMAT INCORRECT
 P: CONNECT
 
 R: YA ESTÁS CONECTADO
+~T[15:04:39.644855][127.0.0.1:42739]:
+P: CONNECT
+
+R: Estableciendo nodo base como activo 'OLWCY9'
+~T[15:04:51.597702][127.0.0.1:42739]:
+P: Connect
+
+R: FORMAT INCORRECT
+~T[15:37:29.440200][127.0.0.1:41977]:
+P: CONNECT
+
+R: Añadiendo nodo base con id 'W0UOAY' e ip '127.0.0.1'.
+~T[15:37:37.675049][127.0.0.1:41977]:
+P: CONNECT
+
+R: YA ESTÁS CONECTADO
+~T[15:38:51.101403][127.0.0.1:41977]:
+P: OFFER asd asd
+
+R: Ahora el nodo 'W0UOAY' tiene disponible el fichero 'asd' 
+~T[15:39:12.726384][127.0.0.1:41977]:
+P: WANT asd
+
+R: 127.0.0.1
+~T[15:40:35.310445][127.0.0.1:41977]:
+P: OFFER asd2 asd2
+
+R: Ahora el nodo 'W0UOAY' tiene disponible el fichero 'asd2' 
+~T[15:40:39.811469][127.0.0.1:41977]:
+P: WANT asd
+
+R: 127.0.0.1

@@ -45,7 +45,7 @@ defmodule ServerInterface do
 	def handle_cast({:addNode, node, ip}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
 		#Si no existe el nodo se añade
 		unless Utils.exists(node,listaNodosBase) do
-			updated_listNodes = [{node,:DOWN, ip}|listaNodosBase]
+			updated_listNodes = [{node,:UP, ip}|listaNodosBase]
 			{:noreply, [listaNodosMaestros,updated_listNodes,listaFicheros]}
 		else
 			{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}

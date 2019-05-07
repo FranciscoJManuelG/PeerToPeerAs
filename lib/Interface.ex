@@ -1,41 +1,33 @@
 defmodule Interface do
 
-	def execute(orden, ip) do
-		if Process.whereis(:server) != nil do
-			#Si es una ip admin ejecuta execute_admin, si no, ejecuta execute_client
-			if ClientInterface.isAdmin(ip) do
-				Interface.execute_admin(String.split(orden))
-			else 
-				node = ClientInterface.idOfIp(ip)
-				if (node === :error) do
-					Interface.execute_client(String.split(orden),gen_reference(),ip, false)
-				else
-					isNodeUp = ClientInterface.isNodeUp(node)
-					Interface.execute_client(String.split(orden),node,ip, isNodeUp)
-				end
-			end		
-		else
-			ClientInterface.start()
-			execute(orden,ip)
-		end
+	def execute(orden, ip), do: execute(orden,ip,Process.whereis(:server) != nil)
+	def execute(orden, ip, false) do
+		ClientInterface.start()
+		execute(orden,ip,true)
+	end
+	def execute(orden,ip,true) do 
+		#Si es una ip admin ejecuta execute_admin, si no, ejecuta execute_client
+		if ClientInterface.isAdmin(ip) do
+			Interface.execute_admin(String.split(orden))
+		else 
+			node = ClientInterface.idOfIp(ip)
+			if (node === :error) do
+				Interface.execute_client(String.split(orden),gen_reference(),ip, false)
+			else
+				isNodeUp = ClientInterface.isNodeUp(node)
+				Interface.execute_client(String.split(orden),node,ip, isNodeUp)
+			end
+		end	
 	end
 
 	# Ejecuta ordenes provenientes de nodos base
-	def execute_client(["CONNECT"], name, ip, false) do
-			ClientInterface.addNode(name, ip)
-			ClientInterface.nodeUp(name)
-	end
+	def execute_client(["CONNECT"], name, ip, false), do: ClientInterface.addNode(name, ip)
 
-	def execute_client(["DISCONNECT"], name, _, true) do
-			ClientInterface.isNodeUp(name)
-			ClientInterface.nodeDown(name)
-	end
+	def execute_client(["DISCONNECT"], name, _, true), do: ClientInterface.nodeDown(name)
 
-	def execute_client(["WANT", fileId], _, _, true), do:
-			ClientInterface.want(fileId)
+	def execute_client(["WANT", fileId], _, _, true), do: ClientInterface.want(fileId)
 
-	def execute_client(["OFFER", fileId, file], name, _, true), do:
-			ClientInterface.offer(fileId, file, name)
+	def execute_client(["OFFER", fileId, file], name, _, true), do: ClientInterface.offer(fileId, file, name)
 	
 	def execute_client(["CONNECT"], _, _, true), do: "YA ESTÁS CONECTADO"
 
