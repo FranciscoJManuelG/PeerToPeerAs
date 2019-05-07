@@ -4,24 +4,18 @@ defmodule Utils do
 
 	def idOfIp(ip,[{id,_,ip}|_]), do: id
 
-	def idOfIp(ip,[{_,_,_}|tail]), do: idOfIp(ip,tail)
+	def idOfIp(ip,[_|tail]), do: idOfIp(ip,tail)
 
 	def idOfIp(_,[]), do: :error
 
 	######################################################
-	def nodeIsUpFunction(node, [{nodeId,state,_}|_])
-		when node == nodeId and state == :UP do true
-	end
+	def nodeIsUpFunction(nodeId, [{nodeId,:UP,_}|_]), do: true
+	
+	def nodeIsUpFunction(nodeId, [{nodeId,:DOWN,_}|_]), do: false
 
-	def nodeIsUpFunction(node, [{nodeId,_,_}|tail])
-		when node != nodeId do nodeIsUpFunction(node, tail)
-	end
+	def nodeIsUpFunction(nodeId, [_|tail]), do: nodeIsUpFunction(nodeId, tail)
 
-	def nodeIsUpFunction(node, [{nodeId,state,_}|_])
-		when node == nodeId and state != :UP do false
-	end
-
-	def nodeIsUpFunction(_, _), do: false
+	def nodeIsUpFunction(_,_), do: false
 
 	####################################################
 
@@ -29,19 +23,13 @@ defmodule Utils do
 
 	def ipByNode(node, [_|tail]), do: ipByNode(node,tail)
 
-	def ipByNode(_) do
-		"ERROR"
-	end
+	def ipByNode(_), do: "ERROR"
 
 	####################################################
 
-	def nodesByFile(file, [{fileId, _, _,listNodes}|_])
-		when file == fileId do listNodes
-	end
+	def nodesByFile(fileId, [{fileId,_,_,listNodes}|_]), do: listNodes
 
-	def nodesByFile(file, [{fileId, _, _,}|tail])
-		when file != fileId do nodesByFile(file, tail)
-	end
+	def nodesByFile(fileId, [_|tail]), do: nodesByFile(fileId, tail)
 
 	def nodesByFile(_, _), do: []
 
