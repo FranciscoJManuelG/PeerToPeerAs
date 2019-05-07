@@ -31,21 +31,15 @@ defmodule Utils do
 
 	def nodesByFile(fileId, [_|tail]), do: nodesByFile(fileId, tail)
 
-	def nodesByFile(_, _), do: []
+	def nodesByFile(_,_), do: []
 
  	####################################################
 
- 	# Para sabes si existe un nodo
+ 	# Para saber si existe un nodo o un fichero
+ 	def exists(id_node, [{id_node, _, _}|_]), do: true
+ 	def exists(id_file, [{id_file, _, _, _}|_]), do: true
 
- 	def exists(id_want, [{id_want, _, _}|_]), do: true
-
- 	def exists(id_want, [{_, _, _}|tail]), do: exists(id_want, tail)
-
- 	# Para sabes si existe un fichero
-
- 	def exists(id_want, [{id_want, _, _, _}|_]), do: true
-
- 	def exists(id_want, [{_, _, _, _}|tail]), do: exists(id_want, tail)
+ 	def exists(id, [_|tail]), do: exists(id, tail)
 
  	def exists(_,_), do: false
 
