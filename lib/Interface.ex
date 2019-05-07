@@ -25,7 +25,6 @@ defmodule Interface do
 		when not isNodeUp do
 			ClientInterface.addNode(name, ip)
 			ClientInterface.nodeUp(name)
-			ClientInterface.viewAll()
 	end
 
 	def execute_client(["CONNECT"], _, _, isNodeUp) 
@@ -47,7 +46,6 @@ defmodule Interface do
 	def execute_client(["OFFER", fileId, file], name, _, isNodeUp) 
 		when isNodeUp do
 			ClientInterface.offer(fileId, file, name)
-			ClientInterface.viewAll()
 	end
 
 	def execute_client(_, _, _, isNodeUp) 
