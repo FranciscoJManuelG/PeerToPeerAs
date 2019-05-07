@@ -19,8 +19,8 @@ defmodule ClientOperations do
   		"Añadiendo nodo maestro con id '#{nodeM}' e ip '#{ip}'."
   	end
 
-  	def addFile(fileId, file) do
-  		GenServer.cast(:server, {:addFile, fileId, file})
+  	def addFile(fileId, hash) do
+  		GenServer.cast(:server, {:addFile, fileId, hash})
   		"Añadiendo fichero con id '#{fileId}'"
   	end
 
@@ -48,8 +48,8 @@ defmodule ClientOperations do
 		"Añadiendo '#{node}' al fichero '#{file}'"
 	end
 
-	def offer(fileId, file, node) do
-		addFile(fileId, file)
+	def offer(fileId, hash, node) do
+		addFile(fileId, hash)
 		addNodeToFile(fileId,node)
 		"Ahora el nodo '#{node}' tiene disponible el fichero '#{fileId}' "
 	end
