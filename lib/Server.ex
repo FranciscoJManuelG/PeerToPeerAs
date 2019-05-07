@@ -30,7 +30,8 @@ defmodule Server do
 		:gen_tcp.send(socket, line)
 		serve(socket)
 	end
-defp see_resp({:ok, data},socket) do
+	
+	defp see_resp({:ok, data},socket) do
 		#Para sacar el \n del final
 		line = String.slice(String.trim(data),0,String.length(data)-1)
 		#Aquí va la ip 
@@ -38,14 +39,14 @@ defp see_resp({:ok, data},socket) do
 		#Paso la ip a un string
 		ip = Kernel.inspect(ip1)<>"."<>Kernel.inspect(ip2)<>"."<>Kernel.inspect(ip3)<>"."<>Kernel.inspect(ip4)
 
-		peticion = Kernel.inspect(Time.utc_now)<>"[#{ip}:#{port}]:\nP: #{data}\n"
-		respuesta = "R: "<>Interface.execute(line, ip)
+		peticion = Kernel.inspect(Time.utc_now)<>"[#{ip}:#{port}]:\nP: #{data}"
+		respuesta = "R: "<>Interface.execute(line, ip)<>"\n"
 
 		#Almacena el log
 		almacenar_log(peticion, respuesta)
 
 		IO.puts(peticion<>respuesta)
-		respuesta<>"\n"
+		respuesta
 	end
 	defp see_resp(_,_),do: :ok
 
