@@ -21,51 +21,27 @@ defmodule Interface do
 	end
 
 	# Ejecuta ordenes provenientes de nodos base
-	def execute_client(["CONNECT"], name, ip, isNodeUp) 
-		when not isNodeUp do
+	def execute_client(["CONNECT"], name, ip, false) do
 			ClientInterface.addNode(name, ip)
 			ClientInterface.nodeUp(name)
 	end
 
-	def execute_client(["CONNECT"], _, _, isNodeUp) 
-		when isNodeUp do
-			"YA ESTÁS CONECTADO"
-	end
-
-	def execute_client(["DISCONNECT"], name, _, isNodeUp) 
-		when isNodeUp do
+	def execute_client(["DISCONNECT"], name, _, true) do
 			ClientInterface.isNodeUp(name)
 			ClientInterface.nodeDown(name)
 	end
 
-	def execute_client(["WANT", fileId], _, _, isNodeUp) 
-		when isNodeUp do
+	def execute_client(["WANT", fileId], _, _, true), do:
 			ClientInterface.want(fileId)
-	end
 
-	def execute_client(["OFFER", fileId, file], name, _, isNodeUp) 
-		when isNodeUp do
+	def execute_client(["OFFER", fileId, file], name, _, true), do:
 			ClientInterface.offer(fileId, file, name)
-	end
+	
+	def execute_client(["CONNECT"], _, _, true), do: "YA ESTÁS CONECTADO"
 
-	def execute_client(_, _, _, isNodeUp) 
-		when not isNodeUp do
-			"NO ESTÁS CONECTADO"
-	end
+	def execute_client(_, _, _, false), do: "NO ESTÁS CONECTADO"
 
-	def execute_client(_, _, _, isNodeUp) 
-		when not isNodeUp do
-			"NO ESTÁS CONECTADO"
-	end
-
-	def execute_client(_, _, _, isNodeUp) 
-		when not isNodeUp do
-			"NO ESTÁS CONECTADO"
-	end
-
-	def execute_client(_, _, _, _) do
-		"FORMAT INCORRECT"
-	end
+	def execute_client(_, _, _, _), do: "FORMAT INCORRECT"
 
 	# Ejecuta ordenes provenientes de administradores
 	def execute_admin(["STOP"]), do: ClientInterface.stop()
