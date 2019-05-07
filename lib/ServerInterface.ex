@@ -45,7 +45,7 @@ defmodule ServerInterface do
 	def handle_cast({:addNode, node, ip}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
 		#Si no existe el nodo se añade
 		unless Utils.exists(node,listaNodosBase) do
-			updated_listNodes = listaNodosBase ++ [{node,:DOWN, ip}]
+			updated_listNodes = [{node,:DOWN, ip}|listaNodosBase]
 			{:noreply, [listaNodosMaestros,updated_listNodes,listaFicheros]}
 		else
 			{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}
@@ -56,9 +56,7 @@ defmodule ServerInterface do
 	def handle_cast({:addNodeM, nodeM, ip}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
 		#Si no existe el nodo se añade
 		unless Utils.exists(nodeM,listaNodosMaestros) do
-			updated_listNodes = listaNodosMaestros ++ [{nodeM, :UNSYNC, ip}]
-			#Se sincroniza el nodo que se acaba de añadir
-			#nodeMSync(nodeM,[])
+			updated_listNodes = [{nodeM, :UNSYNC, ip}|listaNodosMaestros]
 			{:noreply, [updated_listNodes,listaNodosBase,listaFicheros]}
 		else
 			{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}
@@ -72,7 +70,7 @@ defmodule ServerInterface do
 			#Se aplica el hash al fichero
 			hash = :crypto.hash(:sha256, file)
 			#Se añade
-			updated_list = listaFicheros ++ [{fileId,hash,file,[]}]
+			updated_list = [{fileId,hash,file,[]}|listaFicheros]
 			{:noreply, [listaNodosMaestros,listaNodosBase,updated_list]}
 		else
 			{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}

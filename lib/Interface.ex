@@ -4,13 +4,14 @@ defmodule Interface do
 		if Process.whereis(:server) != nil do
 			#Si es una ip admin ejecuta execute_admin, si no, ejecuta execute_client
 			if ClientInterface.isAdmin(ip) do
-				Interface.execute_admin(orden)
+				Interface.execute_admin(String.split(orden))
 			else 
 				node = ClientInterface.idOfIp(ip)
 				if (node === :error) do
-					Interface.execute_client(orden,gen_reference(),ip)
+					Interface.execute_client(String.split(orden),gen_reference(),ip, false)
 				else
-					Interface.execute_client(orden,node,ip)
+					isNodeUp = ClientInterface.isNodeUp(node)
+					Interface.execute_client(String.split(orden),node,ip, isNodeUp)
 				end
 			end		
 		else
@@ -20,39 +21,64 @@ defmodule Interface do
 	end
 
 	# Ejecuta ordenes provenientes de nodos base
-	def execute_client(orden, name, ip) do
-		case String.split(orden) do
-			["CONNECT"] -> 			if not ClientInterface.isNodeUp(name) do
-										ClientInterface.addNode(name, ip)
-										ClientInterface.nodeUp(name)
-									else "YA ESTÁS CONECTADO"
-									end
-			["DISCONNECT"] -> 		if ClientInterface.isNodeUp(name) do
-										ClientInterface.nodeDown(name)
-									else "NO ESTÁS CONECTADO"
-									end
-			["WANT", fileId] -> 	if ClientInterface.isNodeUp(name) do
-										ClientInterface.want(fileId)
-									else "NO ESTÁS CONECTADO"
-									end
-			["OFFER", fileId, file] -> 	if ClientInterface.isNodeUp(name) do
-										ClientInterface.offer(fileId, file, name)
-									else "NO ESTÁS CONECTADO"
-									end
-			_-> "FORMAT INCORRECT"
-		end
+	def execute_client(["CONNECT"], name, ip, isNodeUp) 
+		when not isNodeUp do
+			ClientInterface.addNode(name, ip)
+			ClientInterface.nodeUp(name)
+			ClientInterface.viewAll()
+	end
+
+	def execute_client(["CONNECT"], _, _, isNodeUp) 
+		when isNodeUp do
+			"YA ESTÁS CONECTADO"
+	end
+
+	def execute_client(["DISCONNECT"], name, _, isNodeUp) 
+		when isNodeUp do
+			ClientInterface.isNodeUp(name)
+			ClientInterface.nodeDown(name)
+	end
+
+	def execute_client(["WANT", fileId], _, _, isNodeUp) 
+		when isNodeUp do
+			ClientInterface.want(fileId)
+	end
+
+	def execute_client(["OFFER", fileId, file], name, _, isNodeUp) 
+		when isNodeUp do
+			ClientInterface.offer(fileId, file, name)
+			ClientInterface.viewAll()
+	end
+
+	def execute_client(_, _, _, isNodeUp) 
+		when not isNodeUp do
+			"NO ESTÁS CONECTADO"
+	end
+
+	def execute_client(_, _, _, isNodeUp) 
+		when not isNodeUp do
+			"NO ESTÁS CONECTADO"
+	end
+
+	def execute_client(_, _, _, isNodeUp) 
+		when not isNodeUp do
+			"NO ESTÁS CONECTADO"
+	end
+
+	def execute_client(_, _, _, _) do
+		"FORMAT INCORRECT"
 	end
 
 	# Ejecuta ordenes provenientes de administradores
-	def execute_admin(orden) do
-		case String.split(orden) do
-			["STOP"] -> ClientInterface.stop()
-			["ADD", "NODEM", nodeMId, nodeMIp] -> ClientInterface.addNodeM(nodeMId,nodeMIp)
-			["REMOVE", "NODEM", nodeMId] -> ClientInterface.removeNodeM(nodeMId)
-			["VIEW"] -> ClientInterface.viewAll()
-			_-> "FORMAT INCORRECT"
-		end
-	end
+	def execute_admin(["STOP"]), do: ClientInterface.stop()
+
+	def execute_admin(["ADD", "NODEM", nodeMId, nodeMIp]), do: ClientInterface.addNodeM(nodeMId,nodeMIp)
+
+	def execute_admin(["REMOVE", "NODEM", nodeMId]), do: ClientInterface.removeNodeM(nodeMId)
+
+	def execute_admin(["VIEW"]), do: ClientInterface.viewAll()
+
+	def execute_admin(_), do: "FORMAT INCORRECT"
 
 	#Genera un string aleatorio
 	def gen_reference() do

@@ -68,6 +68,6 @@ defmodule ClientInterface do
 
 	def isAdmin(ip) do
 		#De momento siempre devuelve true solo si es localhost
-		ip == "127.0.0.1"
+		ip == "127.0.0.0"
 	end
 end
