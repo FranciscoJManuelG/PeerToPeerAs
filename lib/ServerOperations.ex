@@ -64,13 +64,13 @@ defmodule ServerOperations do
 	end
 
 	#Añade un fichero
-	def handle_cast({:addFile, fileId, file}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
+	def handle_cast({:addFile, fileId, hash}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
 		#Si no existe el fichero lo añade
-		unless Utils.exists(file,listaFicheros) do
+		unless Utils.exists(fileId,listaFicheros) do
 			#Se aplica el hash al fichero
-			hash = :crypto.hash(:sha256, file)
+			#hash = :crypto.hash(:sha256, file)
 			#Se añade
-			updated_list = [{fileId,hash,file,[]}|listaFicheros]
+			updated_list = [{fileId,hash,[]}|listaFicheros]
 			{:noreply, [listaNodosMaestros,listaNodosBase,updated_list]}
 		else
 			{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}

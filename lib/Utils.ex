@@ -28,7 +28,7 @@ defmodule Utils do
 
 	####################################################
 	# Busca una lista de nodos de un fichero
-	def nodesByFile(fileId, [{fileId,_,_,listNodes}|_]), do: listNodes
+	def nodesByFile(fileId, [{fileId,_,listNodes}|_]), do: listNodes
 
 	def nodesByFile(fileId, [_|tail]), do: nodesByFile(fileId, tail)
 
@@ -37,7 +37,7 @@ defmodule Utils do
  	####################################################
  	# Para saber si existe un nodo o un fichero
  	def exists(id_node, [{id_node, _, _}|_]), do: true
- 	def exists(id_file, [{id_file, _, _, _}|_]), do: true
+ 	def exists(id_file, [{id_file, _, _}|_]), do: true
 
  	def exists(id, [_|tail]), do: exists(id, tail)
 
