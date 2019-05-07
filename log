@@ -375,3 +375,7 @@ R: Estableciendo nodo base como apagado 'node'
 P: NODE DOWN node
 
 R: Estableciendo nodo base como apagado 'node'
+~T[17:52:14.871122][127.0.0.1:43413]:
+P: CONNECT
+
+R: FORMAT INCORRECT

@@ -47,8 +47,7 @@ defp see_resp({:ok, data},socket) do
 		IO.puts(peticion<>respuesta)
 		respuesta<>"\n"
 	end
-	defp see_resp({:ok, data}),do: data
-	defp see_resp(_),do: :ok
+	defp see_resp(_,_),do: :ok
 
 	defp almacenar_log(peticion, respuesta) do
 		File.write(Path.rootname("./log.txt"), peticion<>respuesta<>"\n",[:append])
