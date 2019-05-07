@@ -4,11 +4,11 @@ defmodule Interface do
 	def execute(orden, ip) do
 		if Process.whereis(:server) != nil do
 			#Si es una ip admin ejecuta execute_admin, si no, ejecuta execute_client
-			if Interface.execute_admin("IS ADMIN " <>  ip) do
+			if Server.isAdmin(ip) do
 				Interface.execute_admin(orden)
 			else 
-				node = Interface.execute_admin("ID OF IP " <> ip)
-				if (String.length(node)==0) do
+				node = Server.idOfIp(ip)
+				if (node === :error) do
 					Interface.execute_client(orden,gen_reference(),ip)
 				else
 					Interface.execute_client(orden,node,ip)
@@ -48,17 +48,9 @@ defmodule Interface do
 	def execute_admin(orden) do
 		case String.split(orden) do
 			["STOP"] -> Server.stop()
-			["ADD", "NODE", nodeId, nodeIp] -> Server.addNode(nodeId,nodeIp)
 			["ADD", "NODEM", nodeMId, nodeMIp] -> Server.addNodeM(nodeMId,nodeMIp)
-			["ADD", "FILE", fileId, file] -> Server.addFile(fileId, file)
-			["ADD", "NODE_TO_FILE", fileId, node] -> Server.addNodeToFile(fileId,node)
 			["REMOVE", "NODEM", nodeMId] -> Server.removeNodeM(nodeMId)
-			["REMOVE", "NODE", nodeId] -> Server.removeNode(nodeId)
-			["REMOVE", "FILE", fileId] -> Server.removeFile(fileId)
-			["REMOVE", "NODE_TO_FILE", fileId, node] -> Server.removeNodeOfFile(fileId,node)	
 			["VIEW"] -> Server.viewAll()
-			["NODE","UP",nodeId] -> Server.nodeUp(nodeId)
-			["NODE","DOWN",nodeId] -> Server.nodeDown(nodeId)
 			["IS","ADMIN", ip] -> Server.isAdmin(ip) # No deben de ser llamadas desde el cliente
 			["ID","OF","IP", ip] -> Server.idOfIp(ip) # No deben de ser llamadas desde el cliente
 			_-> "FORMAT INCORRECT"

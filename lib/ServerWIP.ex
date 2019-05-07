@@ -20,19 +20,9 @@ defmodule ServerWIP do
 		GenServer.call(:server, :viewAll)
 	end
 
-	def removeNode(node) do
-		GenServer.cast(:server, {:removeNode, node})
-		"Eliminando nodo base '#{node}'"
-	end
-
 	def removeNodeM(nodeM) do
 		GenServer.cast(:server, {:removeNodeM, nodeM})
 		"Eliminando nodo maestro '#{nodeM}'"
-	end
-
-	def removeFile(file) do
-		GenServer.cast(:server, {:removeFile, file})
-		"Eliminando fichero '#{file}'"
 	end
 
 	def nodeUp(node) do
@@ -48,11 +38,6 @@ defmodule ServerWIP do
 	def addNodeToFile(file, node) do
 		GenServer.cast(:server, {:addNodeToFile, file, node})
 		"Añadiendo '#{node}' al fichero '#{file}'"
-	end
-
-	def removeNodeOfFile(file, node) do
-		GenServer.cast(:server, {:removeNodeOfFile, file, node})
-		"Eliminando '#{node}' del fichero '#{file}'"
 	end
 
 	def offer(fileId, file, node) do
@@ -182,36 +167,6 @@ defmodule ServerWIP do
 		end		
 	end
 
-	#Elimina un nodo base 
-	def handle_cast({:removeNode, node}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
-		updated_listNodes = delete(node,listaNodosBase)
-		if updated_listNodes == listaNodosBase do
-			{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}
-		else
-			{:noreply, [listaNodosMaestros,updated_listNodes,listaFicheros]}
-		end		
-	end
-
-	#Elimina un fichero
-	def handle_cast({:removeFile, file}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
-		updated_listFiles = delete(file,listaFicheros)
-		if updated_listFiles == listaFicheros do
-			{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}
-		else
-			{:noreply, [listaNodosMaestros,listaNodosBase,updated_listFiles]}
-		end		
-	end
-
-	#Elimina un nodo de un fichero
-	def handle_cast({:removeNodeOfFile, file, node}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
-		updated_listFiles = removeNodeToFilesFunction(file, node, listaFicheros)
-		if updated_listFiles == listaFicheros do
-			{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}
-		else
-			{:noreply, [listaNodosMaestros,listaNodosBase,updated_listFiles]}
-		end
-	end
-
 	#Establece el estado de UP a un nodo base
 	def handle_cast({:nodeUp, node}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
 		updated_listNodes = nodeStateFunction(node, :UP, listaNodosBase)
@@ -235,7 +190,7 @@ defmodule ServerWIP do
 
 	def idOfIp(ip,[{_,_,_}|tail]), do: idOfIp(ip,tail)
 
-	def idOfIp(_,[]), do: ""
+	def idOfIp(_,[]), do: :error
 
 	######################################################
 	def nodeIsUpFunction(node, [{nodeId,state,_}|_])
@@ -302,12 +257,6 @@ defmodule ServerWIP do
 
 	def delete(id_want,[{id_list,state,ip}|tail],aux), do: delete(id_want, tail, aux++[{id_list,state,ip}])
 
-	# Para eliminar un fichero
-
-	def delete(id_want,[{id_want, _, _, _}|tail],aux), do: aux ++ tail
-
-	def delete(id_want,[{id_list, hash, file, nodes}|tail],aux), do: delete(id_want, tail, aux++[{id_list, hash, file, nodes}])
-
 	############################################################
 
 	def nodeStateFunction(nodeId, state, list) do
@@ -315,11 +264,11 @@ defmodule ServerWIP do
 	end
 
 	def nodeStateFunction(nodeId, state, [{nodeId, _, ip}|tail], aux) do
-		aux ++ [{nodeId, state, ip}|tail]
+		Enum.concat(aux,[{nodeId, state, ip}|tail])
 	end
 
-	def nodeStateFunction(node, status, [{nodeID, state, id}|tail], aux) do
-		nodeStateFunction(node, status, tail, aux ++ [{nodeID, state, id}])
+	def nodeStateFunction(node, status, [head|tail], aux) do
+		nodeStateFunction(node, status, tail, [head|aux])
 	end
 
 	def nodeStateFunction(_, _, _, aux) do
@@ -355,29 +304,7 @@ defmodule ServerWIP do
 
 	def inList?(_, _), do: false
 
-	##################################################################
-
-	def removeNodeToFilesFunction(file, node, listFiles) do
-		removeNodeToFilesFunction(file, node, listFiles, [], [])
-	end
-
-	def removeNodeToFilesFunction(fileID, node, [{fileID, hash, file, [node|tail]}|_], listAuxFileList, listAuxNodesList) do
-		listAuxFileList ++ [{fileID,hash, file,listAuxNodesList ++ tail}]
-	end
-
-	def removeNodeToFilesFunction(fileID, node, [{fileID, hash, file, [other_node|tail]}|tail2], listAuxFileList, listAuxNodesList) do
-		removeNodeToFilesFunction(fileID, node, [{fileID, hash, file, tail}|tail2], listAuxFileList, listAuxNodesList ++ [other_node])
-	end
-
-	def removeNodeToFilesFunction(fileID, listNodes, [{other_fileID, hash, file, listNodesFiles}|tail], listAuxFileList, _) do
-		removeNodeToFilesFunction(fileID, listNodes, tail,listAuxFileList ++ [{other_fileID, hash, file,listNodesFiles}], [])
-	end
-
-	def removeNodeToFilesFunction(_, _, [], listAuxFileList, _) do
-		listAuxFileList
-	end
 	##############################################################################
-
 
 	def init([listaNodosMaestros,listaNodosBase,listaFicheros]) do
 		{:ok, [listaNodosMaestros,listaNodosBase,listaFicheros]}
