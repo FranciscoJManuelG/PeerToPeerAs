@@ -473,3 +473,15 @@ R: YA ESTÁS CONECTADO
 P: CONNECT
 R: YA ESTÁS CONECTADO
 
+~T[17:29:19.051163][192.168.43.107:44331]:
+P: CONNECT
+R: Añadiendo nodo base con id 'PBM38R' e ip '192.168.43.107'.
+
+~T[17:29:42.880119][192.168.43.107:44331]:
+P: OFFER file1 <<123,1231>>
+R: Ahora el nodo 'PBM38R' tiene disponible el fichero 'file1' 
+
+~T[17:33:21.714362][192.168.43.107:34263]:
+P: CONNECT
+R: Añadiendo nodo base con id 'PK3X51' e ip '192.168.43.107'.
+

@@ -10,7 +10,7 @@ defmodule InterfaceOperations do
 	end
 
 	def isAdmin(ip) do
-		ip == "127.0.0.0"
+		ip == "127.0.0.1"
     end
     
 end
