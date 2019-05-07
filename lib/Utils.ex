@@ -1,7 +1,7 @@
 defmodule Utils do
 
 	############################## FUNCIONES AUXILIARES ###########################
-
+	# Busca la id de una ip
 	def idOfIp(ip,[{id,_,ip}|_]), do: id
 
 	def idOfIp(ip,[_|tail]), do: idOfIp(ip,tail)
@@ -9,6 +9,7 @@ defmodule Utils do
 	def idOfIp(_,[]), do: :error
 
 	######################################################
+	# Busca si un nodo está :UP
 	def nodeIsUpFunction(nodeId, [{nodeId,:UP,_}|_]), do: true
 	
 	def nodeIsUpFunction(nodeId, [{nodeId,:DOWN,_}|_]), do: false
@@ -18,7 +19,7 @@ defmodule Utils do
 	def nodeIsUpFunction(_,_), do: false
 
 	####################################################
-
+	# Busca la ip correspondiente a un nodo
 	def ipByNode(nodeId, [{nodeId,_, ip}|_]), do: ip
 
 	def ipByNode(node, [_|tail]), do: ipByNode(node,tail)
@@ -26,7 +27,7 @@ defmodule Utils do
 	def ipByNode(_), do: "ERROR"
 
 	####################################################
-
+	# Busca una lista de nodos de un fichero
 	def nodesByFile(fileId, [{fileId,_,_,listNodes}|_]), do: listNodes
 
 	def nodesByFile(fileId, [_|tail]), do: nodesByFile(fileId, tail)
@@ -34,7 +35,6 @@ defmodule Utils do
 	def nodesByFile(_,_), do: []
 
  	####################################################
-
  	# Para saber si existe un nodo o un fichero
  	def exists(id_node, [{id_node, _, _}|_]), do: true
  	def exists(id_file, [{id_file, _, _, _}|_]), do: true
@@ -44,61 +44,46 @@ defmodule Utils do
  	def exists(_,_), do: false
 
 	####################################################
-
-	def delete(id_want,list), do: delete(id_want,list,[])
+	# Para eliminar un nodo
+	def delete(id_node,list), do: delete(id_node,list,[])
 
 	def delete(_,[],aux), do: aux
 
-	# Para eliminar un nodo
+	def delete(id_node,[{id_node,_,_}|tail],aux), do:  Enum.concat(aux,tail)
 
-	def delete(id_want,[{id_want,_,_}|tail],aux), do: aux ++ tail
-
-	def delete(id_want,[{id_list,state,ip}|tail],aux), do: delete(id_want, tail, aux++[{id_list,state,ip}])
+	def delete(id_node,[node|tail],aux), do: delete(id_node, tail, [node | aux])
 
 	############################################################
-
-	def nodeStateFunction(nodeId, state, list) do
+	# Modificar estado de un nodo
+	def nodeStateFunction(nodeId, state, list), do:	
 		nodeStateFunction(nodeId, state, list, [])
-	end
 
-	def nodeStateFunction(nodeId, state, [{nodeId, _, ip}|tail], aux) do
+	def nodeStateFunction(nodeId, state, [{nodeId, _, ip}|tail], aux), do:
 		Enum.concat(aux,[{nodeId, state, ip}|tail])
-	end
 
-	def nodeStateFunction(node, status, [head|tail], aux) do
+	def nodeStateFunction(node, status, [head|tail], aux), do:
 		nodeStateFunction(node, status, tail, [head|aux])
-	end
 
-	def nodeStateFunction(_, _, _, aux) do
-		aux
-	end
+	def nodeStateFunction(_, _, _, aux), do: aux
 
-################################################################
-	def addNodeToFileFunction(fileId, node, listFilesNodes) do
+	#############################################################
+	# Añade un nodo a un fichero
+	def addNodeToFileFunction(fileId, node, listFilesNodes), do:
 		addNodeToFileFunction(fileId, node, listFilesNodes, [])
-	end
 
-	def addNodeToFileFunction(fileId, node, [{fileId, hash, file, listNodes}|tail], listAux) do
-		listAux ++ [{fileId, hash, file, listNodes++[node]}|tail]
-	end
+	def addNodeToFileFunction(fileId, node, [{fileId, hash, file, listNodes}|tail], listAux), do:
+		Enum.concat(listAux, [{fileId, hash, file, [node | listNodes]} | tail])
 
-	def addNodeToFileFunction(fileId, node, [{other_fileId, hash, file, listNodes}|tail], listAux) do
-		addNodeToFileFunction(fileId, node, tail, listAux ++ [{other_fileId, hash, file, listNodes}])
-	end
+	def addNodeToFileFunction(fileId, node, [node|tail], listAux), do:
+		addNodeToFileFunction(fileId, node, tail, [node | listAux])
 
-	def addNodeToFileFunction(_, _, [], listAux) do
-		listAux
-	end
+	def addNodeToFileFunction(_, _, [], listAux), do: listAux
 
-###############################################################
+	############################################################
+	# Comprueba si el nodo esta en la lista
+	def inList?(node, [node|_]), do: true		
 
-	def inList?(node, [head|_])
-		when node == head do true		
-	end
-
-	def inList?(node, [head|tail])
-		when node != head do inList?(node,tail)
-	end
+	def inList?(node, [_|tail]), do: inList?(node,tail)
 
 	def inList?(_, _), do: false
 

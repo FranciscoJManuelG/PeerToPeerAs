@@ -387,3 +387,15 @@ R: FORMAT INCORRECT
 P: VIEW
 
 R: [[], [], []]
+~T[14:19:09.800807][127.0.0.1:37199]:
+P: CONNECT
+
+R: Estableciendo nodo base como activo 'OT4RTP'
+~T[14:19:26.168396][127.0.0.1:37199]:
+P: no se
+
+R: FORMAT INCORRECT
+~T[14:19:35.678715][127.0.0.1:37199]:
+P: CONNECT
+
+R: YA ESTÁS CONECTADO
