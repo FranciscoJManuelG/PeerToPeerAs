@@ -39,7 +39,8 @@ defmodule ClientConection do
         case :gen_tcp.recv(socket, 0) do
             {:ok, data} ->  IO.puts(data)
                             send_stringlist(tl,socket)
-            _ -> IO.puts("Error con el servidor")
+            _ -> IO.puts("Error con el servidor. Conexion cerrada")
+                 GenServer.stop(:client)
         end
         
     end
