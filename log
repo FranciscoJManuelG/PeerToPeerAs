@@ -485,3 +485,75 @@ R: Ahora el nodo 'PBM38R' tiene disponible el fichero 'file1'
 P: CONNECT
 R: Añadiendo nodo base con id 'PK3X51' e ip '192.168.43.107'.
 
+~T[17:38:16.217791][192.168.43.107:36309]:
+P: CONNECT
+R: Añadiendo nodo base con id 'CAJUAN' e ip '192.168.43.107'.
+
+~T[17:38:32.900727][192.168.43.107:36309]:
+P: OFFER file1 <<231,3213,231>>
+R: Ahora el nodo 'CAJUAN' tiene disponible el fichero 'file1' 
+
+~T[17:38:47.236700][192.168.43.107:36309]:
+P: WANT file1
+R: 192.168.43.107
+
+~T[17:38:59.524764][192.168.43.107:36309]:
+P: OFFER file2 <<231,3213,231>>
+R: Ahora el nodo 'CAJUAN' tiene disponible el fichero 'file2' 
+
+~T[17:39:01.982257][192.168.43.107:36309]:
+P: OFFER file3 <<231,3213,231>>
+R: Ahora el nodo 'CAJUAN' tiene disponible el fichero 'file3' 
+
+~T[17:39:04.234618][192.168.43.107:36309]:
+P: WANT file1
+R: 192.168.43.107
+
+~T[17:39:05.668333][192.168.43.107:36309]:
+P: WANT file2
+R: 192.168.43.107
+
+~T[17:39:07.101940][192.168.43.107:36309]:
+P: WANT file3
+R: 192.168.43.107
+
+~T[17:39:23.024289][127.0.0.1:39537]:
+P: VIEW
+R: [[], [{"CAJUAN", :UP, "192.168.43.107"}], [{"file3", "<<231,3213,231>>", ["CAJUAN"]}, {"file2", "<<231,3213,231>>", ["CAJUAN"]}, {"file1", "<<231,3213,231>>", ["CAJUAN"]}]]
+
+~T[17:44:40.435925][127.0.0.1:40519]:
+P: CONNECT
+R: Añadiendo nodo base con id '31ZINY' e ip '127.0.0.1'.
+
+~T[17:44:48.503069][192.168.43.107:40313]:
+P: CONNECT
+R: Añadiendo nodo base con id '21KW7P' e ip '192.168.43.107'.
+
+~T[17:44:52.394530][192.168.43.107:40313]:
+P: OFFER file2 <<231,3213,231>>
+R: Ahora el nodo '21KW7P' tiene disponible el fichero 'file2' 
+
+~T[17:44:59.767534][192.168.43.107:40313]:
+P: OFFER file1 <<231,3213,231>>
+R: Ahora el nodo '21KW7P' tiene disponible el fichero 'file1' 
+
+~T[17:45:02.839590][192.168.43.107:40313]:
+P: OFFER file3 <<231,3213,231>>
+R: Ahora el nodo '21KW7P' tiene disponible el fichero 'file3' 
+
+~T[17:45:07.959034][192.168.43.107:40313]:
+P: WANT file2
+R: 192.168.43.107
+
+~T[17:45:33.867084][127.0.0.1:40519]:
+P: WANT file2
+R: 192.168.43.107
+
+~T[17:46:29.993291][127.0.0.1:40519]:
+P: OFFER file54 <<321,654,876>>
+R: Ahora el nodo '31ZINY' tiene disponible el fichero 'file54' 
+
+~T[17:46:45.034126][192.168.43.107:40313]:
+P: WANT file54
+R: 127.0.0.1
+

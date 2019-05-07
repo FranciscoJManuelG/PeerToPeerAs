@@ -36,8 +36,7 @@ defmodule Utils do
 
  	####################################################
  	# Para saber si existe un nodo o un fichero
- 	def exists(id_node, [{id_node, _, _}|_]), do: true
- 	def exists(id_file, [{id_file, _, _}|_]), do: true
+ 	def exists(id, [{id, _, _}|_]), do: true
 
  	def exists(id, [_|tail]), do: exists(id, tail)
 
@@ -86,5 +85,13 @@ defmodule Utils do
 	def inList?(node, [_|tail]), do: inList?(node,tail)
 
 	def inList?(_, _), do: false
+	############################################################
+	def get_own_ip() do
+		{:ok,list} = :inet.getif()
+		get_own_ip(first(list))
+	end
+	def get_own_ip({{ip1,ip2,ip3,ip4},_,_}) do
+		Kernel.inspect(ip1)<>"."<>Kernel.inspect(ip2)<>"."<>Kernel.inspect(ip3)<>"."<>Kernel.inspect(ip4)
+	end
 
 end
