@@ -1,4 +1,5 @@
 defmodule ClientConection do 
+    use GenServer
 
     def connect(ip, port) do
         {:ok,socket} = :gen_tcp.connect(ip,port,[:binary, packet: :line, active: false, reuseaddr: true])
@@ -42,6 +43,6 @@ defmodule ClientConection do
             _ -> IO.puts("Error con el servidor. Conexion cerrada")
                  GenServer.stop(:client)
         end
-        
     end
+
 end
