@@ -1,4 +1,4 @@
-defmodule ServerInterface do
+defmodule ServerOperations do
 	use GenServer
 	#Server
 	#Arranca el servidor

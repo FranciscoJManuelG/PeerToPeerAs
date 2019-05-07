@@ -1,5 +1,5 @@
 defmodule Client do
-    alias ClientConection, as: Conection
+    alias ClientOperations, as: Conection
 
     def connect(), do: connect('127.0.0.1',5000)
     def connect(ip,port), do: Conection.connect(ip,port)

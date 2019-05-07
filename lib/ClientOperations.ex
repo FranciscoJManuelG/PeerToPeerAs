@@ -1,12 +1,12 @@
-defmodule ClientInterface do
-	#Client
+defmodule ClientOperations do
+	alias ServerOperations, as: ServerI
 
 	def start() do
-		ServerInterface.start()
+		ServerI.start()
 	end
 
 	def stop() do
-		ServerInterface.stop()
+		ServerI.stop()
 	end
 
   	def addNode(node, ip) do
