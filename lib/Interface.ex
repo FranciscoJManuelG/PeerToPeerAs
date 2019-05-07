@@ -1,13 +1,12 @@
 defmodule Interface do
-	alias ServerWIP, as: Server
 
 	def execute(orden, ip) do
 		if Process.whereis(:server) != nil do
 			#Si es una ip admin ejecuta execute_admin, si no, ejecuta execute_client
-			if Server.isAdmin(ip) do
+			if ClientInterface.isAdmin(ip) do
 				Interface.execute_admin(orden)
 			else 
-				node = Server.idOfIp(ip)
+				node = ClientInterface.idOfIp(ip)
 				if (node === :error) do
 					Interface.execute_client(orden,gen_reference(),ip)
 				else
@@ -15,7 +14,7 @@ defmodule Interface do
 				end
 			end		
 		else
-			Server.start()
+			ClientInterface.start()
 			execute(orden,ip)
 		end
 	end
@@ -23,21 +22,21 @@ defmodule Interface do
 	# Ejecuta ordenes provenientes de nodos base
 	def execute_client(orden, name, ip) do
 		case String.split(orden) do
-			["CONNECT"] -> 			if not Server.isNodeUp(name) do
-										Server.addNode(name, ip)
-										Server.nodeUp(name)
+			["CONNECT"] -> 			if not ClientInterface.isNodeUp(name) do
+										ClientInterface.addNode(name, ip)
+										ClientInterface.nodeUp(name)
 									else "YA ESTÁS CONECTADO"
 									end
-			["DISCONNECT"] -> 		if Server.isNodeUp(name) do
-										Server.nodeDown(name)
+			["DISCONNECT"] -> 		if ClientInterface.isNodeUp(name) do
+										ClientInterface.nodeDown(name)
 									else "NO ESTÁS CONECTADO"
 									end
-			["WANT", fileId] -> 	if Server.isNodeUp(name) do
-										Server.want(fileId)
+			["WANT", fileId] -> 	if ClientInterface.isNodeUp(name) do
+										ClientInterface.want(fileId)
 									else "NO ESTÁS CONECTADO"
 									end
-			["OFFER", fileId, file] -> 	if Server.isNodeUp(name) do
-										Server.offer(fileId, file, name)
+			["OFFER", fileId, file] -> 	if ClientInterface.isNodeUp(name) do
+										ClientInterface.offer(fileId, file, name)
 									else "NO ESTÁS CONECTADO"
 									end
 			_-> "FORMAT INCORRECT"
@@ -47,12 +46,10 @@ defmodule Interface do
 	# Ejecuta ordenes provenientes de administradores
 	def execute_admin(orden) do
 		case String.split(orden) do
-			["STOP"] -> Server.stop()
-			["ADD", "NODEM", nodeMId, nodeMIp] -> Server.addNodeM(nodeMId,nodeMIp)
-			["REMOVE", "NODEM", nodeMId] -> Server.removeNodeM(nodeMId)
-			["VIEW"] -> Server.viewAll()
-			["IS","ADMIN", ip] -> Server.isAdmin(ip) # No deben de ser llamadas desde el cliente
-			["ID","OF","IP", ip] -> Server.idOfIp(ip) # No deben de ser llamadas desde el cliente
+			["STOP"] -> ClientInterface.stop()
+			["ADD", "NODEM", nodeMId, nodeMIp] -> ClientInterface.addNodeM(nodeMId,nodeMIp)
+			["REMOVE", "NODEM", nodeMId] -> ClientInterface.removeNodeM(nodeMId)
+			["VIEW"] -> ClientInterface.viewAll()
 			_-> "FORMAT INCORRECT"
 		end
 	end

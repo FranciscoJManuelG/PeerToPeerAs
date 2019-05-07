@@ -379,3 +379,11 @@ R: Estableciendo nodo base como apagado 'node'
 P: CONNECT
 
 R: FORMAT INCORRECT
+~T[11:00:29.923083][127.0.0.1:44799]:
+P: CONNECT
+
+R: FORMAT INCORRECT
+~T[11:00:38.081442][127.0.0.1:44799]:
+P: VIEW
+
+R: [[], [], []]
