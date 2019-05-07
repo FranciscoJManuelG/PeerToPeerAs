@@ -71,8 +71,8 @@ defmodule Utils do
 	def addNodeToFileFunction(fileId, node, listFilesNodes), do:
 		addNodeToFileFunction(fileId, node, listFilesNodes, [])
 
-	def addNodeToFileFunction(fileId, node, [{fileId, hash, file, listNodes}|tail], listAux), do:
-		Enum.concat(listAux, [{fileId, hash, file, [node | listNodes]} | tail])
+	def addNodeToFileFunction(fileId, node, [{fileId, hash, listNodes}|tail], listAux), do:
+		Enum.concat(listAux, [{fileId, hash, [node | listNodes]} | tail])
 
 	def addNodeToFileFunction(fileId, node, [node|tail], listAux), do:
 		addNodeToFileFunction(fileId, node, tail, [node | listAux])
