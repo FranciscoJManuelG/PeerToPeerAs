@@ -1,11 +1,11 @@
 defmodule Interface do
 	alias ClientOperations, as: Client
 	alias AdminOperations, as: Admin
-	alias InterfaceOperations as: Iface
+	alias InterfaceOperations, as: Iface
 
 	def execute(orden, ip), do: execute(orden,ip,Process.whereis(:server) != nil)
 	def execute(orden, ip, false) do
-		Client.start()
+		Iface.start()
 		execute(orden,ip,true)
 	end
 	def execute(orden,ip,true) do 
@@ -13,17 +13,18 @@ defmodule Interface do
 		if Iface.isAdmin(ip) do
 			execute_admin(String.split(orden))
 		else
-			execute(orden,ip,Iface.idOfIp(ip))
+			execute(orden,ip,Client.idOfIp(ip))
+		end
 	end
 	def execute(orden,ip,:error),do: execute_client(String.split(orden),gen_reference(),ip, false)
-	def execute(orden,ip,node),do: execute_client(String.split(orden),node,ip,Iface.isNodeUp(node)
+	def execute(orden,ip,node),do: execute_client(String.split(orden),node,ip,Iface.isNodeUp(node))
 
 	# Ejecuta ordenes provenientes de administradores
 	def execute_admin(["STOP"]), do: Admin.stop()
 	def execute_admin(["ADD", "NODEM", nodeMId, nodeMIp]), do: Admin.addNodeM(nodeMId,nodeMIp)
 	def execute_admin(["REMOVE", "NODEM", nodeMId]), do: Admin.removeNodeM(nodeMId)
 	def execute_admin(["VIEW"]), do: Admin.viewAll()
-	def execute_admin(orden),do: execute(orden,'127.0.0.1',Iface.idOfIp('127.0.0.1'))
+	def execute_admin(orden),do: execute(orden,'127.0.0.1',Client.idOfIp('127.0.0.1'))
 
 	# Ejecuta ordenes provenientes de nodos base
 	def execute_client(["CONNECT"], name, ip, false), do: Client.addNode(name, ip)
