@@ -41,6 +41,15 @@ defmodule Utils do
  	def exists(id, [_|tail]), do: exists(id, tail)
 
  	def exists(_,_), do: false
+ 	####################################################
+	 # Para saber si existe un nodo o un fichero
+	def addIfExists(file,hash,id,list), do: addIfExists(file,hash,id,list,[]) 
+
+ 	def addIfExists(file,hash,id,[{file, hash, ids}|t],aux), do: Enum.concat(aux,[{file, hash, [id | ids]}|t])  
+
+ 	def addIfExists(file,hash,id,[h|tail],aux), do: addIfExists(file,hash,id, [h | tail])
+
+ 	def addIfExists(_,_,_,_,aux), do: aux
 
 	####################################################
 	# Para eliminar un nodo
