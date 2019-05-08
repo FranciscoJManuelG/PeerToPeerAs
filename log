@@ -473,3 +473,15 @@ R: YA ESTÁS CONECTADO
 P: CONNECT
 R: YA ESTÁS CONECTADO
 
+~T[17:46:03.462711][127.0.0.1:34787]:
+P: CONNECT
+R: Añadiendo nodo base con id 'K31N3B' e ip '127.0.0.1'.
+
+~T[17:46:41.942467][127.0.0.1:34787]:
+P: OFFER NURIA persona
+R: Ahora el nodo 'K31N3B' tiene disponible el fichero 'NURIA' 
+
+~T[17:46:52.466662][127.0.0.1:34787]:
+P: WANT NURIA
+R: 127.0.0.1
+

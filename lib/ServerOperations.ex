@@ -95,11 +95,7 @@ defmodule ServerOperations do
 	#Elimina un nodo maestro 
 	def handle_cast({:removeNodeM, nodeM}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
 		updated_listNodesM = Utils.delete(nodeM,listaNodosMaestros)
-		if updated_listNodesM == listaNodosMaestros do
-			{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}
-		else
-			{:noreply, [updated_listNodesM,listaNodosBase,listaFicheros]}
-		end		
+		{:noreply, [updated_listNodesM,listaNodosBase,listaFicheros]}	
 	end
 
 	#Establece el estado de UP a un nodo base

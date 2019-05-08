@@ -6,11 +6,6 @@ defmodule ClientOperations do
   		"Añadiendo nodo base con id '#{node}' e ip '#{ip}'."
   	end  	
 
-  	def addFile(fileId, hash) do
-  		GenServer.cast(:server, {:addFile, fileId, hash})
-  		"Añadiendo fichero con id '#{fileId}'"
-  	end
-
 	def nodeUp(node) do
   		GenServer.cast(:server, {:nodeUp, node})
   		"Estableciendo nodo base como activo '#{node}'"
@@ -21,14 +16,12 @@ defmodule ClientOperations do
   		"Estableciendo nodo base como apagado '#{node}'"
   	end
 
-	def addNodeToFile(file, node) do
-		GenServer.cast(:server, {:addNodeToFile, file, node})
-		"Añadiendo '#{node}' al fichero '#{file}'"
-	end
-
 	def offer(fileId, hash, node) do
-		addFile(fileId, hash)
-		addNodeToFile(fileId,node)
+		GenServer.cast(:server, {:addFile, fileId, hash})
+			"Añadiendo fichero con id '#{fileId}'"
+		  
+		GenServer.cast(:server, {:addNodeToFile, fileId, node})
+			"Añadiendo '#{node}' al fichero '#{file}'"
 		"Ahora el nodo '#{node}' tiene disponible el fichero '#{fileId}' "
 	end
 
