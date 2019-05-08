@@ -78,11 +78,11 @@ defmodule ServerOperations do
 	end
 
 	 #Añade nodos a los ficheros
- 	def handle_cast({:addNodeToFile, file, node}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
+ 	def handle_cast({:addNodeToFile, file, hash, node}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
  		if Utils.exists(node, listaNodosBase) do
  			nodes = Utils.nodesByFile(file, listaFicheros)
  			unless Utils.inList?(node, nodes) do
-				updated_listFiles = Utils.addNodeToFileFunction(file, node, listaFicheros)
+				updated_listFiles = Utils.addNodeToFileFunction(file, hash, node, listaFicheros)
 				{:noreply, [listaNodosMaestros,listaNodosBase,updated_listFiles]}
 			else
 				{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}
@@ -95,11 +95,7 @@ defmodule ServerOperations do
 	#Elimina un nodo maestro 
 	def handle_cast({:removeNodeM, nodeM}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
 		updated_listNodesM = Utils.delete(nodeM,listaNodosMaestros)
-		if updated_listNodesM == listaNodosMaestros do
-			{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}
-		else
-			{:noreply, [updated_listNodesM,listaNodosBase,listaFicheros]}
-		end		
+		{:noreply, [updated_listNodesM,listaNodosBase,listaFicheros]}	
 	end
 
 	#Establece el estado de UP a un nodo base

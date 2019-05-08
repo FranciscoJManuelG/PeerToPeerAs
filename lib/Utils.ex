@@ -67,14 +67,14 @@ defmodule Utils do
 
 	#############################################################
 	# Añade un nodo a un fichero
-	def addNodeToFileFunction(fileId, node, listFilesNodes), do:
-		addNodeToFileFunction(fileId, node, listFilesNodes, [])
+	def addNodeToFileFunction(fileId, hash, node, listFilesNodes), do:
+		addNodeToFileFunction(fileId, hash, node, listFilesNodes, [])
 
-	def addNodeToFileFunction(fileId, node, [{fileId, hash, listNodes}|tail], listAux), do:
+	def addNodeToFileFunction(fileId, hash, node, [{fileId, hash, listNodes}|tail], listAux), do:
 		Enum.concat(listAux, [{fileId, hash, [node | listNodes]} | tail])
 
-	def addNodeToFileFunction(fileId, node, [node|tail], listAux), do:
-		addNodeToFileFunction(fileId, node, tail, [node | listAux])
+	def addNodeToFileFunction(fileId, hash, node, [node|tail], listAux), do:
+		addNodeToFileFunction(fileId, hash, node, tail, [node | listAux])
 
 	def addNodeToFileFunction(_, _, [], listAux), do: listAux
 
