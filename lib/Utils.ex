@@ -93,5 +93,18 @@ defmodule Utils do
 	def get_own_ip({{ip1,ip2,ip3,ip4},_,_}) do
 		Kernel.inspect(ip1)<>"."<>Kernel.inspect(ip2)<>"."<>Kernel.inspect(ip3)<>"."<>Kernel.inspect(ip4)
 	end
+############################################################
+	def directory(:log) do
+		#El log será la 1ª linea de directories.conf
+		{:ok, data} = File.read("directories.conf")
+		IO.puts(data)
+		IO.puts(Enum.at(String.split(data,'\n'),0))
+		Enum.at(String.split(data,'\n'),0)
+	end
 
+	def directory(:files) do
+		#La carpeta de ficheros será la aª linea de directories.conf
+		{:ok, data} = File.read("directories.conf")
+		Enum.at(String.split(data,'\n'),1)
+	end
 end

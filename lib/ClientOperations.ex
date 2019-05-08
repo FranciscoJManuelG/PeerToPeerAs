@@ -21,7 +21,7 @@ defmodule ClientOperations do
 			"Añadiendo fichero con id '#{fileId}'"
 		  
 		GenServer.cast(:server, {:addNodeToFile, fileId, node})
-			"Añadiendo '#{node}' al fichero '#{file}'"
+			"Añadiendo '#{node}' al fichero '#{fileId}'"
 		"Ahora el nodo '#{node}' tiene disponible el fichero '#{fileId}' "
 	end
 
