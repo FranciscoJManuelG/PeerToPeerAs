@@ -105,15 +105,19 @@ defmodule Utils do
 ############################################################
 	def directory(:log) do
 		#El log será la 1ª linea de directories.conf
-		{:ok, data} = File.read("directories.conf")
-		IO.puts(data)
-		IO.puts(Enum.at(String.split(data,'\n'),0))
-		Enum.at(String.split(data,'\n'),0)
+		case File.read("./lib/directories.conf") do
+		{:ok, data} -> Enum.at(String.split(data,"\n"),0)
+		_ -> 	File.write(Enum.at(String.split(File.read("./lib/directories.conf"),"\n"),0),"")
+				directory(:log)
+		end
 	end
 
 	def directory(:files) do
-		#La carpeta de ficheros será la aª linea de directories.conf
-		{:ok, data} = File.read("directories.conf")
-		Enum.at(String.split(data,'\n'),1)
+		#La carpeta de ficheros será la 2ª linea de directories.conf
+		case File.read("./lib/directories.conf") do
+			{:ok, data} -> Enum.at(String.split(data,"\n"),1)
+			_ -> 	File.mkdir(Enum.at(String.split(File.read("./lib/directories.conf"),"\n"),1))
+					directory(:files)
+			end
 	end
 end
