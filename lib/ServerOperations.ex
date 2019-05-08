@@ -23,16 +23,17 @@ defmodule ServerOperations do
 	def handle_call({:viewFile, fileId}, _from, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
 		#Se seleccionan los nodos que tienen ese fichero
 		nodesList = Utils.nodesByFile(fileId, listaFicheros)
-		unless Enum.empty?(nodesList) do
+
+		if Enum.empty?(nodesList) do
+			#Si no se tiene ningún nodo asociado al fichero o no existe el fichero se devuelve :not_found
+			{:reply, "File not found", [listaNodosMaestros,listaNodosBase,listaFicheros]}
+		else
 			#Se escoje uno al azar
 			node = Enum.random(nodesList)
 			#Se busca su ip
 			ipOfNode = Utils.ipByNode(node, listaNodosBase)
 			#Devolvemos la ip del nodo
 			{:reply, ipOfNode, [listaNodosMaestros,listaNodosBase,listaFicheros]}
-		else
-		#Si no se tiene ningún nodo asociado al fichero o no existe el fichero se devuelve :not_found
-		{:reply, "File not found", [listaNodosMaestros,listaNodosBase,listaFicheros]}
 		end
 	end
 
@@ -44,22 +45,22 @@ defmodule ServerOperations do
 	#Añade un nodo base
 	def handle_cast({:addNode, node, ip}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
 		#Si no existe el nodo se añade
-		unless Utils.exists(node,listaNodosBase) do
+		if Utils.exists(node,listaNodosBase) do
+			{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}
+		else
 			updated_listNodes = [{node,:UP, ip}|listaNodosBase]
 			{:noreply, [listaNodosMaestros,updated_listNodes,listaFicheros]}
-		else
-			{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}
 		end
 	end
 
 	#Añade un nodo base
 	def handle_cast({:addNodeM, nodeM, ip}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
 		#Si no existe el nodo se añade
-		unless Utils.exists(nodeM,listaNodosMaestros) do
+		if Utils.exists(nodeM,listaNodosMaestros) do
+			{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}
+		else			
 			updated_listNodes = [{nodeM, :UNSYNC, ip}|listaNodosMaestros]
 			{:noreply, [updated_listNodes,listaNodosBase,listaFicheros]}
-		else
-			{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}
 		end
 	end
 
