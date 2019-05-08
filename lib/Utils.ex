@@ -36,8 +36,7 @@ defmodule Utils do
 
  	####################################################
  	# Para saber si existe un nodo o un fichero
- 	def exists(id_node, [{id_node, _, _}|_]), do: true
- 	def exists(id_file, [{id_file, _, _}|_]), do: true
+ 	def exists(id, [{id, _, _}|_]), do: true
 
  	def exists(id, [_|tail]), do: exists(id, tail)
 
@@ -68,14 +67,14 @@ defmodule Utils do
 
 	#############################################################
 	# Añade un nodo a un fichero
-	def addNodeToFileFunction(fileId, node, listFilesNodes), do:
-		addNodeToFileFunction(fileId, node, listFilesNodes, [])
+	def addNodeToFileFunction(fileId, hash, node, listFilesNodes), do:
+		addNodeToFileFunction(fileId, hash, node, listFilesNodes, [])
 
-	def addNodeToFileFunction(fileId, node, [{fileId, hash, listNodes}|tail], listAux), do:
+	def addNodeToFileFunction(fileId, hash, node, [{fileId, hash, listNodes}|tail], listAux), do:
 		Enum.concat(listAux, [{fileId, hash, [node | listNodes]} | tail])
 
-	def addNodeToFileFunction(fileId, node, [node|tail], listAux), do:
-		addNodeToFileFunction(fileId, node, tail, [node | listAux])
+	def addNodeToFileFunction(fileId, hash, node, [node|tail], listAux), do:
+		addNodeToFileFunction(fileId, hash, node, tail, [node | listAux])
 
 	def addNodeToFileFunction(_, _, [], listAux), do: listAux
 
@@ -86,5 +85,13 @@ defmodule Utils do
 	def inList?(node, [_|tail]), do: inList?(node,tail)
 
 	def inList?(_, _), do: false
+	############################################################
+	def get_own_ip() do
+		{:ok,list} = :inet.getif()
+		get_own_ip(List.first(list))
+	end
+	def get_own_ip({{ip1,ip2,ip3,ip4},_,_}) do
+		Kernel.inspect(ip1)<>"."<>Kernel.inspect(ip2)<>"."<>Kernel.inspect(ip3)<>"."<>Kernel.inspect(ip4)
+	end
 
 end
