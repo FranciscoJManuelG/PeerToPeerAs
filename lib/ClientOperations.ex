@@ -17,11 +17,7 @@ defmodule ClientOperations do
   	end
 
 	def offer(fileId, hash, node) do
-		GenServer.cast(:server, {:addFile, fileId, hash})
-			"Añadiendo fichero con id '#{fileId}'"
-		  
-		GenServer.cast(:server, {:addNodeToFile, fileId, node})
-			"Añadiendo '#{node}' al fichero '#{fileId}'"
+		GenServer.cast(:server, {:addFile, fileId, hash, node})
 		"Ahora el nodo '#{node}' tiene disponible el fichero '#{fileId}' "
 	end
 

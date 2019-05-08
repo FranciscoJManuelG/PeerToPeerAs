@@ -63,32 +63,13 @@ defmodule ServerOperations do
 		end
 	end
 
-	#Añade un fichero
-	def handle_cast({:addFile, fileId, hash}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
-		#Si no existe el fichero lo añade
-		unless Utils.exists(fileId,listaFicheros) do
-			#Se aplica el hash al fichero
-			#hash = :crypto.hash(:sha256, file)
-			#Se añade
-			updated_list = [{fileId,hash,[]}|listaFicheros]
-			{:noreply, [listaNodosMaestros,listaNodosBase,updated_list]}
+	#Añade un fichero y el node y solo el node si ya existe el fichero
+	def handle_cast({:addFile, fileId, hash, node}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
+		updated_list = Utils.addIfExists(fileId,hash,node,listaFicheros)
+		if updated_list == listaFicheros do
+			{:noreply, [listaNodosMaestros,listaNodosBase,[{fileId,hash,[node]} | updated_list]]}
 		else
-			{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}
-		end
-	end
-
-	 #Añade nodos a los ficheros
- 	def handle_cast({:addNodeToFile, file, hash, node}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
- 		if Utils.exists(node, listaNodosBase) do
- 			nodes = Utils.nodesByFile(file, listaFicheros)
- 			unless Utils.inList?(node, nodes) do
-				updated_listFiles = Utils.addNodeToFileFunction(file, hash, node, listaFicheros)
-				{:noreply, [listaNodosMaestros,listaNodosBase,updated_listFiles]}
-			else
-				{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}
-			end
-		else 
-			{:noreply, [listaNodosMaestros,listaNodosBase,listaFicheros]}
+			{:noreply, [listaNodosMaestros,listaNodosBase,updated_list]}
 		end
 	end
 
