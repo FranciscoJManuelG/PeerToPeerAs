@@ -13,5 +13,4 @@ defmodule Client do
     end
 
     def close(), do: Conection.close()
-
 end
