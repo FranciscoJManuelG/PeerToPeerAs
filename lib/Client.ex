@@ -12,5 +12,7 @@ defmodule Client do
     	end
     end
 
+    def want(ip,port,file),do: Conection.want_file(ip,port,file)
+    
     def close(), do: Conection.close()
 end
