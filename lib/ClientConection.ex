@@ -11,19 +11,15 @@ defmodule ClientConection do
     def want_file(ip, port, file) do
         {:ok,socket} = :gen_tcp.connect(ip,port,[:binary, packet: :raw, active: false, reuseaddr: true])
         :gen_tcp.send(socket,"WANT "<>file<>"\n")
-        resp = want_file_resp(socket,file,:gen_tcp.recv(socket,0,1000))
-        :gen_tcp.close(socket)
-        resp
-    end
-
-    defp want_file_resp(socket,file,{:ok,"DISPONIBLE"}) do
         recfile = receive_file(socket,:gen_tcp.recv(socket,0,1000),"")
-        File.write(file,recfile)
-        :ok
-    end
-    defp want_file_resp(_,_,_) do
-        IO.puts("Fichero no disponible")
-        :error
+        case recfile do
+            "" -> IO.puts("Fichero no disponible")
+                :gen_tcp.close(socket)
+                :error
+            _ -> File.write(file,recfile)
+                :gen_tcp.close(socket)
+                :ok
+        end
     end
 
     def receive_file(_,{:ok,""},file),do: file
