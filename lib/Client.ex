@@ -4,6 +4,8 @@ defmodule Client do
     def connect(), do: connect('127.0.0.1',5000)
     def connect(ip,port), do: Conection.connect(ip,port)
 
+    def connect_peer(ip,port), do: Conection.connect_peer(ip,port)
+
     def send(message) do
     	if is_binary(message) do 
     		Conection.send(message)

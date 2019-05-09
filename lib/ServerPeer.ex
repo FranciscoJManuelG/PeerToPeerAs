@@ -9,15 +9,13 @@ defmodule ServerPeer do
 
 	defp loop(serverSocket) do
 		{:ok,clientSocket} = :gen_tcp.accept(serverSocket)
-		_pid = spawn_link(__MODULE__,:serve,[clientSocket])
-		#serve(client)
+		spawn_link(__MODULE__,:serve,[clientSocket])
 		loop(serverSocket)
 	end
 
 	def serve(socket) do
 		socket
 		|> read_line()
-		|> write_line(socket)
 	end
 
 	defp read_line(socket) do
@@ -25,10 +23,8 @@ defmodule ServerPeer do
 		see_resp(data,socket)
 	end
 
-	defp write_line(:ok, _),do: :ok
 	defp write_line(line, socket) do
 		:gen_tcp.send(socket, line)
-		serve(socket)
 	end
 	
 	defp see_resp({:ok, data},socket) do
@@ -40,17 +36,27 @@ defmodule ServerPeer do
 		ip = Kernel.inspect(ip1)<>"."<>Kernel.inspect(ip2)<>"."<>Kernel.inspect(ip3)<>"."<>Kernel.inspect(ip4)
 
 		peticion = Kernel.inspect(Time.utc_now)<>"[#{ip}:#{port}]:\nP: #{data}"
-		respuesta = PeerInterface.execute(String.split(line))<>"\n"
+		file = PeerInterface.execute(String.split(line))<>"\n"
+
+		send_file(socket,file,0,1024,String.length(file))
 
 		#Almacena el log
-		almacenar_log(peticion, "") #No se almacena la respuesta porque puede ser un fichero
+		almacenar_log(peticion)
 
 		IO.puts(peticion)
-		respuesta
 	end
 	defp see_resp(_,_),do: :ok
 
-	def almacenar_log(peticion, respuesta) do
-		File.write(Path.rootname(Utils.param(:log)), peticion<>respuesta<>"\n",[:append])
+	defp send_file(socket,file, inicio, intervalo, limit) when inicio<limit do
+		:gen_tcp.send(socket, String.slice(file,inicio,intervalo))
+		send_file(socket,file,inicio+1024,intervalo,limit)
+	end
+
+	defp send_file(socket,_, _, _, _) do
+		:gen_tcp.send(socket, "")
+	end
+
+	defp almacenar_log(peticion) do
+		File.write(Path.rootname(Utils.param(:log)), peticion<>"\n",[:append])
 	end
 end
