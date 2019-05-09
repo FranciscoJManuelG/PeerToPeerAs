@@ -2,8 +2,8 @@ defmodule Peer do
     
     def get_ip_port() do
         {:ok,list} = File.read("directories.conf")
-        ip = Enum.at(list,3)
-        port = Enum.at(list,4)
+        ip = Utils.param(:ip)
+        port = Utils.param(:port)
         {String.to_charlist(ip),String.to_integer(port)}
     end
 

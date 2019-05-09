@@ -103,21 +103,56 @@ defmodule Utils do
 		Kernel.inspect(ip1)<>"."<>Kernel.inspect(ip2)<>"."<>Kernel.inspect(ip3)<>"."<>Kernel.inspect(ip4)
 	end
 ############################################################
-	def directory(:log) do
-		#El log será la 1ª linea de directories.conf
-		case File.read("./lib/directories.conf") do
-		{:ok, data} -> Enum.at(String.split(data,"\n"),0)
-		_ -> 	File.write(Enum.at(String.split(File.read("./lib/directories.conf"),"\n"),0),"")
-				directory(:log)
+	def param(:log) do
+		#El log será la 1ª linea de configurations.conf
+		case File.read("./lib/configurations.conf") do
+		{:ok, data} -> path = Enum.at(String.split(data,"\n"),0)
+						case File.exists?(path) do
+							true -> path
+							_ -> File.write(path,"")
+								path
+						end
+
+		_ -> path = "./server_log"
+						case File.exists?(path) do
+							true -> path
+						_ -> File.write(path,"")
+							path
+						end
 		end
 	end
 
-	def directory(:files) do
-		#La carpeta de ficheros será la 2ª linea de directories.conf
+	def param(:files) do
+		#La carpeta de ficheros será la 2ª linea de configurations.conf
+		case File.read("./lib/configurations.conf") do
+			{:ok, data} -> path = Enum.at(String.split(data,"\n"),1)
+							case File.exists?(path) do
+								true -> path
+								_ -> File.mkdir(path)
+								path
+							end
+			_ -> path = "./ficheros/"
+							case File.exists?(path) do
+								true -> path
+								_ -> File.mkdir(path)
+								path
+							end
+			end
+	end
+
+	def param(:ip) do
+		#La ip será la 3ª linea de configurations.conf
 		case File.read("./lib/directories.conf") do
-			{:ok, data} -> Enum.at(String.split(data,"\n"),1)
-			_ -> 	File.mkdir(Enum.at(String.split(File.read("./lib/directories.conf"),"\n"),1))
-					directory(:files)
+			{:ok, data} -> Enum.at(String.split(data,"\n"),2)
+			_ -> "127.0.0.1"
+			end
+	end
+
+	def param(:port) do
+		#La ip será la 3ª linea de configurations.conf
+		case File.read("./lib/directories.conf") do
+			{:ok, data} -> Enum.at(String.split(data,"\n"),3)
+			_ -> "5000"
 			end
 	end
 end
