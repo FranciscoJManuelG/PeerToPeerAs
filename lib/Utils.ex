@@ -110,12 +110,14 @@ defmodule Utils do
 						case File.exists?(path) do
 							true -> path
 							_ -> File.write(path,"")
+								path
 						end
 
-		_ -> path = "./server.log"
+		_ -> path = "./server_log"
 						case File.exists?(path) do
 							true -> path
 						_ -> File.write(path,"")
+							path
 						end
 		end
 	end
@@ -127,11 +129,13 @@ defmodule Utils do
 							case File.exists?(path) do
 								true -> path
 								_ -> File.mkdir(path)
+								path
 							end
 			_ -> path = "./ficheros/"
 							case File.exists?(path) do
 								true -> path
 								_ -> File.mkdir(path)
+								path
 							end
 			end
 	end

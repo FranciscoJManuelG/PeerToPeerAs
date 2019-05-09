@@ -50,7 +50,7 @@ defmodule Server do
 	end
 	defp see_resp(_,_),do: :ok
 
-	defp almacenar_log(peticion, respuesta) do
+	def almacenar_log(peticion, respuesta) do
 		File.write(Path.rootname(Utils.directory(:log)), peticion<>respuesta<>"\n",[:append])
 	end
 end
