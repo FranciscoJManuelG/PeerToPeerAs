@@ -22,11 +22,11 @@ defmodule ClientConection do
         end
     end
 
-    def receive_file(_,{:ok,""},file),do: file
-    def receive_file(socket,{:ok,msg},file) do
+    defp receive_file(_,{:ok,""},file),do: file
+    defp receive_file(socket,{:ok,msg},file) do
         receive_file(socket,:gen_tcp.recv(socket,0,1000),file<>msg)
     end
-    def receive_file(_,_,file),do: file
+    defp receive_file(_,_,file),do: file
 
     def send(message) do
         GenServer.cast(:client,{:send,message})
