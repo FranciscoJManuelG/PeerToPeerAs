@@ -21,13 +21,16 @@ defmodule Peer do
     
     def connect() do
         do_operation("CONNECT")
-        spawn_link(ServerPeer,:accept,[4000])
+        case spawn_link(ServerPeer,:accept,[4000]) do
+            {:ok,pid} ->  Process.register(pid, :serverpeer)
+            _ ->"No se pudo iniciar el servidor interno"
+            end
         :ok
     end
 
     def disconnect() do
         do_operation("DISCONNECT")
-        down_local_server()
+        Process.exit(:serverpeer, :normal)
     end
 
     def offer(fich) do
@@ -41,4 +44,8 @@ defmodule Peer do
     def want(fich) do
         do_operation("WANT "<>fich)
     end 
+
+    def give_me_file(ip,fich) do
+        Client.want(String.to_charlist(ip),4000,fich)
+    end
 end
