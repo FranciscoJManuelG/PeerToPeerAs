@@ -47,15 +47,9 @@ defmodule ServerPeer do
 	end
 	defp see_resp(_,_),do: :ok
 
-	defp wantfile_resp(socket,"NO DISPONIBLE") do
-		write_line("NO DISPONIBLE",socket)
-		IO.puts("NO DISPONIBLE")
-	end
 	defp wantfile_resp(socket,file) do
 		start = 0
 		gap = 1024
-		IO.puts("DISPONIBLE")
-		write_line("DISPONIBLE",socket)
 		send_file(socket,start,gap,String.slice(file,start,gap),file)
 	end
 
