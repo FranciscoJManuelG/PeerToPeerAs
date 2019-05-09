@@ -25,7 +25,6 @@ defmodule ClientConection do
     def receive_file(_,{:ok,""},_),do: :ok
     def receive_file(socket,{:ok,msg},file) do
         File.write(file,msg,[:append])
-        IO.puts(msg)
         receive_file(socket,:gen_tcp.recv(socket,1024),file)
     end
     def receive_file(_,_,_),do: :ok
