@@ -22,5 +22,5 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 practicaarquitectura-*.tar
 
-./server.log
+./server_log
 ./ficheros/*
