@@ -28,12 +28,11 @@ defmodule Utils do
 
 	####################################################
 	# Busca una lista de nodos de un fichero
-	def nodesByFile(fileId, [{fileId,_,listNodes}|_]), do: listNodes
+	def nodesByFile(fileId, [{fileId,hash,listNodes}|_]), do: {listNodes,hash}
 
 	def nodesByFile(fileId, [_|tail]), do: nodesByFile(fileId, tail)
 
-	def nodesByFile(_,_), do: []
-
+	def nodesByFile(_,_), do: {[],""}
  	####################################################
  	# Para saber si existe un nodo o un fichero
  	def exists(id, [{id, _, _}|_]), do: true

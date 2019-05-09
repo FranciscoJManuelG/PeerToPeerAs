@@ -1,25 +1,38 @@
 defmodule Peer do
     
-    def get_ip_port() do
-        {:ok,list} = File.read("directories.conf")
+    defp get_ip_port() do
         ip = Utils.param(:ip)
         port = Utils.param(:port)
         {String.to_charlist(ip),String.to_integer(port)}
     end
 
-    def do_operation(operation) do
+    defp do_operation(operation) do
         {ip,port} = get_ip_port()
         Client.connect(ip,port)
         Client.send(operation)
         Client.close()
+    end
+
+    defp hash(fich) do
+        Enum.join(String.split(Kernel.inspect(
+            [:crypto.hash(:sha256,File.read!(Utils.param(:files)<>fich))]))
+        )
     end
     
     def connect() do
         do_operation("CONNECT")
     end
 
+    def disconnect() do
+        do_operation("DISCONNECT")
+    end
+
     def offer(fich) do
-        do_operation("OFFER "<>fich)
+        ruta = Utils.param(:files)<>fich
+        case File.exists?(ruta) do
+            true -> do_operation("OFFER "<>fich<>" "<>hash(fich))
+            _ -> IO.puts("El fichero no existe")
+        end
     end
 
     def want(fich) do

@@ -22,7 +22,7 @@ defmodule ServerOperations do
 	#Muestra los nodos que tienen disponible el fichero 
 	def handle_call({:viewFile, fileId}, _from, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
 		#Se seleccionan los nodos que tienen ese fichero
-		nodesList = Utils.nodesByFile(fileId, listaFicheros)
+		{nodesList,hash} = Utils.nodesByFile(fileId, listaFicheros)
 
 		if Enum.empty?(nodesList) do
 			#Si no se tiene ningún nodo asociado al fichero o no existe el fichero se devuelve :not_found
@@ -33,7 +33,7 @@ defmodule ServerOperations do
 			#Se busca su ip
 			ipOfNode = Utils.ipByNode(node, listaNodosBase)
 			#Devolvemos la ip del nodo
-			{:reply, ipOfNode, [listaNodosMaestros,listaNodosBase,listaFicheros]}
+			{:reply, ipOfNode<>" "<>hash, [listaNodosMaestros,listaNodosBase,listaFicheros]}
 		end
 	end
 
