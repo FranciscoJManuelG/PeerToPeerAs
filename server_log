@@ -290,3 +290,7 @@ R: YA ESTÁS CONECTADO
 P: CONNECT
 R: YA ESTÁS CONECTADO
 
+~T[22:40:45.250841][127.0.0.1:36451]:
+P: CONNECT
+R: Estableciendo nodo base como activo 'A48BW3'
+

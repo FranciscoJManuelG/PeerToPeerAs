@@ -18,18 +18,11 @@ defmodule Peer do
             [:crypto.hash(:sha256,File.read!(Utils.param(:files)<>fich))]))
         )
     end
-
-    defp up_local_server() do
-        Agent.start_link(ServerPeer.accept(),:serverPeer,[])
-    end
-
-    defp down_local_server() do
-        Agent.stop(:serverPeer,:normal)
-    end
     
     def connect() do
         do_operation("CONNECT")
-        up_local_server()
+        spawn_link(ServerPeer,:accept,[4000])
+        :ok
     end
 
     def disconnect() do
