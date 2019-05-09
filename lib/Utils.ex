@@ -116,7 +116,7 @@ defmodule Utils do
 						case File.exists?(path) do
 							true -> path
 						_ -> File.write(path,"")
-						end"./server.log"
+						end
 		end
 	end
 
