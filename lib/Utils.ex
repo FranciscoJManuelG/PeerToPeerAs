@@ -112,7 +112,11 @@ defmodule Utils do
 							_ -> File.write(path,"")
 						end
 
-		_ -> "./server.log"
+		_ -> path = "./server.log"
+						case File.exists?(path) do
+							true -> path
+						_ -> File.write(path,"")
+						end"./server.log"
 		end
 	end
 
@@ -124,8 +128,11 @@ defmodule Utils do
 								true -> path
 								_ -> File.mkdir(path)
 							end
-			_ -> 	File.mkdir(Enum.at(String.split(File.read("./lib/directories.conf"),"\n"),1))
-					directory(:files)
+			_ -> path = "./ficheros/"
+							case File.exists?(path) do
+								true -> path
+								_ -> File.mkdir(path)
+							end
 			end
 	end
 end
