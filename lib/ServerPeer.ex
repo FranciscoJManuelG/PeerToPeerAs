@@ -36,24 +36,33 @@ defmodule ServerPeer do
 		ip = Kernel.inspect(ip1)<>"."<>Kernel.inspect(ip2)<>"."<>Kernel.inspect(ip3)<>"."<>Kernel.inspect(ip4)
 
 		peticion = Kernel.inspect(Time.utc_now)<>"[#{ip}:#{port}]:\nP: #{data}"
-		file = PeerInterface.execute(String.split(line))<>"\n"
-
-		send_file(socket,file,0,1024,String.length(file))
+		file = PeerInterface.execute(String.split(line))
+		wantfile_resp(socket,file)
 
 		#Almacena el log
 		almacenar_log(peticion)
 
 		IO.puts(peticion)
+		serve(socket)
 	end
 	defp see_resp(_,_),do: :ok
 
-	defp send_file(socket,file, inicio, intervalo, limit) when inicio<limit do
-		:gen_tcp.send(socket, String.slice(file,inicio,intervalo))
-		send_file(socket,file,inicio+1024,intervalo,limit)
+	defp wantfile_resp(socket,"NO DISPONIBLE") do
+		write_line("NO DISPONIBLE",socket)
+		IO.puts("NO DISPONIBLE")
+	end
+	defp wantfile_resp(socket,file) do
+		start = 0
+		gap = 1024
+		IO.puts("DISPONIBLE")
+		write_line("DISPONIBLE",socket)
+		send_file(socket,start,gap,String.slice(file,start,gap),file)
 	end
 
-	defp send_file(socket,_, _, _, _) do
-		:gen_tcp.send(socket, "")
+	defp send_file(socket,_,_,"",_),do: :gen_tcp.send(socket,"")
+	defp send_file(socket,start,gap,msg,file) do 
+		:gen_tcp.send(socket,msg)
+		send_file(socket,start+gap,gap,String.slice(file,start+gap,gap),file)
 	end
 
 	defp almacenar_log(peticion) do
