@@ -343,6 +343,30 @@ R: YA ESTÁS CONECTADO
 ~T[23:05:05.411733][127.0.0.1:34377]:
 P: WANT Diagrama.png
 
+<<<<<<< HEAD
+~T[06:37:41.319397][127.0.0.1:43827]:
+P: CONNECT
+R: Estableciendo nodo base como activo 'NRXF5N'
+
+~T[06:41:39.034436][127.0.0.1:43693]:
+P: OFFER Diagrama.png [<<30,2,78,123,26,206,8,134,208,9,204,105,248,149,119,168,216,90,207,108,118,147,13,211,118,209,75,220,59,81,235,148>>]
+R: Ahora el nodo 'NRXF5N' tiene disponible el fichero 'Diagrama.png' 
+
+~T[06:47:31.027334][127.0.0.1:43959]:
+P: CONNECT
+R: YA ESTÁS CONECTADO
+
+~T[06:47:57.483230][127.0.0.1:43959]:
+P: VIEW
+R: [[], [{"NRXF5N", :UP, "10.20.36.179"}], [{"Diagrama.png", "[<<30,2,78,123,26,206,8,134,208,9,204,105,248,149,119,168,216,90,207,108,118,147,13,211,118,209,75,220,59,81,235,148>>]", ["NRXF5N"]}]]
+
+~T[06:52:35.827191][127.0.0.1:41487]:
+P: WANT Diagrama.png
+R: 10.20.36.179 [<<30,2,78,123,26,206,8,134,208,9,204,105,248,149,119,168,216,90,207,108,118,147,13,211,118,209,75,220,59,81,235,148>>]
+
+~T[06:54:09.612731][10.20.36.179:34697]:
+P: WANT Diagrama.png
+=======
 ~T[06:52:36.284008][127.0.0.1:37177]:
 P: CONNECT
 R: Estableciendo nodo base como activo 'VM3JGD'
@@ -386,6 +410,7 @@ R: Estableciendo nodo base como activo 'WMKHX1'
 ~T[07:03:09.640942][192.168.43.29:44529]:
 P: CONNECT
 R: Estableciendo nodo base como activo 'IKBP4X'
+>>>>>>> 7e26ee52dae49862ff8a9d8d47d8034cf484bc6a
 
 ~T[07:08:12.172964][127.0.0.1:36019]:
 P: CONNECT
