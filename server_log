@@ -343,3 +343,47 @@ R: YA ESTÁS CONECTADO
 ~T[23:05:05.411733][127.0.0.1:34377]:
 P: WANT Diagrama.png
 
+~T[06:52:36.284008][127.0.0.1:37177]:
+P: CONNECT
+R: Estableciendo nodo base como activo 'VM3JGD'
+
+~T[06:52:46.457097][127.0.0.1:38673]:
+P: DISCONNECT
+R: Estableciendo nodo base como apagado 'VM3JGD'
+
+~T[06:53:24.484934][127.0.0.1:38347]:
+P: CONNECT
+R: Estableciendo nodo base como activo 'VM3JGD'
+
+~T[06:53:28.824734][127.0.0.1:42465]:
+P: DISCONNECT
+R: Estableciendo nodo base como apagado 'VM3JGD'
+
+~T[06:53:44.281537][127.0.0.1:41633]:
+P: CONNECT
+R: Estableciendo nodo base como activo 'VM3JGD'
+
+~T[06:53:50.332418][127.0.0.1:42953]:
+P: CONNECT
+R: YA ESTÁS CONECTADO
+
+~T[06:54:08.858935][127.0.0.1:46439]:
+P: OFFER log [<<218,108,92,159,1,119,153,117,54,115,69,241,129,234,23,165,103,46,131,103,139,154,15,70,142,109,34,104,81,4,120,31>>]
+R: Ahora el nodo 'VM3JGD' tiene disponible el fichero 'log' 
+
+~T[06:54:15.155652][127.0.0.1:36455]:
+P: WANT 
+R: FORMAT INCORRECT
+
+~T[06:54:19.027174][127.0.0.1:44151]:
+P: WANT log
+R: 10.20.37.90 [<<218,108,92,159,1,119,153,117,54,115,69,241,129,234,23,165,103,46,131,103,139,154,15,70,142,109,34,104,81,4,120,31>>]
+
+~T[06:59:02.118705][127.0.0.1:35525]:
+P: CONNECT
+R: Estableciendo nodo base como activo 'WMKHX1'
+
+~T[07:03:09.640942][192.168.43.29:44529]:
+P: CONNECT
+R: Estableciendo nodo base como activo 'IKBP4X'
+

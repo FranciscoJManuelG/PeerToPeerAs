@@ -30,7 +30,7 @@ defmodule Peer do
 
     def disconnect() do
         do_operation("DISCONNECT")
-        Process.exit(:serverpeer, :normal)
+        #Process.exit(:serverpeer, :normal)
     end
 
     def offer(fich) do
