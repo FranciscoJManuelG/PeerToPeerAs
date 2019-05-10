@@ -36,7 +36,7 @@ defmodule Peer do
 
     def disconnect(ip,port) do
         do_operation("DISCONNECT",ip,port)
-        Process.exit(:serverpeer, :normal)
+        # Process.exit(:serverpeer, :normal)
     end
 
     def offer(fich,ip,port) do
