@@ -387,3 +387,11 @@ R: Estableciendo nodo base como activo 'WMKHX1'
 P: CONNECT
 R: Estableciendo nodo base como activo 'IKBP4X'
 
+~T[07:08:12.172964][127.0.0.1:36019]:
+P: CONNECT
+R: Estableciendo nodo base como activo '1REWEK'
+
+~T[07:10:04.830898][127.0.0.1:35101]:
+P: VIEW
+R: [[], [{"1REWEK", :UP, "10.20.37.90"}], []]
+
