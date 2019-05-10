@@ -1,13 +1,19 @@
 defmodule Peer do
     
-    defp get_ip_port() do
-        ip = Utils.param(:ip)
-        port = Utils.param(:port)
-        {String.to_charlist(ip),String.to_integer(port)}
-    end
+    # defp get_ip_port() do
+    #     ip = Utils.param(:ip)
+    #     port = Utils.param(:port)
+    #     {String.to_charlist(ip),String.to_integer(port)}
+    # end
 
-    defp do_operation(operation) do
-        {ip,port} = get_ip_port()
+    # defp do_operation(operation) do
+    #     {ip,port} = get_ip_port()
+    #     Client.connect(ip,port)
+    #     Client.send(operation)
+    #     Client.close()
+    # end
+
+    defp do_operation(operation,ip,port) do 
         Client.connect(ip,port)
         Client.send(operation)
         Client.close()
@@ -19,8 +25,8 @@ defmodule Peer do
         )
     end
     
-    def connect() do
-        do_operation("CONNECT")
+    def connect(ip,port) do
+        do_operation("CONNECT",ip,port)
         case spawn_link(ServerPeer,:accept,[4000]) do
             {:ok,pid} ->  Process.register(pid, :serverpeer)
             _ ->"No se pudo iniciar el servidor interno"
@@ -28,21 +34,21 @@ defmodule Peer do
         :ok
     end
 
-    def disconnect() do
-        do_operation("DISCONNECT")
+    def disconnect(ip,port) do
+        do_operation("DISCONNECT",ip,port)
         Process.exit(:serverpeer, :normal)
     end
 
-    def offer(fich) do
+    def offer(fich,ip,port) do
         ruta = Utils.param(:files)<>fich
         case File.exists?(ruta) do
-            true -> do_operation("OFFER "<>fich<>" "<>hash(fich))
+            true -> do_operation("OFFER "<>fich<>" "<>hash(fich),ip,port)
             _ -> IO.puts("El fichero no existe")
         end
     end
 
-    def want(fich) do
-        do_operation("WANT "<>fich)
+    def want(fich,ip,port) do
+        do_operation("WANT "<>fich,ip,port)
     end 
 
     def give_me_file(ip,fich) do
