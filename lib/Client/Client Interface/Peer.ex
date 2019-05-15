@@ -13,12 +13,6 @@ defmodule Peer do
         Client.close()
     end
 
-    # defp do_operation(operation,ip,port) do 
-    #     Client.connect(ip,port)
-    #     Client.send(operation)
-    #     Client.close()
-    # end
-
     defp hash(fich) do
         Enum.join(String.split(Kernel.inspect(
             [:crypto.hash(:sha256,File.read!(Utils.param(:files)<>fich))]))

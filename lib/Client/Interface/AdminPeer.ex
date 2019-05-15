@@ -42,10 +42,6 @@ defmodule AdminPeer do
         do_operation("VIEW",ip,port)
     end
 
-    def server_stop(ip,port) do
-        do_operation("STOP",ip,port)
-    end
-
     def give_me_file(ip,fich) do
         Client.want(String.to_charlist(ip),4000,fich)
     end

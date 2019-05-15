@@ -1,16 +1,16 @@
 defmodule InterfaceOperations do
     alias ServerOperations, as: ServerI
 
-    def start() do
+  	def start() do
 		ServerI.start()
-    end
+  	end
     
-    def isNodeUp(name) do
+  	def isNodeUp(name) do
 		GenServer.call(:server, {:nodeIsUp, name})
 	end
 
 	def isAdmin(ip) do
 		ip == "127.0.0.1"
-    end
+ 	end
     
 end
