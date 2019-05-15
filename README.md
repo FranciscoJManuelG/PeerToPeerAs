@@ -8,6 +8,10 @@
 + Iván González Dopico
 
 # Descripción de la app
+* Necesitamos un sistema de compartición de ficheros que se usará en el ámbito académico para compartir los contenidos impartidos entre varias Universidades. 
+* Este sistema ha de tener una alta disponibilidad al que puedan estar subiendo y descargando ficheros entre varios miembros de la red de forma simultánea, dejando a los usuarios de la red la capacidad de manejar los archivos que quieren compartir o dejar de compartir en todo momento. 
+* Se debe asegurar la integridad de los datos y debe estar en funcionamiento casi todo el tiempo. 
+* En cuanto a escalabilidad debe ser escalable desde unos pocos usuarios hasta varios centenares.
 
 # Explicación de la arquitectura
 # Diseño
