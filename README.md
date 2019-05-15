@@ -40,7 +40,45 @@ Hay dos niveles de usuario, donde el uno es el administrador de nodos intermedio
 Se guarda en el fichero `server_log` toda la información de los errores incluso la de los
 atacantes.
 
+## Utilización
 
+*Se inicia el Nodo Intermedio.*
+```elixir
+Server.accept()
+```
+Se inicia en el puerto 5000.
+
+*Se conecta el Peer*
+```elixir
+Peer.connect()
+```
+Se conecta al nodo intermedio con ip y puerto que está en el fichero de configuración. 
+De esta manera se añade y/o establece como levantado el nodo en el servidor y se inicia el servidor interno del Peer en el puerto 4000.
+
+*El peer ofrece un fichero*
+```elixir
+Peer.offer("nombre_del_fichero")
+```
+El fichero debe estar en la ruta que se establece en el fichero de configuración. Se añade al nodo intermedio y se muestra esta ip como disponible para descargar.
+
+*El peer quiere un fichero*
+```elixir
+Peer.want("nombre_del_fichero")
+```
+El nodo intermedio puede devolver un "File not found" en caso de que no exista ese fichero o "ip hash"
+
+*El peer descarga un fichero*
+```elixir
+Peer.give_me_file("ip_nodo","nombre_del_fichero","hash")
+```
+Si el fichero se descarga y el hash es el correcto la descarga se realizará correctamente.
+Si el fichero que se recibe no tiene el mismo hash que el aportado por el servidor la descarga se abortará.
+
+*El peer se desconecta*
+```elixir
+Peer.disconnect()
+```
+El nodo pasa a estar desconectado en el nodo intermedio y se apaga el servidor local.
 
 ## Installation
 
