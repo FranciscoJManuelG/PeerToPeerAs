@@ -25,7 +25,7 @@
 * Se dispone de una interfaz de usuario, mediante la cual el cliente podrá realizar las peticiones de "Oferta de documentos" y de "Solicitud de semilla de documento". Una vez recibida la solicitud, el nodo base enviará la información al distribuidor, que se encargará de transmitirlo al nodo intermedio más apropiado, que proporcionará la información necesaria. 
 * Los nodos base se conectarán directamente entre si para la compartición de los ficheros, de tal forma que el nodo que enviará un fichero se comunica con el que lo va a recibir, y viceversa.
 
-# Tácticas
+## Tácticas
 * Reducción de la sobrecarga computacional:
 Por definición de la propia arquitectura que reparte la sobrecarga entre los distintos nodos.
 * Introducción a la concurrencia
