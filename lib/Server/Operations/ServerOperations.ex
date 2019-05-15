@@ -10,7 +10,7 @@ defmodule ServerOperations do
 
     # handle the trapped exit call
     def stop() do
-    	GenServer.stop(:server)
+    	GenServer.stop(:server, :normal)
     end
 
   	#Muestra la estructura completa

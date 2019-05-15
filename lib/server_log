@@ -1,0 +1,36 @@
+~T[15:55:37.294686][127.0.0.1:45417]:
+P: CONNECT
+R: Estableciendo nodo base como activo '2ff0c03c-1d3e-4f1e-8e78-81bc0116542a'
+
+~T[16:01:10.093681][127.0.0.1:33841]:
+P: CONNECT
+R: Estableciendo nodo base como activo '07251da8-e99e-4179-8dbc-7859ae2b09ee'
+
+~T[16:01:32.350533][127.0.0.1:38167]:
+P: DISCONNECT
+R: Estableciendo nodo base como apagado '07251da8-e99e-4179-8dbc-7859ae2b09ee'
+
+~T[16:13:41.272944][127.0.0.1:39057]:
+P: CONNECT
+R: Estableciendo nodo base como activo '5dee0c93-5dbc-43ed-8b49-9dab99ac24b7'
+
+~T[16:13:45.336128][127.0.0.1:41703]:
+P: WANT 4000
+
+~T[16:14:17.956640][127.0.0.1:34261]:
+P: WANT 4000
+
+~T[16:14:51.933371][127.0.0.1:40669]:
+P: CONNECT
+R: YA ESTÁS CONECTADO
+
+~T[16:15:27.809154][127.0.0.1:44401]:
+P: WANT Diagrama.png
+
+~T[16:18:18.985146][127.0.0.1:39825]:
+P: CONNECT
+R: YA ESTÁS CONECTADO
+
+~T[16:18:20.874087][127.0.0.1:36925]:
+P: WANT Diagrama.png
+

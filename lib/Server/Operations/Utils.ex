@@ -154,4 +154,22 @@ defmodule Utils do
 			_ -> "5000"
 			end
 	end
+
+	def param(:downloaded) do
+		#La carpeta de descargas será la 5ª linea de configurations.conf
+		case File.read("./lib/configurations.conf") do
+			{:ok, data} -> path = Enum.at(String.split(data,"\n"),4)
+							case File.exists?(path) do
+								true -> path
+								_ -> File.mkdir(path)
+								path
+							end
+			_ -> path = "./descargas/"
+							case File.exists?(path) do
+								true -> path
+								_ -> File.mkdir(path)
+								path
+							end
+			end
+	end
 end
