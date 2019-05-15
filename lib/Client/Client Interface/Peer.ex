@@ -43,9 +43,25 @@ defmodule Peer do
 
     def want(fich) do
         do_operation("WANT "<>fich)
-    end 
+    end
 
-    def give_me_file(ip,fich) do
+    def give_me_file(ip,fich,hash) do
         Client.want(String.to_charlist(ip),4000,fich)
+        if check_hash(fich,hash) do
+            IO.puts("Fichero descargado correctamente.")
+        else
+            File.rm(Utils.param(:downloaded)<>fich)
+            IO.puts("El hash es incorrecto. Descarga abortada.")
+        end
+    end
+
+    defp check_hash(fich,hash) do
+        expected_hash = hash(fich)
+        actual_hash = hash
+        if expected_hash == actual_hash do
+            true
+        else
+            false
+        end
     end
 end
