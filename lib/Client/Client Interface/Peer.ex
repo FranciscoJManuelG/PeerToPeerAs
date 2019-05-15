@@ -21,11 +21,12 @@ defmodule Peer do
     
     def connect() do
         do_operation("CONNECT")
-        case spawn_link(ServerPeer,:accept,[4000]) do
-            {:ok,pid} ->  Process.register(pid, :serverpeer)
-            _ ->"No se pudo iniciar el servidor interno"
-            end
-        :ok
+        case Process.whereis(:serverpeer) != nil do
+            false ->    pid = spawn_link(ServerPeer,:accept,[4000])
+                        Process.register(pid, :serverpeer)
+                        :ok
+            true -> :ok
+        end
     end
 
     def disconnect() do

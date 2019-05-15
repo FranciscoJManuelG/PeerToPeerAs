@@ -47,25 +47,3 @@ defmodule Interface do
 	end
 
 end
-
- # import Interface
- # execute_admin("START")
- # execute_admin("ADD NODE Node1 10.10.10.10")
- # execute_admin("ADD NODE Node2 20.10.10.10")
- # execute_admin("VIEW NODES")
- # execute_admin("ADD NODEM NodeM1 33.33.33.33")
- # execute_admin("VIEW NODESM")
- # execute_admin("NODE UP Node1")
- ## execute_admin("NODEM SYNC NodeM1 []")
- # execute_admin("VIEW NODES")
- # execute_admin("VIEW NODESM")
- # execute_admin("ADD FILE File1 file")
- # execute_admin("ADD NODES_TO_FILE File1 Node1-Node2")
- # execute_admin("VIEW FILES")
- # execute_admin("REMOVE NODES_TO_FILE File1 Node1-Node2")
- # execute_admin("VIEW FILES")
- # execute_admin("REMOVE NODEM NodeM1")
- # execute_admin("REMOVE NODE Node2")
- # execute_admin("REMOVE FILE File1")
- # execute_admin("VIEW")
- # execute_admin("STOP")
