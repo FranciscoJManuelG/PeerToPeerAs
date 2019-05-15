@@ -10,6 +10,11 @@
 # Descripción de la app
 
 # Explicación de la arquitectura
+# Diseño
+* El sistema será empleado por dos tipos de usuarios: administrador y cliente. El cliente se relacionará directamente con los nodos base, mientras que el administrador tendrá la capacidad de conectarse a los nodos intermedios, los cuales se comunican con los nodos base mediante un balanceador de carga que impidirá la sobrecarga del sistema. 
+* Se dispone de una interfaz de usuario, mediante la cual el cliente podrá realizar las peticiones de "Oferta de documentos" y de "Solicitud de semilla de documento". Una vez recibida la solicitud, el nodo base enviará la información al distribuidor, que se encargará de transmitirlo al nodo intermedio más apropiado, que proporcionará la información necesaria. 
+* Los nodos base se conectarán directamente entre si para la compartición de los ficheros, de tal forma que el nodo que enviará un fichero se comunica con el que lo va a recibir, y viceversa.
+
 
 # Tácticas
 * Reducción de la sobrecarga computacional:
