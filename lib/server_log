@@ -1,0 +1,8 @@
+~T[16:20:59.999914][127.0.0.1:43453]:
+P: CONNECT
+R: Estableciendo nodo base como activo '328b0938-8665-4e37-bfeb-a241630868d7'
+
+~T[16:23:23.989424][127.0.0.1:41105]:
+P: WANT hello
+R: File not found
+
