@@ -2,24 +2,28 @@ defmodule ClientConection do
     use GenServer
 
     def connect(ip, port) do
-        {:ok,socket} = :gen_tcp.connect(ip,port,[:binary, packet: :line, active: false, reuseaddr: true])
-        {:ok,pid} = GenServer.start_link(__MODULE__, [socket])
-        Process.register(pid,:client)
-        :ok
+        case :gen_tcp.connect(ip,port,[:binary, packet: :line, active: false, reuseaddr: true]) do
+            {:ok,socket} ->  {:ok,pid} = GenServer.start_link(__MODULE__, [socket])
+                                Process.register(pid,:client)
+                                :ok
+            _ -> IO.puts("Servidor no disponible")
+        end
     end
 
     def want_file(ip, port, file) do
-        {:ok,socket} = :gen_tcp.connect(ip,port,[:binary, packet: :raw, active: false, reuseaddr: true])
-        :gen_tcp.send(socket,"WANT "<>file<>"\n")
-        recfile = receive_file(socket,:gen_tcp.recv(socket,0,1000),"")
-        case recfile do
-            "" -> IO.puts("Fichero no disponible")
-                :gen_tcp.close(socket)
-                :error
-            _ -> File.write(Path.rootname(Utils.param(:downloaded))<>file,recfile)
-                IO.puts(Path.rootname(Utils.param(:downloaded))<>file)
-                :gen_tcp.close(socket)
-                :ok
+        case :gen_tcp.connect(ip,port,[:binary, packet: :line, active: false, reuseaddr: true]) do
+            {:ok,socket} ->  :gen_tcp.send(socket,"WANT "<>file<>"\n")
+                                recfile = receive_file(socket,:gen_tcp.recv(socket,0,1000),"")
+                                case recfile do
+                                    "" -> IO.puts("Fichero no disponible")
+                                        :gen_tcp.close(socket)
+                                        :error
+                                    _ -> File.write(Path.rootname(Utils.param(:downloaded))<>file,recfile)
+                                        IO.puts(Path.rootname(Utils.param(:downloaded))<>file)
+                                        :gen_tcp.close(socket)
+                                        :ok
+                                end
+            _ -> IO.puts("Servidor no disponible")
         end
     end
 
@@ -34,9 +38,12 @@ defmodule ClientConection do
     end
 
     def close() do
-        GenServer.cast(:client,:close)
-        GenServer.stop(:client)
-        :ok
+        case Process.whereis(:client)!=nil do
+            true -> GenServer.cast(:client,:close)
+                    GenServer.stop(:client)
+                    :ok
+            _ -> :ok
+        end
     end
 
     @impl true
