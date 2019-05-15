@@ -16,7 +16,8 @@ defmodule ClientConection do
             "" -> IO.puts("Fichero no disponible")
                 :gen_tcp.close(socket)
                 :error
-            _ -> File.write(file,recfile)
+            _ -> File.write(Path.rootname(Utils.param(:downloaded))<>file,recfile)
+                IO.puts(Path.rootname(Utils.param(:downloaded))<>file)
                 :gen_tcp.close(socket)
                 :ok
         end

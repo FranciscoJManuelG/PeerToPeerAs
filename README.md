@@ -8,8 +8,17 @@
 + Iván González Dopico
 
 # Descripción de la app
+* Necesitamos un sistema de compartición de ficheros que se usará en el ámbito académico para compartir los contenidos impartidos entre varias Universidades. 
+* Este sistema ha de tener una alta disponibilidad al que puedan estar subiendo y descargando ficheros entre varios miembros de la red de forma simultánea, dejando a los usuarios de la red la capacidad de manejar los archivos que quieren compartir o dejar de compartir en todo momento. 
+* Se debe asegurar la integridad de los datos y debe estar en funcionamiento casi todo el tiempo. 
+* En cuanto a escalabilidad debe ser escalable desde unos pocos usuarios hasta varios centenares.
 
 # Explicación de la arquitectura
+# Diseño
+* El sistema será empleado por dos tipos de usuarios: administrador y cliente. El cliente se relacionará directamente con los nodos base, mientras que el administrador tendrá la capacidad de conectarse a los nodos intermedios, los cuales se comunican con los nodos base mediante un balanceador de carga que impidirá la sobrecarga del sistema. 
+* Se dispone de una interfaz de usuario, mediante la cual el cliente podrá realizar las peticiones de "Oferta de documentos" y de "Solicitud de semilla de documento". Una vez recibida la solicitud, el nodo base enviará la información al distribuidor, que se encargará de transmitirlo al nodo intermedio más apropiado, que proporcionará la información necesaria. 
+* Los nodos base se conectarán directamente entre si para la compartición de los ficheros, de tal forma que el nodo que enviará un fichero se comunica con el que lo va a recibir, y viceversa.
+
 
 # Tácticas
 * Reducción de la sobrecarga computacional:
