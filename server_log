@@ -420,3 +420,6 @@ R: Estableciendo nodo base como activo '1REWEK'
 P: VIEW
 R: [[], [{"1REWEK", :UP, "10.20.37.90"}], []]
 
+~T[07:20:29.277929][192.168.43.107:44125]:
+P: WANT Diagrama.png
+
