@@ -141,7 +141,7 @@ defmodule Utils do
 
 	def param(:ip) do
 		#La ip será la 3ª linea de configurations.conf
-		case File.read("./lib/directories.conf") do
+		case File.read("./lib/configurations.conf") do
 			{:ok, data} -> Enum.at(String.split(data,"\n"),2)
 			_ -> "127.0.0.1"
 			end
@@ -149,7 +149,7 @@ defmodule Utils do
 
 	def param(:port) do
 		#La ip será la 4ª linea de configurations.conf
-		case File.read("./lib/directories.conf") do
+		case File.read("./lib/configurations.conf") do
 			{:ok, data} -> Enum.at(String.split(data,"\n"),3)
 			_ -> "5000"
 			end

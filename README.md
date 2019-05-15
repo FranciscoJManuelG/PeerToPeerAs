@@ -11,6 +11,15 @@
 
 # Explicación de la arquitectura
 
+# Tácticas
+* Reducción de la sobrecarga computacional
+* Introducción a la concurrencia
+* Arbitraje de recursos FIFO
+* Integridad de datos
+* Autorización de usuarios
+* Identificación de atacantes
+
+
 
 ## Installation
 
