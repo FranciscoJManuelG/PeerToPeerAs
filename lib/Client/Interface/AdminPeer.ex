@@ -13,9 +13,9 @@ defmodule AdminPeer do
         Client.close()
     end
 
-    defp hash(fich) do
+    defp hash(fich, location) do
         Enum.join(String.split(Kernel.inspect(
-            [:crypto.hash(:sha256,File.read!(Utils.param(:files)<>fich))]))
+            [:crypto.hash(:sha256,File.read!(location<>fich))]))
         )
     end
     
@@ -36,7 +36,7 @@ defmodule AdminPeer do
     def offer(fich) do
         ruta = Utils.param(:files)<>fich
         case File.exists?(ruta) do
-            true -> do_operation("OFFER "<>fich<>" "<>hash(fich))
+            true -> do_operation("OFFER "<>fich<>" "<>hash(fich,Utils.param(:files)))
             _ -> IO.puts("El fichero no existe")
         end
     end
@@ -68,7 +68,7 @@ defmodule AdminPeer do
     end
 
     defp check_hash(fich,hash) do
-        expected_hash = hash(fich)
+        expected_hash = hash(fich,Utils.param(:downloaded))
         actual_hash = hash
         if expected_hash == actual_hash do
             true
