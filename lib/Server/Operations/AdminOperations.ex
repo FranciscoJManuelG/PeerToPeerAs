@@ -1,9 +1,4 @@
 defmodule AdminOperations do
-    alias ServerOperations, as: ServerI
-    
-  def stop() do
-		ServerI.stop()
-	end
 
   def addNodeM(nodeM, ip) do
     GenServer.cast(:server, {:addNodeM, nodeM, ip})

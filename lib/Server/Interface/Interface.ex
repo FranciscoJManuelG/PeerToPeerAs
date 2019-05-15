@@ -1,5 +1,4 @@
 defmodule Interface do
-	import Ecto
 
 	alias ClientOperations, as: Client
 	alias AdminOperations, as: Admin
@@ -22,7 +21,6 @@ defmodule Interface do
 	def execute(orden,ip,node),do: execute_client(orden,node,ip,Iface.isNodeUp(node))
 
 	# Ejecuta ordenes provenientes de administradores
-	def execute_admin(["STOP"]), do: Admin.stop()
 	def execute_admin(["ADD", "NODEM", nodeMId, nodeMIp]), do: Admin.addNodeM(nodeMId,nodeMIp)
 	def execute_admin(["REMOVE", "NODEM", nodeMId]), do: Admin.removeNodeM(nodeMId)
 	def execute_admin(["VIEW"]), do: Admin.viewAll()

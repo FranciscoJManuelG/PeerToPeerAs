@@ -8,11 +8,6 @@ defmodule ServerOperations do
     	:ok
   	end
 
-    # handle the trapped exit call
-    def stop() do
-    	GenServer.stop(:server, :normal)
-    end
-
   	#Muestra la estructura completa
 	def handle_call(:viewAll, _from, list) do
 		#Se devuelve la estructura almacenada en el nodo
@@ -40,7 +35,12 @@ defmodule ServerOperations do
  	#Devuelve verdadero si el nodo está conectado
  	def handle_call({:nodeIsUp, node}, _from, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
  		{:reply, Utils.nodeIsUpFunction(node, listaNodosBase), [listaNodosMaestros,listaNodosBase,listaFicheros]}
- 	end
+	end
+	 
+	def handle_call({:idOfIp, ip}, _from, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
+		nodeId = Utils.idOfIp(ip,listaNodosBase)
+		{:reply, nodeId, [listaNodosMaestros,listaNodosBase,listaFicheros]}
+	end
 
 	#Añade un nodo base
 	def handle_cast({:addNode, node, ip}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
@@ -90,11 +90,6 @@ defmodule ServerOperations do
 	def handle_cast({:nodeDown, node}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
 		updated_listNodes = Utils.nodeStateFunction(node, :DOWN, listaNodosBase)
 		{:noreply, [listaNodosMaestros,updated_listNodes,listaFicheros]}
-	end
-
-	def handle_call({:idOfIp, ip}, _from, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
-		nodeId = Utils.idOfIp(ip,listaNodosBase)
-		{:reply, nodeId, [listaNodosMaestros,listaNodosBase,listaFicheros]}
 	end
 
 	def init([listaNodosMaestros,listaNodosBase,listaFicheros]) do

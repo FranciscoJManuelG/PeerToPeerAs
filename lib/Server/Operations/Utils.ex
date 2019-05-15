@@ -46,7 +46,7 @@ defmodule Utils do
 
  	def addIfExists(file,hash,id,[{file, hash, ids}|t],aux), do: Enum.concat(aux,[{file, hash, [id | ids]}|t])  
 
- 	def addIfExists(file,hash,id,[h|tail],aux), do: addIfExists(file,hash,id, [h | tail])
+ 	def addIfExists(file,hash,id,[h|tail],_), do: addIfExists(file,hash,id, [h | tail])
 
  	def addIfExists(_,_,_,_,aux), do: aux
 
@@ -84,7 +84,7 @@ defmodule Utils do
 	def addNodeToFileFunction(fileId, hash, node, [node|tail], listAux), do:
 		addNodeToFileFunction(fileId, hash, node, tail, [node | listAux])
 
-	def addNodeToFileFunction(_, _, [], listAux), do: listAux
+	def addNodeToFileFunction(_, _, _, [], listAux), do: listAux
 
 	############################################################
 	# Comprueba si el nodo esta en la lista
