@@ -45,8 +45,16 @@ defmodule AdminPeer do
         do_operation("WANT "<>fich)
     end
 
-    def view(ip,port) do
-        do_operation("VIEW",ip,port)
+    def view() do
+        do_operation("VIEW")
+    end
+
+    def add_nodeM(id,ip) do
+        do_operation("ADD NODEM "<>id<>" "<>ip)
+    end
+
+    def remove_nodeM(id) do
+        do_operation("REMOVE NODEM "<>id)
     end
 
     def give_me_file(ip,fich,hash) do
