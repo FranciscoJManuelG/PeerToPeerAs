@@ -596,3 +596,31 @@ P: CONNECT
 R: Estableciendo nodo base como activo 'HTX43Z'
 >>>>>>> 482e0a65bf8bd10820a8e99f91179ab452158bd7
 
+~T[15:48:02.718271][127.0.0.1:34387]:
+P: CONNECT
+R: Estableciendo nodo base como activo 'BW8BF0'
+
+~T[15:48:54.487188][127.0.0.1:36727]:
+P: CONNECT
+R: YA ESTÁS CONECTADO
+
+~T[15:49:19.621299][127.0.0.1:38137]:
+P: DISCONNECT
+R: Estableciendo nodo base como apagado 'BW8BF0'
+
+~T[15:50:04.922880][127.0.0.1:46577]:
+P: CONNECT
+R: Estableciendo nodo base como activo 'BW8BF0'
+
+~T[15:51:08.978940][127.0.0.1:34861]:
+P: CONNECT
+R: YA ESTÁS CONECTADO
+
+~T[15:51:28.687899][127.0.0.1:41979]:
+P: OFFER Diagrama.png [<<30,2,78,123,26,206,8,134,208,9,204,105,248,149,119,168,216,90,207,108,118,147,13,211,118,209,75,220,59,81,235,148>>]
+R: Ahora el nodo 'BW8BF0' tiene disponible el fichero 'Diagrama.png' 
+
+~T[15:51:45.130835][127.0.0.1:45069]:
+P: VIEW
+R: [[], [{"BW8BF0", :UP, "10.20.39.185"}], [{"Diagrama.png", "[<<30,2,78,123,26,206,8,134,208,9,204,105,248,149,119,168,216,90,207,108,118,147,13,211,118,209,75,220,59,81,235,148>>]", ["BW8BF0"]}]]
+
