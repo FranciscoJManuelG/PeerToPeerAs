@@ -1,5 +1,4 @@
 defmodule ClientOperations do
-	alias ServerOperations, as: ServerI
 
   	def addNode(node, ip) do
   		GenServer.cast(:server, {:addNode, node, ip})
@@ -26,7 +25,7 @@ defmodule ClientOperations do
 	end
 
 	def idOfIp(ip) do
-		GenServer.call(:server, {:idOfIp, ip})
+		GenServer.call(:server, {:idOfIp, ip},:infinity)
 	end
 
 end

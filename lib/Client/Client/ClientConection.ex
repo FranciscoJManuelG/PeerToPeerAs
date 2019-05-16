@@ -69,7 +69,7 @@ defmodule ClientConection do
             {:ok, data} ->  IO.puts(data)
                             send_stringlist(tl,socket)
             _ -> IO.puts("Error con el servidor. Conexion cerrada")
-                 GenServer.stop(:client)
+                 #GenServer.stop(:client)
         end
     end
 

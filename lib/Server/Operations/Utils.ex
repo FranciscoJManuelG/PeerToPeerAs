@@ -44,9 +44,16 @@ defmodule Utils do
 	 # Para saber si existe un nodo o un fichero
 	def addIfExists(file,hash,id,list), do: addIfExists(file,hash,id,list,[]) 
 
- 	def addIfExists(file,hash,id,[{file, hash, ids}|t],aux), do: Enum.concat(aux,[{file, hash, [id | ids]}|t])  
+ 	#def addIfExists(file,hash,id,[{file, hash, ids}|t],aux), do: Enum.concat(aux,[{file, hash, [id | ids]}|t])  
 
- 	def addIfExists(file,hash,id,[h|tail],_), do: addIfExists(file,hash,id, [h | tail])
+	def addIfExists(file,hash,id,[{file, hash, ids}|t],aux) do
+		case inList?(id,ids) do
+			false -> Enum.concat(aux,[{file, hash, [id | ids]}|t])
+			true -> addIfExists(file,hash,id, [{file, hash, ids}|t])
+		end 
+	end
+	 
+	def addIfExists(file,hash,id,[h|tail],_), do: addIfExists(file,hash,id, [h | tail])
 
  	def addIfExists(_,_,_,_,aux), do: aux
 

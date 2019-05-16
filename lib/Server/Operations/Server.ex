@@ -2,16 +2,19 @@ defmodule Server do
 
 	def accept(),do: accept(5000)
 	def accept(port) do
-		{:ok, serverSocket} = :gen_tcp.listen(port,[:binary, packet: :line, active: false, reuseaddr: true])
-		IO.puts("Aceptando conexiones en el puerto #{port}")
-		loop(serverSocket)
+		case :gen_tcp.listen(port,[:binary, packet: :line, active: false, reuseaddr: true]) do
+			{:ok, serverSocket} -> IO.puts("Aceptando conexiones en el puerto #{port}")
+									loop(serverSocket)
+			_ -> IO.puts("Error al iniciar el servidor")
+		end
   	end
 
 	defp loop(serverSocket) do
-		{:ok,clientSocket} = :gen_tcp.accept(serverSocket)
-		_pid = spawn_link(__MODULE__,:serve,[clientSocket])
-		#serve(client)
-		loop(serverSocket)
+		case :gen_tcp.accept(serverSocket) do
+			{:ok,clientSocket} -> _pid = spawn_link(__MODULE__,:serve,[clientSocket])
+									loop(serverSocket)
+			_ -> IO.puts("Error al aceptar la conexion")
+		end
 	end
 
 	def serve(socket) do
@@ -50,21 +53,7 @@ defmodule Server do
 	end
 	defp see_resp(_,_),do: :ok
 
-	def almacenar_log(peticion, respuesta) do
+	defp almacenar_log(peticion, respuesta) do
 		File.write(Path.rootname(Utils.param(:log)), peticion<>respuesta<>"\n",[:append])
 	end
 end
-
-
-#SERVER
-#{:ok, socket}=:gen_tcp.listen(5000,[:binary,
-#	 packet: :line, active: false, reuseaddr: true])
-#{:ok, client} = :gen_tcp.accept(socket)
-#{:ok, data} = :gen_tcp.recv(client, 0)
-#:gen_tcp.send(client, line)
-
-#CLIENT
-#{:ok,socket} = :gen_tcp.connect('127.0.0.1',5000,[:binary,
-#	packet: :line, active: false, reuseaddr: true])
-#:gen_tcp.send(socket,"holahola")
-#{:ok, data} = :gen_tcp.recv(socket, 0)

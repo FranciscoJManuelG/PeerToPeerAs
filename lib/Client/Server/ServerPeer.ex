@@ -2,15 +2,19 @@ defmodule ServerPeer do
 
 	def accept(),do: accept(4000)
 	def accept(port) do
-		{:ok, serverSocket} = :gen_tcp.listen(port,[:binary, packet: :line, active: false, reuseaddr: true])
-		IO.puts("Aceptando conexiones en el puerto #{port}")
-		loop(serverSocket)
+		case :gen_tcp.listen(port,[:binary, packet: :line, active: false, reuseaddr: true]) do
+			{:ok, serverSocket} -> IO.puts("Aceptando conexiones en el puerto #{port}")
+									loop(serverSocket)
+			_ -> IO.puts("No se ha podido iniciar el servidor interno")
+		end
   	end
 
 	defp loop(serverSocket) do
-		{:ok,clientSocket} = :gen_tcp.accept(serverSocket)
-		spawn_link(__MODULE__,:serve,[clientSocket])
-		loop(serverSocket)
+		case :gen_tcp.accept(serverSocket) do
+			{:ok,clientSocket} -> spawn_link(__MODULE__,:serve,[clientSocket])
+									loop(serverSocket)
+			_ -> IO.puts("Error del servidor interno")
+		end	
 	end
 
 	def serve(socket) do
@@ -21,10 +25,6 @@ defmodule ServerPeer do
 	defp read_line(socket) do
 		data = :gen_tcp.recv(socket, 0)
 		see_resp(data,socket)
-	end
-
-	defp write_line(line, socket) do
-		:gen_tcp.send(socket, line)
 	end
 	
 	defp see_resp({:ok, data},socket) do
