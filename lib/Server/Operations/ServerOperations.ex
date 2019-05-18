@@ -61,12 +61,8 @@ defmodule ServerOperations do
 
 	#Añade un fichero y el node y solo el node si ya existe el fichero
 	def handle_cast({:addFile, fileId, hash, node}, [listaNodosMaestros,listaNodosBase,listaFicheros]) do
-		updated_list = Utils.addIfExists(fileId,hash,node,listaFicheros)
-		if updated_list == listaFicheros do
-			{:noreply, [listaNodosMaestros,listaNodosBase,[{fileId,hash,[node]} | updated_list]]}
-		else
-			{:noreply, [listaNodosMaestros,listaNodosBase,updated_list]}
-		end
+		updated_list = Utils.addNodetoFile(fileId,hash,node,listaFicheros)
+		{:noreply, [listaNodosMaestros,listaNodosBase,updated_list]}
 	end
 
 	#Elimina un nodo maestro 

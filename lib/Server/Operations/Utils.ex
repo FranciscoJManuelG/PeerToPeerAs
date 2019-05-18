@@ -42,20 +42,18 @@ defmodule Utils do
  	def exists(_,_), do: false
  	####################################################
 	 # Para saber si existe un nodo o un fichero
-	def addIfExists(file,hash,id,list), do: addIfExists(file,hash,id,list,[]) 
+	def addNodetoFile(file,hash,id,list), do: addNodetoFile(file,hash,id,list,[]) 
 
- 	#def addIfExists(file,hash,id,[{file, hash, ids}|t],aux), do: Enum.concat(aux,[{file, hash, [id | ids]}|t])  
-
-	def addIfExists(file,hash,id,[{file, hash, ids}|t],aux) do
+	def addNodetoFile(file,hash,id,[{file, hash, ids}|t],aux) do
 		case inList?(id,ids) do
 			false -> Enum.concat(aux,[{file, hash, [id | ids]}|t])
-			true -> addIfExists(file,hash,id, [{file, hash, ids}|t])
+			true -> Enum.concat(aux,[{file, hash, ids}|t])
 		end 
 	end
 	 
-	def addIfExists(file,hash,id,[h|tail],_), do: addIfExists(file,hash,id, [h | tail])
+	def addNodetoFile(file,hash,id,[h|tail],aux), do: addNodetoFile(file,hash,id, tail, [h|aux])
 
- 	def addIfExists(_,_,_,_,aux), do: aux
+ 	def addNodetoFile(file,hash,id,_,aux), do: [{file, hash, [id]}|aux]
 
 	####################################################
 	# Para eliminar un nodo

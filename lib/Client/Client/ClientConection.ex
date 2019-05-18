@@ -72,5 +72,4 @@ defmodule ClientConection do
                  #GenServer.stop(:client)
         end
     end
-
 end
