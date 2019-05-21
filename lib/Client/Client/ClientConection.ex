@@ -11,9 +11,9 @@ defmodule ClientConection do
     end
 
     def want_file(ip, port, file) do
-        case :gen_tcp.connect(ip,port,[:binary, packet: :line, active: false, reuseaddr: true]) do
+        case :gen_tcp.connect(ip,port,[:binary, packet: :raw, active: false, reuseaddr: true]) do
             {:ok,socket} ->  :gen_tcp.send(socket,"WANT "<>file<>"\n")
-                                recfile = receive_file(socket,:gen_tcp.recv(socket,0,1000),"")
+                                recfile = receive_file(socket,:gen_tcp.recv(socket,0,3000),"")
                                 case recfile do
                                     "" -> IO.puts("Fichero no disponible")
                                         :gen_tcp.close(socket)
@@ -29,9 +29,12 @@ defmodule ClientConection do
 
     defp receive_file(_,{:ok,""},file),do: file
     defp receive_file(socket,{:ok,msg},file) do
-        receive_file(socket,:gen_tcp.recv(socket,0,1000),file<>msg)
+        receive_file(socket,:gen_tcp.recv(socket,0,3000),file<>msg)
     end
-    defp receive_file(_,_,file),do: file
+    defp receive_file(_,x,file) do 
+        IO.puts(Kernel.inspect(x))
+        file
+    end
 
     def send(message) do
         GenServer.cast(:client,{:send,message})
