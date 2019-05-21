@@ -31,10 +31,7 @@ defmodule ClientConection do
     defp receive_file(socket,{:ok,msg},file) do
         receive_file(socket,:gen_tcp.recv(socket,0,3000),file<>msg)
     end
-    defp receive_file(_,x,file) do 
-        IO.puts(Kernel.inspect(x))
-        file
-    end
+    defp receive_file(_,_,file),do: file
 
     def send(message) do
         GenServer.cast(:client,{:send,message})

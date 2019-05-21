@@ -21,10 +21,12 @@ defmodule AdminPeer do
     
     def connect() do
         do_operation("CONNECT")
-        case spawn_link(ServerPeer,:accept,[4000]) do
-            {:ok,pid} ->  Process.register(pid, :serverpeer)
-            _ ->"No se pudo iniciar el servidor interno"
-            end
+        connect(Process.whereis(:serverpeer) != nil)
+    end
+    defp connect(true),do: :ok
+    defp connect(false) do
+        pid = spawn_link(ServerPeer,:accept,[4000])
+        Process.register(pid, :serverpeer)
         :ok
     end
 
@@ -70,10 +72,6 @@ defmodule AdminPeer do
     defp check_hash(fich,hash) do
         expected_hash = hash(fich,Utils.param(:downloaded))
         actual_hash = hash
-        if expected_hash == actual_hash do
-            true
-        else
-            false
-        end
+        expected_hash == actual_hash
     end
 end
