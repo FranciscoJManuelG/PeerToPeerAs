@@ -95,3 +95,15 @@ El administrador puede realizar todas las funciones que puede hacer un usuario n
 ```elixir
 AdminPeer.view()
 ```
+
+**Añadir Nodo Intermedio**
+```elixir
+AdminPeer.add_nodeM("id_nodoM","ip_nodoM")
+```
+
+**Añadir Nodo Intermedio**
+```elixir
+AdminPeer.remove_nodeM("id_nodoM")
+```
+
+De momento los Nodos Intermedios se añaden como :UNSYNC (desincronizados) a una lista del Nodo Intermedio al que estamos conectados pero no tiene funcionalidad. En un futuro estos Nodos Intermedios se comunicarían entre sí y se sincronizarían cada cierto tiempo.
